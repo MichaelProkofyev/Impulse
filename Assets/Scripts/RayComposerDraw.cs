@@ -199,6 +199,7 @@ public class RayComposerDraw : MonoBehaviour {
             
             pointsObject = GameObject.FindGameObjectsWithTag("LaserPoints");
 
+
             for (int i = 0; i < pointsObject.Length; i++)
             {
 
