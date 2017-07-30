@@ -150,7 +150,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   upperRandLimit: 0
-  mSize: 0.1
+  mSize: 0.79
   randomDots: 0
   dotsCount: 0
   speed: 20000
@@ -262,7 +262,7 @@ MonoBehaviour:
   _receiveAllAddresses: 1
   _useExplicitConnection: 0
   _explicitConnection: {fileID: 0}
-  _oscPort: 10000
+  _oscPort: 0
   _receiveAllPorts: 0
   _redrawFlag: 0
   _foldoutList: []
@@ -341,7 +341,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1043862741
 Transform:
   m_ObjectHideFlags: 0
@@ -384,6 +384,49 @@ MonoBehaviour:
   duranceMin: 1
   duranceMax: 1.5
   globalSpeedTimerSpeed: 0.39
+--- !u!1 &1104572942
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1104572945}
+  - component: {fileID: 1104572943}
+  m_Layer: 0
+  m_Name: LaserNew
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1104572943
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1104572942}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fb3ca0714944dd4ab4c8467c7117cf5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sizeMultiplier: 0.8
+  multy: 1
+  multx: 1
+--- !u!4 &1104572945
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1104572942}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1838368710
 GameObject:
   m_ObjectHideFlags: 0

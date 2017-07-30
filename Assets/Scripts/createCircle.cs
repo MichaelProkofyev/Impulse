@@ -33,30 +33,42 @@ public class createCircle : MonoBehaviour {
 
 	
 	void Update () {
-
-
-
         radius = Mathf.Abs(sizeCurve.Evaluate(timer)) < 1 ? Mathf.Abs(sizeCurve.Evaluate(timer)) : 1;
 
 
         points = new List<RCPoint>();
 
-        if (minСhatter > 0 || maxСhatter < 1)
-        {
+        if (minСhatter > 0 || maxСhatter < 1) {
             colorMultipy = Random.Range(minСhatter, maxСhatter);
         }
-        else
+        else {
             colorMultipy = 1;
+        }
+            
 
 
         uint i;
+        Vector2 pointTransform = Vector2.zero;
+        //double x_min = Mathf.Infinity;
+        //double x_max = -Mathf.Infinity;
+        //double y_min = Mathf.Infinity;
+        //double y_max = -Mathf.Infinity;
         for (i = 0; i < pointCount; i++) {
             RCPoint point = new RCPoint();
 
-            float phi = (float)i * Mathf.PI * 2.0f / (float)pointCount +  + angleOffset * Mathf.Deg2Rad;
+            float phi = (float)i * Mathf.PI * 2.0f / (float)pointCount  + angleOffset * Mathf.Deg2Rad;
 
-            Vector2 pointTransform = new Vector3((Mathf.Sin(phi) * radius * 32767.5f - 0.5f), (Mathf.Cos(phi) * radius * 32767.5f - 0.5f));
+            pointTransform = new Vector2((Mathf.Sin(phi) * radius * 32767.5f - 0.5f),
+                                            (Mathf.Cos(phi) * radius * 32767.5f - 0.5f));
 
+
+            //double pre_x = pointTransform.x;
+            //double pre_y = pointTransform.y;
+
+            //if (pre_x < x_min) x_min = pre_x;
+            //if (pre_y < y_min) y_min = pre_y;
+            //if (pre_x > x_max) x_max = pre_x;
+            //if (pre_y > y_max) y_max = pre_y;
 
             point.x = (short)(pointTransform.x * Global.mSize);
             point.y = (short)(pointTransform.y * Global.mSize);
@@ -79,20 +91,22 @@ public class createCircle : MonoBehaviour {
             points.Add(point);
 
         }
+        //print("circle X MIN: " + x_min + " Y MIN: " + y_min + " X MAX: " + x_max + " Y MAX: " + y_max);
+
 
         GetComponent<laserPoints>().points = points;
 
-        if (timer < sizeCurve.keys[sizeCurve.keys.Length - 1].time)
+        if (timer < sizeCurve.keys[sizeCurve.keys.Length - 1].time) {
             timer += speed;
-        else
+        } else {
             Finish();
+        }
             //Debug.Log("curve Finish");
 		
 	}
 
 
-    void Finish()
-    {
+    void Finish() {
         Global.numSyms--;
         Destroy(this.gameObject);
     }

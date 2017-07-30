@@ -171,16 +171,27 @@ public class RayComposerDraw : MonoBehaviour {
             
         }else if(drawTestCircle)
         {
-
-            /* Your TODO: create fancy laser graphics here */
-
             pointCount = 200;
-            uint i;
-            for (i = 0; i < pointCount; i++)
+            double x_min = Mathf.Infinity;
+            double x_max = -Mathf.Infinity;
+            double y_min = Mathf.Infinity;
+            double y_max = -Mathf.Infinity;
+
+            for (int i = 0; i < pointCount; i++)
             {
                 RCPoint point = new RCPoint();
 
                 float phi = (float)i * Mathf.PI * 2.0f / (float)pointCount;
+                double pre_x = ((Mathf.Sin(phi) * 32767.5 - 0.5) * testCircleradius * mSize);
+                double pre_y = ((Mathf.Cos(phi) * 32767.5 - 0.5) * testCircleradius * mSize);
+
+                if (pre_x < x_min) x_min = pre_x;
+                if (pre_y < y_min) y_min = pre_y;
+                if (pre_x > x_max) x_max = pre_x;
+                if (pre_y > y_max) y_max = pre_y;
+
+
+
                 point.x = (short)(((Mathf.Sin(phi) * 32767.5 - 0.5) * testCircleradius * mSize) + correctionX);
                 point.y = (short)(((Mathf.Cos(phi) * 32767.5 - 0.5) * testCircleradius * mSize) + correctionY);
                 point.red = tRed;
@@ -192,98 +203,59 @@ public class RayComposerDraw : MonoBehaviour {
 
                 points.Add(point);
 
+                if (i > 0)
+                {
+
+                    Debug.DrawLine(new Vector2(points[i - 1].x, points[i - 1].y) / 32767.5f, new Vector2(points[i].x, points[i].y) / 32767.5f, new Color(points[i].red / 65535f, points[i].green / 65535f, points[i].blue / 65535f));
+                }
+
             }
+            print("X MIN: " + x_min + " Y MIN: " + y_min + " X MAX: " + x_max + " Y MAX: " + y_max);
         }
         else
         {
             
-            pointsObject = GameObject.FindGameObjectsWithTag("LaserPoints");
+            //pointsObject = GameObject.FindGameObjectsWithTag("LaserPoints");
 
 
-            for (int i = 0; i < pointsObject.Length; i++)
+
+
+            List<RCPoint> objectPoints = new List<RCPoint>();
+            objectPoints = Laser.Instance.currentPoints;
+
+
+
+
+            if (objectPoints.Count > 0)
             {
 
-                List<RCPoint> objectPoints = new List<RCPoint>();
-                objectPoints = pointsObject[i].GetComponent<laserPoints>().points;
-
-
-
-
-                if (objectPoints.Count > 0)
-                {
-
                         
-                    //Position Correction
-                    for (int p = 0; p < objectPoints.Count; p++)
-                    {
-                        RCPoint point = new RCPoint();
-                        point.x = (short)(objectPoints[p].x + correctionX);
-                        point.y = (short)((objectPoints[p].y + correctionY) * heigthCorrection);
-                        point.red = objectPoints[p].red;
-                        point.green = objectPoints[p].green;
-                        point.blue = objectPoints[p].blue;
-                        point.intensity = 0;
-                        point.user1 = 0;
-                        point.user2 = 0;
-                        objectPoints[p] = point;
+                //Position Correction
+                for (int p = 0; p < objectPoints.Count; p++)
+                {
+                    RCPoint point = new RCPoint();
+                    point.x = (short)(objectPoints[p].x + correctionX);
+                    point.y = (short)((objectPoints[p].y + correctionY) * heigthCorrection);
+                    point.red = objectPoints[p].red;
+                    point.green = objectPoints[p].green;
+                    point.blue = objectPoints[p].blue;
+                    point.intensity = 0;
+                    point.user1 = 0;
+                    point.user2 = 0;
+                    objectPoints[p] = point;
 //                        objectPoints[p].x = (short)(objectPoints[p].x + correctionX);
 //                        objectPoints[p].y = (short)(objectPoints[p].y + correctionY);
 
  
-                    }
+                }
 
 
 
-                    for (int b = 0; b < startBlackPoints; b++) // Put Start black Points
-                        {
-                            RCPoint point = new RCPoint();
-                            point.x = objectPoints[0].x;
-                            point.y = objectPoints[0].y;
-                            point.red = 0;
-                            point.green = 0;
-                            point.blue = 0;
-                            point.intensity = 0;
-                            point.user1 = 0;
-                            point.user2 = 0;
-                            points.Add(point);
-                        }
-
-
-
-                    for (int p = 0; p < objectPoints.Count; p++)
-                    {
-                        if (p == 0) // Put start color Points
-                        {
-                            for (int b = 0; b < startAnchors; b++)
-                            {
-                                points.Add(objectPoints[p]);
-                            }
-                        }
-
-                        points.Add(objectPoints[p]);
-                        if(p > 0)
-                            Debug.DrawLine(new Vector2(objectPoints[p - 1].x, objectPoints[p - 1].y)/32767.5f, new Vector2(objectPoints[p].x, objectPoints[p].y)/32767.5f, new Color(objectPoints[p].red / 65535f, objectPoints[p].green / 65535f, objectPoints[p].blue / 65535f));
-                        //print(objectPoints[p].x);
-
-                        if (p == objectPoints.Count-1)  // Put End color Points
-                        {
-                            for (int b = 0; b < endAnchors; b++)
-                            {
-                                points.Add(objectPoints[p]);
-                            }
-                        }
-
-  
-                            
-
-                    }
-
-
-                    for (int b = 0; b < endBlackPoints; b++) // Put End black Points
+                for (int b = 0; b < startBlackPoints; b++) // Put Start black Points
                     {
                         RCPoint point = new RCPoint();
-                        point.x = objectPoints[objectPoints.Count-1].x;
-                        point.y = objectPoints[objectPoints.Count-1].y;
+                        point.x = objectPoints[0].x;
+                        point.y = objectPoints[0].y;
                         point.red = 0;
                         point.green = 0;
                         point.blue = 0;
@@ -292,13 +264,58 @@ public class RayComposerDraw : MonoBehaviour {
                         point.user2 = 0;
                         points.Add(point);
                     }
+
+
+
+                for (int p = 0; p < objectPoints.Count; p++)
+                {
+                    if (p == 0) // Put start color Points
+                    {
+                        for (int b = 0; b < startAnchors; b++)
+                        {
+                            points.Add(objectPoints[p]);
+                        }
+                    }
+
+                    points.Add(objectPoints[p]);
+                    if(p > 0)
+                        Debug.DrawLine(new Vector2(objectPoints[p - 1].x, objectPoints[p - 1].y)/32767.5f, new Vector2(objectPoints[p].x, objectPoints[p].y)/32767.5f, new Color(objectPoints[p].red / 65535f, objectPoints[p].green / 65535f, objectPoints[p].blue / 65535f));
+                    //print(objectPoints[p].x);
+
+                    if (p == objectPoints.Count-1)  // Put End color Points
+                    {
+                        for (int b = 0; b < endAnchors; b++)
+                        {
+                            points.Add(objectPoints[p]);
+                        }
+                    }
+
+  
+                            
+
                 }
 
 
-
-
-
+                for (int b = 0; b < endBlackPoints; b++) // Put End black Points
+                {
+                    RCPoint point = new RCPoint();
+                    point.x = objectPoints[objectPoints.Count-1].x;
+                    point.y = objectPoints[objectPoints.Count-1].y;
+                    point.red = 0;
+                    point.green = 0;
+                    point.blue = 0;
+                    point.intensity = 0;
+                    point.user1 = 0;
+                    point.user2 = 0;
+                    points.Add(point);
+                }
             }
+
+
+
+
+
+            
         }
 
 

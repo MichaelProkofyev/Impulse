@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 114671863053445546}
   - component: {fileID: 114436323458486204}
   m_Layer: 0
-  m_Name: Zero1
+  m_Name: Zero2
   m_TagString: LaserPoints
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -57,7 +57,7 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 2
       time: 0
-      value: 1
+      value: 0
       inSlope: 0
       outSlope: 0
       tangentMode: 0

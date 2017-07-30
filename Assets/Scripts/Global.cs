@@ -139,13 +139,12 @@ public class Global : MonoBehaviour
     }
 
 
-    void getPrefab()
-    {
+    void getPrefab() {
         // Emulate 0, 1
         //symbol = Random.Range(0, 2);
         string name;
         int prefabCount;
-        bool selectZero = Random.value > 0.5f;
+        bool selectZero = true;//Random.value > 0.5f;
         if (selectZero)
         {
             name = "Zero";
