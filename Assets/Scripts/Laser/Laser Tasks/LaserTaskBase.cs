@@ -4,7 +4,7 @@ using UnityEngine;
 
 abstract public class LaserTaskBase {
 
-    protected Vector3 startPoint;
+    protected Vector2 startPoint;
     protected int cyclesCount; //Number of times to repeat the pattern. 0 - infinity.
     protected float duration;
 
@@ -14,7 +14,7 @@ abstract public class LaserTaskBase {
     public bool isFinished = false;
     
 
-    public LaserTaskBase(Vector3 newStartPoint, float newSpeed = 5f, int newCyclesCount = 0) {
+    public LaserTaskBase(Vector2 newStartPoint, float newSpeed = 5f, int newCyclesCount = 0) {
         this.startPoint = newStartPoint;
         this.cyclesCount = newCyclesCount;
         this.duration = newSpeed;
