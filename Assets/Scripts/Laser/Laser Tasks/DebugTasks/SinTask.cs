@@ -21,7 +21,7 @@ public class SinTask : LaserTaskBase {
         {
             Vector2 newPoint;
             newPoint.x = (((float)pIdx / pointsCount) + startPoint.x) * Laser.Instance.multx;
-            newPoint.y = (Mathf.Sin(newPoint.x + progress) + startPoint.y) * Laser.Instance.multy;
+            newPoint.y = (Mathf.Sin(newPoint.x) + startPoint.y) * Laser.Instance.multy;
             //if (newPoint.y > maxy) maxy = newPoint.y;
             //if (newPoint.y < miny) miny = newPoint.y;
 

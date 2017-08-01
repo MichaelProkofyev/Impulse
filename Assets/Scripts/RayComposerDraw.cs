@@ -94,7 +94,6 @@ public class RayComposerDraw : MonoBehaviour {
 
         /* Demo laser output */
         /* Select first device in list. */
-
         ret = RayComposer.RCDeviceID(0, deviceIdString, (uint)deviceIdString.Capacity);
 
         if(ret < 0){
@@ -118,9 +117,6 @@ public class RayComposerDraw : MonoBehaviour {
         }
 
 	}
-
-
-	
 
 	void Update () {
 
@@ -190,8 +186,6 @@ public class RayComposerDraw : MonoBehaviour {
                 if (pre_x > x_max) x_max = pre_x;
                 if (pre_y > y_max) y_max = pre_y;
 
-
-
                 point.x = (short)(((Mathf.Sin(phi) * 32767.5 - 0.5) * testCircleradius * mSize) + correctionX);
                 point.y = (short)(((Mathf.Cos(phi) * 32767.5 - 0.5) * testCircleradius * mSize) + correctionY);
                 point.red = tRed;
@@ -212,16 +206,14 @@ public class RayComposerDraw : MonoBehaviour {
             }
             print("X MIN: " + x_min + " Y MIN: " + y_min + " X MAX: " + x_max + " Y MAX: " + y_max);
         }
-        else
-        {
+        else {
 
             //pointsObject = GameObject.FindGameObjectsWithTag("LaserPoints");
-
-
 
             List<List<RCPoint>> availableShapes = Laser.Instance.currentPoints;
             for (int shapeIdx = 0; shapeIdx < availableShapes.Count; shapeIdx++) {
                 List<RCPoint> shapePoints = availableShapes[shapeIdx];
+
 
                 if (shapePoints.Count > 0) {
                     //Position Correction

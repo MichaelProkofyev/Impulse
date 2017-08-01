@@ -46,8 +46,8 @@ public class arduinoMega : MonoBehaviour {
         while(true) {
             yield return new WaitForSeconds(delay);
             for (int i = 0; i < controls.Length; i++) {
-                    controls[i] = isZero ? 0 : 255;
-                    // controls[i] = (int)(oscReciever.ledValues[i] * 255);
+                    // controls[i] = isZero ? 0 : 255;
+                    controls[i] = (int)(oscReciever.ledValues[i] * 255);
             }
             isZero = !isZero;   
         }

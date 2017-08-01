@@ -19,7 +19,6 @@ namespace UniOSC{
 	[AddComponentMenu("UniOSC/MoveGameObject")]
 	public class UniOSCMoveGameObject :  UniOSCEventTarget {
 
-		public float currentValue = 0;
 		public float[] ledValues = new float[10];
 
 		[HideInInspector]
@@ -36,23 +35,15 @@ namespace UniOSC{
 		}
 
 
-		public override void OnEnable()
-		{
-			base.OnEnable();
-
-			if(transformToMove == null){
-				Transform hostTransform = GetComponent<Transform>();
-				if(hostTransform != null) transformToMove = hostTransform;
-			}
-		}
-
-
 		public override void OnOSCMessageReceived(UniOSCEventArgs args)
 		{
 			if(transformToMove == null) return;
 			OscMessage msg = (OscMessage)args.Packet;
 			if(msg.Data.Count <1)return;
 
+			//
+			//LED LIGHTS
+			//
 			if(msg.Address == "/led1") {
 				ledValues[0] = (float)msg.Data[0];
 			}else
@@ -83,50 +74,19 @@ namespace UniOSC{
 			if(msg.Address == "/led10") {
 				ledValues[9] = (float)msg.Data[0];
 			}
-
-			
-
-			currentValue = (float)msg.Data[0];
-			// print(msg.Address);
-			// print(msg.Data[0]);
-			return;
-
-			float x = transformToMove.transform.position.x;
-			float y =  transformToMove.transform.position.y;
-			float z = transformToMove.transform.position.z;
-
-			switch (movementMode) {
-
-			case Mode.Screen:
-
-				y = Screen.height * (float)msg.Data[0];
-				
-				if(msg.Data.Count >= 2){
-					x = Screen.width* (float)msg.Data[1];
+			//
+			//LASER
+			//
+			if(msg.Address == "/laser1") {
+				if((int)msg.Data[0] == 1)  {
+					int patternID = (int)msg.Data[1];
+					float patternGain = Mathf.Clamp01((float)msg.Data[2]);
+					Laser.Instance.AddPattern(patternID, patternGain);
 				}
-				
-				pos = new Vector3(x,y,Camera.main.nearClipPlane+nearClipPlaneOffset);
-				transformToMove.transform.position = Camera.main.ScreenToWorldPoint(pos);
-
-				break;
-
-			case Mode.Relative:
-				z = 0f;
-				y =  (float)msg.Data[0];
-				if(msg.Data.Count >= 2){
-					x =  (float)msg.Data[1];
-				}
-				if(msg.Data.Count >= 3){
-					z =  (float)msg.Data[2];
-				}
-
-				pos = new Vector3(x,y,z);
-				transformToMove.transform.position += pos; 
-				break;
-
 			}
 
-
+			// print(msg.Address);
+			// print(msg.Data[0]);
 		}
 
 	}

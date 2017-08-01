@@ -199,7 +199,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &607506512
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -258,15 +258,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _oscAddress: /
-  _oscAddresses: []
+  _oscAddresses:
+  - /
   _receiveAllAddresses: 1
   _useExplicitConnection: 0
   _explicitConnection: {fileID: 0}
-  _oscPort: 0
+  _oscPort: 10000
   _receiveAllPorts: 0
   _redrawFlag: 0
   _foldoutList: []
-  currentValue: 0
   ledValues:
   - 0
   - 0
@@ -296,7 +296,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &957303017
 Transform:
   m_ObjectHideFlags: 0
@@ -412,7 +412,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fb3ca0714944dd4ab4c8467c7117cf5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tasksCount: 0
   sizeMultiplier: 0.8
   multy: 1
   multx: 1

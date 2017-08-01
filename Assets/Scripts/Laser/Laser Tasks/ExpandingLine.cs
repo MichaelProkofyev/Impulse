@@ -10,7 +10,8 @@ public class ExpandingLine : LaserTaskBase
 
     public ExpandingLine(Vector2 newStartPoint, float newSpeed = 5, int newCyclesCount = 0) : base(newStartPoint, newSpeed, newCyclesCount)
     {
-        endPoint = startPoint + UnityEngine.Random.insideUnitCircle / 2f;
+        endPoint = startPoint;// + UnityEngine.Random.insideUnitCircle / 2f;
+      //  print("START POINT: " + startPoint);
     }
 
     public override Vector2[] NextPointsCalculations(int pointsCount)

@@ -6,8 +6,8 @@ public class Laser : SingletonComponent<Laser> {
 
     LineRenderer laserLine;
 
-    List<LaserTaskBase> tasks = new List<LaserTaskBase>();
-    int pointsCount = 100;
+    //List<LaserTaskBase> patterns = new List<LaserTaskBase>();
+    int pointsPerShape = 200;
 
     public float sizeMultiplier = 1;
 
@@ -15,7 +15,23 @@ public class Laser : SingletonComponent<Laser> {
     public float multx;
 
     public List<List<RCPoint>> currentPoints = new List<List<RCPoint>>(); 
+    Dictionary<int, LaserTaskBase> currentPatterns = new Dictionary<int, LaserTaskBase>();
 
+
+    public void AddPattern(int patternID, float brightnessFraction) {
+        if(currentPatterns.ContainsKey(patternID)) {
+            LaserTaskBase pattern = currentPatterns[patternID];
+            pattern.brightnessFraction = brightnessFraction;
+        }else if(!Mathf.Approximately(brightnessFraction,0)) { //NO PATTERN FOR ID, CREATE IT
+
+            print("ADDED PATTERN");
+            float line_duration = 10f;//Random.Range(.1f, .5f);
+            ExpandingLine expLineTask = new ExpandingLine(Random.insideUnitCircle / 2f, line_duration, 1);    
+            expLineTask.brightnessFraction = brightnessFraction;
+            currentPatterns.Add(patternID, expLineTask);
+            //patterns.Add(expLineTask);
+        }
+    }
 
 
 	// Use this for initialization
@@ -28,25 +44,39 @@ public class Laser : SingletonComponent<Laser> {
 
         //  LaserTaskBase lineTask = new LineTask(new Vector3(0f, -2f, 0f), 4f, 0);
         // LaserTaskBase sinTask = new SinTask(Vector3.zero, 4f, 0);
-        ExpandingLine expLineTask = new ExpandingLine(Random.insideUnitCircle/2f, .1f, 1);
-        tasks.Add(expLineTask);
+
+
+        // ExpandingLine expLineTask = new ExpandingLine(Random.insideUnitCircle/2f, .1f, 1);
+        // patterns.Add(expLineTask);
+
+        // StartCoroutine(AddLinesRegularly());
     }
+
+    // IEnumerator AddLinesRegularly() {
+    //     while(true) {
+    //         yield return new WaitForSeconds(.7f);
+    //         float line_duration = Random.Range(1, 2);
+    //         ExpandingLine expLineTask = new ExpandingLine(Random.insideUnitCircle / 2f, line_duration, 1);
+    //         patterns.Add(expLineTask);
+    //     }
+    // }
 	
     void Update() {
         if(Input.GetKeyDown(KeyCode.Space)) {
             ExpandingLine expLineTask = new ExpandingLine(Random.insideUnitCircle / 2f, .1f, 1);
-            tasks.Add(expLineTask);
+            // patterns.Add(expLineTask);
         }
         currentPoints.Clear();
-        for (int taskIdx = 0; taskIdx < tasks.Count; taskIdx++) {
+
+        foreach(KeyValuePair<int, LaserTaskBase> pattern in currentPatterns) {
             List<RCPoint> shapePoints = new List<RCPoint>();
-            Vector2[] pointsPositions = tasks[taskIdx].NextPoints(pointsCount);
+            Vector2[] pointsPositions = pattern.Value.NextPoints(pointsPerShape);
 
             for (int pIdx = 0; pIdx < pointsPositions.Length; pIdx++) {
                 RCPoint newPoint;
                 newPoint.x = (short)(pointsPositions[pIdx].x * 32767 * sizeMultiplier);
                 newPoint.y = (short)(pointsPositions[pIdx].y * 32767 * sizeMultiplier);
-                newPoint.red = 65535;
+                newPoint.red = (ushort)(65535 * pattern.Value.brightnessFraction);
                 newPoint.green = 0;
                 newPoint.blue = 0;
 
@@ -59,13 +89,12 @@ public class Laser : SingletonComponent<Laser> {
             }
             currentPoints.Add(shapePoints);
 
-            if (tasks[taskIdx].isFinished) {
-                tasks.RemoveAt(taskIdx);
-
-                ExpandingLine expLineTask = new ExpandingLine(Random.insideUnitCircle / 2f, Random.Range(.1f, 2), 1);
-                tasks.Add(expLineTask);
+            if (pattern.Value.brightnessFraction <= 0) {
+                currentPatterns.Remove(pattern.Key);
+                // print("DEATH");
             }
 
+            print("IDX " + pattern.Key +  "BRIGHTNESS: " + pattern.Value.brightnessFraction);
 
         }
     }

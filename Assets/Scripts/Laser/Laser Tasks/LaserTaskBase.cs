@@ -4,12 +4,16 @@ using UnityEngine;
 
 abstract public class LaserTaskBase {
 
+
+    public float brightnessFraction = 1f;
+
     protected Vector2 startPoint;
     protected int cyclesCount; //Number of times to repeat the pattern. 0 - infinity.
     protected float duration;
 
     protected float progress = 0f; //0..1
     protected int currCycleIdx = 0;
+    
 
     public bool isFinished = false;
     
