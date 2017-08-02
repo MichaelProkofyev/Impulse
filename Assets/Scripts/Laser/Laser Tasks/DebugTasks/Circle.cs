@@ -8,7 +8,7 @@ public class Circle : LaserTaskBase {
     public Vector3 rotation_speed = Vector3.one;
 	float radius;
 
-	static Pattern_t type  = Pattern_t.CIRCLE;
+	new static Pattern_t type  = Pattern_t.CIRCLE;
 	int pointsCount = Const.pointsPerPattern[type];
 
 	public Circle(Vector2 newStartPoint, int newCyclesCount = 0, float radius = 1) : base(newStartPoint, newCyclesCount) {

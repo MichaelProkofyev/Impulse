@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class LineTask : LaserTaskBase {
 
-    static Pattern_t type  = Pattern_t.LINE;
+    new static Pattern_t type  = Pattern_t.LINE;
 	int pointsCount = Const.pointsPerPattern[type];
 
     //Constructor that just uses the base class, nothing more

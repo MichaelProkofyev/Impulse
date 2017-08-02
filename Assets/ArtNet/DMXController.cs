@@ -8,9 +8,6 @@ public class DMXController : SingletonComponent<DMXController> {
 
     public string channelToChange = "white";
 
-    float mapTo_floor  = 0;
-    float mapTo_ceiling  = 1;
-
     [Range(0, 255)]
     public int[] dmx_values;
 
