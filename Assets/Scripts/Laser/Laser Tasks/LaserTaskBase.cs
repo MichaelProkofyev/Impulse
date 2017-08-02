@@ -4,7 +4,7 @@ using UnityEngine;
 
 abstract public class LaserTaskBase {
 
-
+    public static Pattern_t type = Pattern_t.NONE;
     public float brightnessFraction = 1f;
 
     protected Vector2 startPoint;
@@ -16,16 +16,17 @@ abstract public class LaserTaskBase {
     
 
     public bool isFinished = false;
+
+
     
 
-    public LaserTaskBase(Vector2 newStartPoint, float newSpeed = 5f, int newCyclesCount = 0) {
+    public LaserTaskBase(Vector2 newStartPoint, int newCyclesCount = 0) {
         this.startPoint = newStartPoint;
         this.cyclesCount = newCyclesCount;
-        this.duration = newSpeed;
     }
 
     //Wrapper-method for REAL CALCULATIONS in NextPointCalculations method
-    public Vector2[] NextPoints(int pointsCount) {
+    public Vector2[] NextPoints(float deltaTime) {
         if (progress >= 1f) { //End of the cycle
             currCycleIdx++;
             bool moveToNextCycle = cyclesCount == 0 || currCycleIdx < cyclesCount; //If set to infinite repeat OR cycles left
@@ -35,10 +36,10 @@ abstract public class LaserTaskBase {
                 isFinished = true;
             }
         }
-        Vector2[] nextPoints = NextPointsCalculations(pointsCount);
+        Vector2[] nextPoints = NextPointsCalculations(deltaTime);
         progress += Time.deltaTime / duration;
         return nextPoints;
     }
 
-    abstract public Vector2[] NextPointsCalculations(int pointsCount);
+    abstract public Vector2[] NextPointsCalculations(float deltaTime);
 }

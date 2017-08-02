@@ -18,17 +18,12 @@ public class artNetStrobe : MonoBehaviour {
 
 	void Start () {
 
-        value = GetComponent<testArtNet>().value;
+        value = GetComponent<DMXController>().dmx_values;
         timer = new int[value.Length];
-        isStrobe = new bool[value.Length];
-
-		
+        isStrobe = new bool[value.Length];	
 	}
-	
 
 	void Update () {
-
-
 
         for (int v = 0; v < value.Length; v++)
         {
@@ -72,6 +67,6 @@ public class artNetStrobe : MonoBehaviour {
 		
         }
 
-        GetComponent<testArtNet>().value = value;
+        GetComponent<DMXController>().dmx_values = value;
     }
 }

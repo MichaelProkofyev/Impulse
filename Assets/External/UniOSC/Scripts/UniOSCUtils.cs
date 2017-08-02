@@ -250,12 +250,6 @@ namespace UniOSC{
 			}
 
 			#region menuItems
-			[MenuItem(UniOSCUtils.MENUITEM_CREATE_MOVE,false,4)]
-			static void CreateUniOSCMoveGameObject(){
-				GameObject go = new GameObject("UniOSC MoveGameObject");
-				 go.AddComponent<UniOSCMoveGameObject>();
-				
-			}
 			
 			[MenuItem(UniOSCUtils.MENUITEM_CREATE_ROTATE,false,4)]
 			static void CreateUniOSCRotateGameObject(){

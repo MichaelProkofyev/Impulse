@@ -7,7 +7,7 @@ using System;
 
 public class arduinoMega : MonoBehaviour {
 
-    public UniOSC.UniOSCMoveGameObject oscReciever;
+    public UniOSC.OSCReciever oscReciever;
 
     string serialPort = "/dev/tty.usbmodem1421";
     public int baudRate = 115200;

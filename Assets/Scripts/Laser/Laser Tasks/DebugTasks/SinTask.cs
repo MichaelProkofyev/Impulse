@@ -5,14 +5,16 @@ using UnityEngine;
 
 public class SinTask : LaserTaskBase {
 
+    static Pattern_t type  = Pattern_t.CIRCLE;
+	int pointsCount = Const.pointsPerPattern[type];
 
     //Constructor that just uses the base class, nothing more
-    public SinTask(Vector3 newStartPoint, float newSpeed = 5, int newCyclesCount = 0) : base(newStartPoint, newSpeed, newCyclesCount)
+    public SinTask(Vector3 newStartPoint, float newSpeed = 5, int newCyclesCount = 0) : base(newStartPoint, newCyclesCount)
     {
 
     }
 
-    public override Vector2[] NextPointsCalculations(int pointsCount)
+    public override Vector2[] NextPointsCalculations(float deltaTime)
     {
         Vector2[] points = new Vector2[pointsCount];
         //float maxy = -Mathf.Infinity;

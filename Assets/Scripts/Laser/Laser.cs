@@ -4,10 +4,8 @@ using UnityEngine;
 
 public class Laser : SingletonComponent<Laser> {
 
-    LineRenderer laserLine;
-
     //List<LaserTaskBase> patterns = new List<LaserTaskBase>();
-    int pointsPerShape = 200;
+    int pointsPerShape = 50;
 
     public float sizeMultiplier = 1;
 
@@ -18,19 +16,31 @@ public class Laser : SingletonComponent<Laser> {
     Dictionary<int, LaserTaskBase> currentPatterns = new Dictionary<int, LaserTaskBase>();
 
 
-    public void AddPattern(int patternID, float brightnessFraction) {
-        if(currentPatterns.ContainsKey(patternID)) {
-            LaserTaskBase pattern = currentPatterns[patternID];
-            pattern.brightnessFraction = brightnessFraction;
-        }else if(!Mathf.Approximately(brightnessFraction,0)) { //NO PATTERN FOR ID, CREATE IT
+    // public void AddPattern(int patternID, float brightnessFraction) {
+    //     if(currentPatterns.ContainsKey(patternID)) {
+    //         LaserTaskBase pattern = currentPatterns[patternID];
+    //         pattern.brightnessFraction = brightnessFraction;
+    //     }else if(!Mathf.Approximately(brightnessFraction,0)) { //NO PATTERN FOR ID, CREATE IT
+    //         print("ADDED PATTERN");
+    //         float line_duration = 10f;//Random.Range(.1f, .5f);
+    //         // ExpandingLine expLineTask = new ExpandingLine(Random.insideUnitCircle / 2f, line_duration, 1);    
+    //         // expLineTask.brightnessFraction = brightnessFraction;
+    //         // Circle circleTask = new Circle(pointsPerShape, Random.insideUnitCircle / 2f, line_duration, 1);    
+    //         // currentPatterns.Add(patternID, circleTask);
+    //         //patterns.Add(expLineTask);
+    //     }
+    // }
 
-            print("ADDED PATTERN");
-            float line_duration = 10f;//Random.Range(.1f, .5f);
-            ExpandingLine expLineTask = new ExpandingLine(Random.insideUnitCircle / 2f, line_duration, 1);    
-            expLineTask.brightnessFraction = brightnessFraction;
-            currentPatterns.Add(patternID, expLineTask);
-            //patterns.Add(expLineTask);
+    public void AddCircleData(int patternID, float brightnessFraction, Vector3 rotation_speed_fraction) {
+        Circle circlePattern;
+        if(currentPatterns.ContainsKey(patternID)) {
+            circlePattern = (Circle)currentPatterns[patternID];
+        }else { //NO PATTERN FOR ID, CREATE IT
+            circlePattern = new Circle(Vector2.zero); 
+            currentPatterns.Add(patternID, circlePattern);
         }
+        circlePattern.brightnessFraction = brightnessFraction;
+        circlePattern.rotation_speed = rotation_speed_fraction * Const.circle_max_rotation_speed;
     }
 
 
@@ -40,7 +50,9 @@ public class Laser : SingletonComponent<Laser> {
                 UnityEditor.SceneView.FocusWindowIfItsOpen(typeof(UnityEditor.SceneView));
         #endif
 
-        laserLine = GetComponent<LineRenderer>();
+        // for (int cIdx = 0; cIdx < 5; cIdx++) {
+        //     AddCircleData(cIdx, 0.1f * cIdx,  Vector3.one * 10 * cIdx);
+        // }
 
         //  LaserTaskBase lineTask = new LineTask(new Vector3(0f, -2f, 0f), 4f, 0);
         // LaserTaskBase sinTask = new SinTask(Vector3.zero, 4f, 0);
@@ -63,10 +75,12 @@ public class Laser : SingletonComponent<Laser> {
 	
     void Update() {
         if(Input.GetKeyDown(KeyCode.Space)) {
-            ExpandingLine expLineTask = new ExpandingLine(Random.insideUnitCircle / 2f, .1f, 1);
+            // ExpandingLine expLineTask = new ExpandingLine(Random.insideUnitCircle / 2f, .1f, 1);
+            // Circle cirlceTask = new Circle(Vector2.zero, 5, 0);
             // patterns.Add(expLineTask);
         }
         currentPoints.Clear();
+
 
         foreach(KeyValuePair<int, LaserTaskBase> pattern in currentPatterns) {
             List<RCPoint> shapePoints = new List<RCPoint>();
@@ -94,7 +108,7 @@ public class Laser : SingletonComponent<Laser> {
                 // print("DEATH");
             }
 
-            print("IDX " + pattern.Key +  "BRIGHTNESS: " + pattern.Value.brightnessFraction);
+            // print("IDX " + pattern.Key +  "BRIGHTNESS: " + pattern.Value.brightnessFraction);
 
         }
     }
