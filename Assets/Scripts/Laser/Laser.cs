@@ -31,7 +31,7 @@ public class Laser : SingletonComponent<Laser> {
     //     }
     // }
 
-    public void AddCircleData(int patternID, float brightnessFraction, Vector3 rotation_speed_fraction) {
+    public void AddCircleData(int patternID, ushort brightness, Vector3 rotation_speed_fraction) {
         Circle circlePattern;
         if(currentPatterns.ContainsKey(patternID)) {
             circlePattern = (Circle)currentPatterns[patternID];
@@ -39,7 +39,7 @@ public class Laser : SingletonComponent<Laser> {
             circlePattern = new Circle(Vector2.zero); 
             currentPatterns.Add(patternID, circlePattern);
         }
-        circlePattern.brightnessFraction = brightnessFraction;
+        circlePattern.brightness = brightness;
         circlePattern.rotation_speed = rotation_speed_fraction * Const.circle_max_rotation_speed;
     }
 
@@ -90,7 +90,7 @@ public class Laser : SingletonComponent<Laser> {
                 RCPoint newPoint;
                 newPoint.x = (short)(pointsPositions[pIdx].x * 32767 * sizeMultiplier);
                 newPoint.y = (short)(pointsPositions[pIdx].y * 32767 * sizeMultiplier);
-                newPoint.red = (ushort)(65535 * pattern.Value.brightnessFraction);
+                newPoint.red = pattern.Value.brightness;
                 newPoint.green = 0;
                 newPoint.blue = 0;
 
@@ -103,39 +103,12 @@ public class Laser : SingletonComponent<Laser> {
             }
             currentPoints.Add(shapePoints);
 
-            if (pattern.Value.brightnessFraction <= 0) {
+            if (pattern.Value.brightness == 0) {
                 currentPatterns.Remove(pattern.Key);
-                // print("DEATH");
             }
 
             // print("IDX " + pattern.Key +  "BRIGHTNESS: " + pattern.Value.brightnessFraction);
 
         }
     }
-
-    // Update is called once per frame
-    //void UpdateLegacy () {
-    //    if (currTaskIdx >= tasks.Count) return;  //If no tasks left - do nothing
-
-
-    //    Vector3 startPosition = transform.position;
-    //    Vector3 endPosition = tasks[currTaskIdx].NextPoints(); // startPosition + Random.insideUnitSphere * 5f;
-
-
-
-    //    laserLine.SetPosition(0, startPosition);
-
-
-    //    Vector3 direction = endPosition - startPosition;
-
-    //    float raycastDistance = Vector3.Distance(endPosition, startPosition);
-    //    laserLine.positionCount = 2;
-    //    laserLine.SetPosition(1, endPosition);
-
-
-    //    //Move to the next task, if needed
-        //if(tasks[currTaskIdx].isFinished) {
-        //    currTaskIdx++;
-        //}
-    //}
 }

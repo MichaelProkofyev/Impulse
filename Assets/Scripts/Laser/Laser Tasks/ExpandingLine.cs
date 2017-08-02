@@ -6,7 +6,7 @@ using UnityEngine;
 public class ExpandingLine : LaserTaskBase
 {
 
-    static Pattern_t type  = Pattern_t.CIRCLE;
+    new static LASERPATTERN type  = LASERPATTERN.CIRCLE;
 	int pointsCount = Const.pointsPerPattern[type];
 
     Vector2 endPoint;

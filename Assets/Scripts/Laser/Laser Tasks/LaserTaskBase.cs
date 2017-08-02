@@ -4,8 +4,8 @@ using UnityEngine;
 
 abstract public class LaserTaskBase {
 
-    public static Pattern_t type = Pattern_t.NONE;
-    public float brightnessFraction = 1f;
+    public static LASERPATTERN type = LASERPATTERN.NONE;
+    public ushort brightness = 65535;
 
     protected Vector2 startPoint;
     protected int cyclesCount; //Number of times to repeat the pattern. 0 - infinity.

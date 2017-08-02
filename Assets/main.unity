@@ -192,7 +192,6 @@ GameObject:
   m_Component:
   - component: {fileID: 607506513}
   - component: {fileID: 607506512}
-  - component: {fileID: 607506514}
   m_Layer: 0
   m_Name: OSC
   m_TagString: Untagged
@@ -208,31 +207,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 607506511}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eaad75f03bc9d2942a2a4dd8e734324f, type: 3}
+  m_Script: {fileID: 11500000, guid: e50489ab0782ea3469ccab650d9e8013, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _transmissionTypeIn: 0
-  _transmissionTypeOut: 0
-  autoConnectOSCIn: 1
-  _oscPort: 10000
-  _isValidOscIPAddress: 1
-  _isValidOscMulticastIPAddress: 1
-  _oscMulticastIPAddress: 224.0.1.0
-  oscOut: 1
-  autoConnectOSCOut: 1
-  foldoutOSCOut: 1
-  foldoutOSCIn: 1
-  _isValidOscOutIPAddress: 1
-  _oscOutIPAddress: 127.0.0.1
-  _isValidOscOutMulticastIPAddress: 1
-  _oscOutMulticastIPAddress: 224.0.1.0
-  _oscOutPort: 9000
-  redrawFlag: 1
-  dispatchOSC: 0
-  dispatchOSCOut: 0
-  oscMappingFileObjList: []
-  oscSessionFileObjList: []
-  SendSessionDataOnStart: 0
 --- !u!4 &607506513
 Transform:
   m_ObjectHideFlags: 0
@@ -246,38 +223,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &607506514
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 607506511}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd646febc1322af40aac9523cacd0278, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _oscAddress: /
-  _oscAddresses:
-  - /
-  _receiveAllAddresses: 1
-  _useExplicitConnection: 0
-  _explicitConnection: {fileID: 0}
-  _oscPort: 10000
-  _receiveAllPorts: 0
-  _redrawFlag: 0
-  _foldoutList: []
-  ledValues:
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
 --- !u!1 &957303016
 GameObject:
   m_ObjectHideFlags: 0
@@ -318,7 +263,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 891cb7446c40040dd84d17cceac46a91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  oscReciever: {fileID: 607506514}
   baudRate: 115200
   OUT_CH: 10
   controls: 00000000000000000000000000000000000000000000000000000000000000000000000000000000

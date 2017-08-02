@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum Pattern_t
+public enum LASERPATTERN
 {
 	NONE,
+    DOT,
 	CIRCLE,
-	LINE,
 }
 
 
@@ -14,10 +14,16 @@ public enum Pattern_t
 
 public static class Const {
 
-	public static Dictionary<Pattern_t, int> pointsPerPattern = new Dictionary<Pattern_t, int>() {
-		{Pattern_t.NONE, 100},
-		{Pattern_t.CIRCLE, 30},
-		{Pattern_t.LINE, 20},
+    //LED
+    public static string LED_SERIAL_PORT = "/dev/tty.usbmodem1421";
+    public static int LED_COUNT = 10;
+    public static float LED_MIN_UPDATE_TIME = 0.017f;
+
+    //LASER
+	public static Dictionary<LASERPATTERN, int> pointsPerPattern = new Dictionary<LASERPATTERN, int>() {
+		{LASERPATTERN.NONE, 100},
+		{LASERPATTERN.DOT, 20},
+		{LASERPATTERN.CIRCLE, 30},
 	};	
 
 	public static float circle_max_rotation_speed = 1f;
