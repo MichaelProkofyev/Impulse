@@ -4,93 +4,56 @@ using UnityEngine;
 
 public class Laser : SingletonComponent<Laser> {
 
-    //List<LaserTaskBase> patterns = new List<LaserTaskBase>();
-    int pointsPerShape = 50;
-
     public float sizeMultiplier = 1;
+    public float multy = 1;
+    public float multx = 1;
 
-    public float multy;
-    public float multx;
-
-    public List<List<RCPoint>> currentPoints = new List<List<RCPoint>>(); 
-    Dictionary<int, LaserTaskBase> currentPatterns = new Dictionary<int, LaserTaskBase>();
+    public ushort cut_x = 32767;
+    public ushort cut_y = 32767;
 
 
-    // public void AddPattern(int patternID, float brightnessFraction) {
-    //     if(currentPatterns.ContainsKey(patternID)) {
-    //         LaserTaskBase pattern = currentPatterns[patternID];
-    //         pattern.brightnessFraction = brightnessFraction;
-    //     }else if(!Mathf.Approximately(brightnessFraction,0)) { //NO PATTERN FOR ID, CREATE IT
-    //         print("ADDED PATTERN");
-    //         float line_duration = 10f;//Random.Range(.1f, .5f);
-    //         // ExpandingLine expLineTask = new ExpandingLine(Random.insideUnitCircle / 2f, line_duration, 1);    
-    //         // expLineTask.brightnessFraction = brightnessFraction;
-    //         // Circle circleTask = new Circle(pointsPerShape, Random.insideUnitCircle / 2f, line_duration, 1);    
-    //         // currentPatterns.Add(patternID, circleTask);
-    //         //patterns.Add(expLineTask);
-    //     }
-    // }
+    public List<List<RCPoint>> points = new List<List<RCPoint>>(); 
+    Dictionary<int, LaserTaskBase> patterns = new Dictionary<int, LaserTaskBase>();
+
 
     public void AddCircleData(int patternID, ushort brightness, Vector3 rotation_speed_fraction) {
         Circle circlePattern;
-        if(currentPatterns.ContainsKey(patternID)) {
-            circlePattern = (Circle)currentPatterns[patternID];
+        if(patterns.ContainsKey(patternID)) {
+            circlePattern = (Circle)patterns[patternID];
         }else { //NO PATTERN FOR ID, CREATE IT
             circlePattern = new Circle(Vector2.zero); 
-            currentPatterns.Add(patternID, circlePattern);
+            patterns.Add(patternID, circlePattern);
         }
         circlePattern.brightness = brightness;
         circlePattern.rotation_speed = rotation_speed_fraction * Const.circle_max_rotation_speed;
     }
 
-
-	// Use this for initialization
 	void Start () {
         #if UNITY_EDITOR
                 UnityEditor.SceneView.FocusWindowIfItsOpen(typeof(UnityEditor.SceneView));
         #endif
 
-        // for (int cIdx = 0; cIdx < 5; cIdx++) {
-        //     AddCircleData(cIdx, 0.1f * cIdx,  Vector3.one * 10 * cIdx);
-        // }
-
-        //  LaserTaskBase lineTask = new LineTask(new Vector3(0f, -2f, 0f), 4f, 0);
-        // LaserTaskBase sinTask = new SinTask(Vector3.zero, 4f, 0);
-
-
-        // ExpandingLine expLineTask = new ExpandingLine(Random.insideUnitCircle/2f, .1f, 1);
-        // patterns.Add(expLineTask);
-
-        // StartCoroutine(AddLinesRegularly());
+        //DEBUG
+        for (int cIdx = 0; cIdx < 5; cIdx++) {
+            AddCircleData(cIdx, (ushort)(0.1f * cIdx * 65500), Vector3.one * 10 * cIdx);
+        }
     }
-
-    // IEnumerator AddLinesRegularly() {
-    //     while(true) {
-    //         yield return new WaitForSeconds(.7f);
-    //         float line_duration = Random.Range(1, 2);
-    //         ExpandingLine expLineTask = new ExpandingLine(Random.insideUnitCircle / 2f, line_duration, 1);
-    //         patterns.Add(expLineTask);
-    //     }
-    // }
 	
     void Update() {
-        if(Input.GetKeyDown(KeyCode.Space)) {
-            // ExpandingLine expLineTask = new ExpandingLine(Random.insideUnitCircle / 2f, .1f, 1);
-            // Circle cirlceTask = new Circle(Vector2.zero, 5, 0);
-            // patterns.Add(expLineTask);
-        }
-        currentPoints.Clear();
+        points.Clear();
 
-
-        foreach(KeyValuePair<int, LaserTaskBase> pattern in currentPatterns) {
+        List<int> finishedPatternIDs = new List<int>();
+        foreach (int patternID in patterns.Keys){
             List<RCPoint> shapePoints = new List<RCPoint>();
-            Vector2[] pointsPositions = pattern.Value.NextPoints(pointsPerShape);
+            Vector2[] pointsPositions = patterns[patternID].NextPoints(Time.deltaTime);
 
-            for (int pIdx = 0; pIdx < pointsPositions.Length; pIdx++) {
+
+            for (int pIdx = 0; pIdx < pointsPositions.Length; pIdx++)
+            {
                 RCPoint newPoint;
-                newPoint.x = (short)(pointsPositions[pIdx].x * 32767 * sizeMultiplier);
-                newPoint.y = (short)(pointsPositions[pIdx].y * 32767 * sizeMultiplier);
-                newPoint.red = pattern.Value.brightness;
+                newPoint.x = (short)( Mathf.Clamp(pointsPositions[pIdx].x * 32767 * sizeMultiplier, -cut_x, cut_x) );
+                newPoint.y = (short)(Mathf.Clamp(pointsPositions[pIdx].y * 32767 * sizeMultiplier, -cut_y, cut_y));
+                newPoint.red = patterns[patternID].brightness;
                 newPoint.green = 0;
                 newPoint.blue = 0;
 
@@ -101,14 +64,17 @@ public class Laser : SingletonComponent<Laser> {
 
                 shapePoints.Add(newPoint);
             }
-            currentPoints.Add(shapePoints);
+            points.Add(shapePoints);
 
-            if (pattern.Value.brightness == 0) {
-                currentPatterns.Remove(pattern.Key);
+            bool shouldDestroyPattern = patterns[patternID].brightness == 0;
+            if (shouldDestroyPattern) {
+                finishedPatternIDs.Add(patternID);
             }
+        }
 
-            // print("IDX " + pattern.Key +  "BRIGHTNESS: " + pattern.Value.brightnessFraction);
-
+        //REMOVE PATTERNS THAT ARE FINISHED
+        for (int i = 0; i < finishedPatternIDs.Count; i++) {
+            patterns.Remove(finishedPatternIDs[i]);
         }
     }
 }

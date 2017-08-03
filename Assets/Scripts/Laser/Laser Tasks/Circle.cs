@@ -5,17 +5,17 @@ using UnityEngine;
 public class Circle : LaserTaskBase {
 
 	public Vector3 rotation = Vector3.zero;
-    public Vector3 rotation_speed = Vector3.one;
+    public Vector3 rotation_speed = Vector3.zero;
 	float radius;
 
-	new static LASERPATTERN type  = LASERPATTERN.CIRCLE;
 	int pointsCount = Const.pointsPerPattern[type];
+	new const LASERPATTERN type  = LASERPATTERN.CIRCLE;
 
-	public Circle(Vector2 newStartPoint, int newCyclesCount = 0, float radius = 1) : base(newStartPoint, newCyclesCount) {
+	public Circle(Vector2 newStartPoint, float radius = 1) : base(newStartPoint) {
 		this.radius = radius;
     }
 
-	public override Vector2[] NextPointsCalculations(float deltaTime) {
+	public override Vector2[] NextPoints(float deltaTime) {
 		//ROTATION
 		rotation += rotation_speed * deltaTime;
 
@@ -29,25 +29,6 @@ public class Circle : LaserTaskBase {
 			points[pIdx] = newPoint;
 		}
 		points[pointsCount] = points[0];
-		return Rotate(points);
+		return Const.RotatePoints(points, rotation);
 	}
-
-	Vector2[] Rotate(Vector2[] points) {
-        Quaternion new_rotation = Quaternion.Euler(rotation);
-        Matrix4x4 m = Matrix4x4.TRS(Vector3.zero, new_rotation, Vector3.one * mathScale(0f, 1f, 0, 2f, 1));
-
-    	for (int pIdx = 0; pIdx < points.Length; pIdx++) { 
-			Vector3 d_point = new Vector3(points[pIdx].x, points[pIdx].y, 0);
-			Vector3 transformedPoint = m.MultiplyPoint3x4(d_point);
-    		points[pIdx] = transformedPoint;
-		}
-        return points;
-	}
-
-	public float mathScale(float OldMin, float OldMax, float NewMin, float NewMax, float OldValue){
-        float OldRange = (OldMax - OldMin);
-        float NewRange = (NewMax - NewMin);
-        float NewValue = (((OldValue - OldMin) * NewRange) / OldRange) + NewMin;
-        return(NewValue);
-    }
 }
