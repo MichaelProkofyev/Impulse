@@ -26,6 +26,7 @@ public static class Const {
         {LASERPATTERN.SQUARE, 30},
     };	
 	public static float circle_max_rotation_speed = 1f;
+    public static float square_max_rotation_speed = 1f;
 
     public static Vector2[] RotatePoints(Vector2[] points, Vector3 rotation)
     {

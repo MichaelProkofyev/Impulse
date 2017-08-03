@@ -28,15 +28,33 @@ public class Laser : SingletonComponent<Laser> {
         circlePattern.rotation_speed = rotation_speed_fraction * Const.circle_max_rotation_speed;
     }
 
-	void Start () {
+    public void AddSquareData(int patternID, ushort brightness, Vector3 rotation_speed_fraction)
+    {
+        Square squarePattern;
+        if (patterns.ContainsKey(patternID))
+        {
+            squarePattern = (Square)patterns[patternID];
+        }
+        else
+        { //NO PATTERN FOR ID, CREATE IT
+            squarePattern = new Square(Vector2.zero, 1);
+            patterns.Add(patternID, squarePattern);
+        }
+        squarePattern.rotation = rotation_speed_fraction * Const.square_max_rotation_speed;
+        squarePattern.brightness = brightness;
+    }
+
+    void Start () {
         #if UNITY_EDITOR
                 UnityEditor.SceneView.FocusWindowIfItsOpen(typeof(UnityEditor.SceneView));
-        #endif
+#endif
 
         //DEBUG
-        for (int cIdx = 0; cIdx < 5; cIdx++) {
-            AddCircleData(cIdx, (ushort)(0.1f * cIdx * 65500), Vector3.one * 10 * cIdx);
-        }
+        //for (int cIdx = 0; cIdx < 5; cIdx++) {
+        //    AddCircleData(cIdx, (ushort)(0.1f * cIdx * 65500), Vector3.one * 10 * cIdx);
+        //}
+
+        AddSquareData(1, 65500, Vector3.one / 2f);
     }
 	
     void Update() {
@@ -46,7 +64,6 @@ public class Laser : SingletonComponent<Laser> {
         foreach (int patternID in patterns.Keys){
             List<RCPoint> shapePoints = new List<RCPoint>();
             Vector2[] pointsPositions = patterns[patternID].NextPoints(Time.deltaTime);
-
 
             for (int pIdx = 0; pIdx < pointsPositions.Length; pIdx++)
             {

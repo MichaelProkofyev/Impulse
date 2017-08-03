@@ -7,7 +7,7 @@ abstract public class LaserTaskBase {
     public const LASERPATTERN type = LASERPATTERN.NONE;
     public ushort brightness = 65535;
 
-    int pointsCount = Const.pointsPerPattern[type];
+    int pointsCount;
 
     protected Vector2 startPoint;
     
