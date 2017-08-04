@@ -78,17 +78,17 @@ public partial class RayComposer
 {
 
     /// Return Type: int
-    [System.Runtime.InteropServices.DllImportAttribute("RayComposer", EntryPoint = "RCInit")]
+    [System.Runtime.InteropServices.DllImportAttribute("RayComposer1.6", EntryPoint = "RCInit")]
     public static extern int RCInit();
 
 
     /// Return Type: int
-    [System.Runtime.InteropServices.DllImportAttribute("RayComposer", EntryPoint = "RCExit")]
+    [System.Runtime.InteropServices.DllImportAttribute("RayComposer1.6", EntryPoint = "RCExit")]
     public static extern int RCExit();
 
 
     /// Return Type: int
-    [System.Runtime.InteropServices.DllImportAttribute("RayComposer", EntryPoint = "RCEnumerateDevices")]
+    [System.Runtime.InteropServices.DllImportAttribute("RayComposer1.6", EntryPoint = "RCEnumerateDevices")]
     public static extern int RCEnumerateDevices();
 
 
@@ -96,19 +96,19 @@ public partial class RayComposer
     ///index: unsigned int
     ///deviceId: char*
     ///maxLength: unsigned int
-    [System.Runtime.InteropServices.DllImportAttribute("RayComposer", EntryPoint = "RCDeviceID")]
+    [System.Runtime.InteropServices.DllImportAttribute("RayComposer1.6", EntryPoint = "RCDeviceID")]
     public static extern int RCDeviceID(uint index, System.Text.StringBuilder deviceId, uint maxLength);
 
 
     /// Return Type: int
     ///deviceId: char*
-    [System.Runtime.InteropServices.DllImportAttribute("RayComposer", EntryPoint = "RCOpenDevice")]
+    [System.Runtime.InteropServices.DllImportAttribute("RayComposer1.6", EntryPoint = "RCOpenDevice")]
     public static extern int RCOpenDevice(System.Text.StringBuilder deviceId);
 
 
     /// Return Type: int
     ///handle: int
-    [System.Runtime.InteropServices.DllImportAttribute("RayComposer", EntryPoint = "RCCloseDevice")]
+    [System.Runtime.InteropServices.DllImportAttribute("RayComposer1.6", EntryPoint = "RCCloseDevice")]
     public static extern int RCCloseDevice(int handle);
 
 
@@ -116,39 +116,39 @@ public partial class RayComposer
     ///handle: int
     ///deviceLabel: char*
     ///maxLength: unsigned int
-    [System.Runtime.InteropServices.DllImportAttribute("RayComposer", EntryPoint = "RCDeviceLabel")]
+    [System.Runtime.InteropServices.DllImportAttribute("RayComposer1.6", EntryPoint = "RCDeviceLabel")]
     public static extern int RCDeviceLabel(int handle, System.IntPtr deviceLabel, uint maxLength);
 
 
     /// Return Type: int
     ///handle: int
     ///deviceLabel: char*
-    [System.Runtime.InteropServices.DllImportAttribute("RayComposer", EntryPoint = "RCSetDeviceLabel")]
+    [System.Runtime.InteropServices.DllImportAttribute("RayComposer1.6", EntryPoint = "RCSetDeviceLabel")]
     public static extern int RCSetDeviceLabel(int handle, System.IntPtr deviceLabel);
 
 
     /// Return Type: int
     ///handle: int
-    [System.Runtime.InteropServices.DllImportAttribute("RayComposer", EntryPoint = "RCStartOutput")]
+    [System.Runtime.InteropServices.DllImportAttribute("RayComposer1.6", EntryPoint = "RCStartOutput")]
     public static extern int RCStartOutput(int handle);
 
 
     /// Return Type: int
     ///handle: int
-    [System.Runtime.InteropServices.DllImportAttribute("RayComposer", EntryPoint = "RCStopOutput")]
+    [System.Runtime.InteropServices.DllImportAttribute("RayComposer1.6", EntryPoint = "RCStopOutput")]
     public static extern int RCStopOutput(int handle);
 
 
     /// Return Type: int
     ///handle: int
     ///timeout: int
-    [System.Runtime.InteropServices.DllImportAttribute("RayComposer", EntryPoint = "RCWaitForReady")]
+    [System.Runtime.InteropServices.DllImportAttribute("RayComposer1.6", EntryPoint = "RCWaitForReady")]
     public static extern int RCWaitForReady(int handle, int timeout);
 
 
     /// Return Type: int
     ///handle: int
-    [System.Runtime.InteropServices.DllImportAttribute("RayComposer", EntryPoint = "RCMaxSpeed")]
+    [System.Runtime.InteropServices.DllImportAttribute("RayComposer1.6", EntryPoint = "RCMaxSpeed")]
     public static extern int RCMaxSpeed(int handle);
 
 
@@ -158,14 +158,14 @@ public partial class RayComposer
     ///count: unsigned int
     ///speed: unsigned int
     ///repeat: unsigned int
-    [System.Runtime.InteropServices.DllImportAttribute("RayComposer", EntryPoint = "RCWriteFrame")]
+    [System.Runtime.InteropServices.DllImportAttribute("RayComposer1.6", EntryPoint = "RCWriteFrame")]
     public static extern int RCWriteFrame(int handle, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex=1)] 
         RCPoint[] points, uint count, uint speed, uint repeat);
 
 
     /// Return Type: int
     ///handle: int
-    [System.Runtime.InteropServices.DllImportAttribute("RayComposer", EntryPoint = "RCUniverseCount")]
+    [System.Runtime.InteropServices.DllImportAttribute("RayComposer1.6", EntryPoint = "RCUniverseCount")]
     public static extern int RCUniverseCount(int handle);
 
 
@@ -176,7 +176,7 @@ public partial class RayComposer
     ///maxLength: unsigned int
     ///pUniverseDirection: RCUniverseDirection*
     ///pChannelCount: unsigned int*
-    [System.Runtime.InteropServices.DllImportAttribute("RayComposer", EntryPoint = "RCUniverseQuery")]
+    [System.Runtime.InteropServices.DllImportAttribute("RayComposer1.6", EntryPoint = "RCUniverseQuery")]
     public static extern int RCUniverseQuery(int handle, uint universeIndex, System.IntPtr universeName, uint maxLength, ref RCUniverseDirection pUniverseDirection, ref uint pChannelCount);
 
 
@@ -186,7 +186,7 @@ public partial class RayComposer
     ///startChannel: unsigned int
     ///data: unsigned char*
     ///count: unsigned int
-    [System.Runtime.InteropServices.DllImportAttribute("RayComposer", EntryPoint = "RCUniverseWrite")]
+    [System.Runtime.InteropServices.DllImportAttribute("RayComposer1.6", EntryPoint = "RCUniverseWrite")]
     public static extern int RCUniverseWrite(int handle, uint universeIndex, uint startChannel, System.IntPtr data, uint count);
 
 
@@ -196,14 +196,14 @@ public partial class RayComposer
     ///startChannel: unsigned int
     ///data: unsigned char*
     ///count: unsigned int
-    [System.Runtime.InteropServices.DllImportAttribute("RayComposer", EntryPoint = "RCUniverseRead")]
+    [System.Runtime.InteropServices.DllImportAttribute("RayComposer1.6", EntryPoint = "RCUniverseRead")]
     public static extern int RCUniverseRead(int handle, uint universeIndex, uint startChannel, System.IntPtr data, uint count);
 
 
     /// Return Type: int
     ///handle: int
     ///universeIndex: unsigned int
-    [System.Runtime.InteropServices.DllImportAttribute("RayComposer", EntryPoint = "RCUniverseUpdate")]
+    [System.Runtime.InteropServices.DllImportAttribute("RayComposer1.6", EntryPoint = "RCUniverseUpdate")]
     public static extern int RCUniverseUpdate(int handle, uint universeIndex);
 
 }

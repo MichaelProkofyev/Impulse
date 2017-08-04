@@ -16,7 +16,7 @@ public class OSCReciever : MonoBehaviour {
 
         switch (patternType) {
             case LASERPATTERN.DOT:
-
+            
                 break;
             case LASERPATTERN.CIRCLE:
                 float speedX = Mathf.Clamp01((float)args[3]);

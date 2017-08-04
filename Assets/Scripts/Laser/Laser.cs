@@ -30,7 +30,7 @@ public class Laser : SingletonComponent<Laser> {
         circlePattern.rotation_speed = rotSpeed * CONST.circle_max_rotation_speed;
     }
 
-    public void AddSquareData(int patternID, ushort brightness, float sideLength, Vector3 rotation_speed_fraction, float dashLength = 0)
+    public void AddSquareData(int patternID, Vector3 rotation_speed_fraction, float sideLength = 1f, ushort brightness = CONST.LASER_MAX_VALUE, float dashLength = 0)
     {
         Square squarePattern;
         if (patterns.ContainsKey(patternID)) {
@@ -55,7 +55,8 @@ public class Laser : SingletonComponent<Laser> {
         //    AddCircleData(cIdx, (ushort)(0.1f * cIdx * 65500), Vector3.one * 10 * cIdx);
         //}
 
-        AddCircleData(patternID: 1, rotSpeed: new Vector3(50,0, 0), dashLength: 0.05f);
+        // AddCircleData(patternID: 1, rotSpeed: new Vector3(50,0, 0), dashLength: 0.05f);
+        AddSquareData(1, rotation_speed_fraction:new Vector3(50,0, 0), dashLength: 0.05f);
     }
 	
     void Update() {
