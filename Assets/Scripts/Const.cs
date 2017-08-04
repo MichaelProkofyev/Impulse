@@ -11,7 +11,7 @@ public enum LASERPATTERN
 }
 
 
-public static class Const {
+public static class CONST {
 
     //LED
     public static string LED_SERIAL_PORT = "/dev/tty.usbmodem1421";
@@ -24,9 +24,12 @@ public static class Const {
 		{LASERPATTERN.DOT, 20},
 		{LASERPATTERN.CIRCLE, 30},
         {LASERPATTERN.SQUARE, 30},
-    };	
-	public static float circle_max_rotation_speed = 1f;
-    public static float square_max_rotation_speed = 1f;
+    };
+
+    public const ushort LASER_MAX_VALUE = 65535;
+
+    public const float circle_max_rotation_speed = 1f;
+    public const float square_max_rotation_speed = 1f;
 
     public static Vector2[] RotatePoints(Vector2[] points, Vector3 rotation)
     {
@@ -43,13 +46,10 @@ public static class Const {
     }
 }
 
-
 public static class ExtensionMethods
 {
-
     public static float Remap(this float value, float from1, float to1, float from2, float to2)
     {
         return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
     }
-
 }

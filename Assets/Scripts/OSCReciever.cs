@@ -22,7 +22,7 @@ public class OSCReciever : MonoBehaviour {
                 float speedX = Mathf.Clamp01((float)args[3]);
                 float speedY = Mathf.Clamp01((float)args[4]);
                 float speedZ = Mathf.Clamp01((float)args[5]);
-                Laser.Instance.AddCircleData(newPatternID, brightness, new Vector3(speedX, speedY, speedZ));
+                Laser.Instance.AddCircleData(newPatternID, brightness: brightness, rotSpeed: new Vector3(speedX, speedY, speedZ));
                 break;
             default:
                 Debug.LogWarning("Recieved unknown laser pattern: " + patternType);

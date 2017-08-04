@@ -8,9 +8,9 @@ using System;
 public class LEDController : SingletonComponent<LEDController> {
 
     int baudRate = 115200;
-    [Range (0, 255)] public byte[] ledValues = new byte[Const.LED_COUNT];
+    [Range (0, 255)] public byte[] ledValues = new byte[CONST.LED_COUNT];
 
-    private byte[] oldControls = new byte[Const.LED_COUNT];
+    private byte[] oldControls = new byte[CONST.LED_COUNT];
     private bool updateOutput;
     private bool serialOpened;
     private SerialPort arduinoSerial;     // each port's actual Serial port
@@ -18,13 +18,13 @@ public class LEDController : SingletonComponent<LEDController> {
 
 
     void Start () {
-        serialOpen(Const.LED_SERIAL_PORT, baudRate);
+        serialOpen(CONST.LED_SERIAL_PORT, baudRate);
         updateOutput = true;
     }
 
     IEnumerator SwitchLight(){ 
         while(true) {
-            yield return new WaitForSeconds(Const.LED_MIN_UPDATE_TIME);
+            yield return new WaitForSeconds(CONST.LED_MIN_UPDATE_TIME);
             for (int i = 0; i < ledValues.Length; i++) {
                     // controls[i] = isZero ? 0 : 255;
                     //controls[i] = (int)(oscReciever.ledValues[i] * 255);
@@ -34,7 +34,7 @@ public class LEDController : SingletonComponent<LEDController> {
 
     void Update () {
         if (serialOpened) {
-            for (int i = 0; i < Const.LED_COUNT; i++) {
+            for (int i = 0; i < CONST.LED_COUNT; i++) {
                 if (oldControls[i] != ledValues[i] && !updateOutput) {
                     oldControls[i] = ledValues[i];
                     updateOutput = true;
@@ -54,7 +54,7 @@ public class LEDController : SingletonComponent<LEDController> {
     {
         if (serialOpened)
         {
-            serialUpdate(new byte[Const.LED_COUNT]);
+            serialUpdate(new byte[CONST.LED_COUNT]);
             arduinoSerial.Close();
         }
     }
@@ -66,7 +66,7 @@ public class LEDController : SingletonComponent<LEDController> {
 			serialOpened = true;
 		}
 		catch {
-			print("Serial port " + Const.LED_SERIAL_PORT + " does not exist or is non-functional");
+			print("Serial port " + CONST.LED_SERIAL_PORT + " does not exist or is non-functional");
 			return;
 		}
     }
@@ -74,10 +74,10 @@ public class LEDController : SingletonComponent<LEDController> {
     void serialUpdate(byte[] values)
     {
 		// convert the LED image to raw data
-		byte[] data = new byte[Const.LED_COUNT + 1];
+		byte[] data = new byte[CONST.LED_COUNT + 1];
 
 		data[0] = (byte)'*';  // first Teensy is the frame sync master
-		for (int i = 0; i < Const.LED_COUNT; i++)
+		for (int i = 0; i < CONST.LED_COUNT; i++)
 		{
             // print("updating i " + values[i]);
 			data[i + 1] = (byte)values[i];

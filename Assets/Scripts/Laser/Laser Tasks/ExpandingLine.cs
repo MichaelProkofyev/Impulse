@@ -6,20 +6,19 @@ using UnityEngine;
 public class ExpandingLine : LaserTaskBase
 {
 
-    new const LASERPATTERN type  = LASERPATTERN.CIRCLE;
-	int pointsCount = Const.pointsPerPattern[type];
+    new const LASERPATTERN type  = LASERPATTERN.DOT;
+	int pointsCount = CONST.pointsPerPattern[type];
 
     Vector2 endPoint;
 
-    public ExpandingLine(Vector2 newStartPoint, float newSpeed = 5) : base(newStartPoint)
+    public ExpandingLine(Vector2 newStartPoint, ushort brightness = CONST.LASER_MAX_VALUE, float newSpeed = 5) : base(newStartPoint, brightness)
     {
         endPoint = startPoint;// + UnityEngine.Random.insideUnitCircle / 2f;
       //  print("START POINT: " + startPoint);
     }
 
-    public override Vector2[] NextPoints(float deltaTime)
+    public override Vector2[] CalculatePatternPoints(float deltaTime)
     {
-
         //LINE IS NOT MAKING PROGRESS, THINK HOW TO FIX AND UPDATE
         Vector2[] points = new Vector2[pointsCount];
         for (int pIdx = 0; pIdx < pointsCount; pIdx++) {
@@ -29,8 +28,6 @@ public class ExpandingLine : LaserTaskBase
             newPoint.y *= Laser.Instance.multy;
             points[pIdx] = newPoint;
         }
-
-
         return points;
     }
 }

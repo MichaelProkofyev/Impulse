@@ -8,6 +8,7 @@ public class Laser : SingletonComponent<Laser> {
     public float multy = 1;
     public float multx = 1;
 
+
     public ushort cut_x = 32767;
     public ushort cut_y = 32767;
 
@@ -16,32 +17,32 @@ public class Laser : SingletonComponent<Laser> {
     Dictionary<int, LaserTaskBase> patterns = new Dictionary<int, LaserTaskBase>();
 
 
-    public void AddCircleData(int patternID, ushort brightness, Vector3 rotation_speed_fraction) {
+    public void AddCircleData(int patternID, Vector3 rotSpeed, ushort brightness = CONST.LASER_MAX_VALUE, float dashLength = 0) {
         Circle circlePattern;
         if(patterns.ContainsKey(patternID)) {
             circlePattern = (Circle)patterns[patternID];
         }else { //NO PATTERN FOR ID, CREATE IT
-            circlePattern = new Circle(Vector2.zero); 
+            circlePattern = new Circle(center: Vector2.zero, radius: 1f); 
             patterns.Add(patternID, circlePattern);
         }
         circlePattern.brightness = brightness;
-        circlePattern.rotation_speed = rotation_speed_fraction * Const.circle_max_rotation_speed;
+        circlePattern.dashLength = dashLength;
+        circlePattern.rotation_speed = rotSpeed * CONST.circle_max_rotation_speed;
     }
 
-    public void AddSquareData(int patternID, ushort brightness, Vector3 rotation_speed_fraction)
+    public void AddSquareData(int patternID, ushort brightness, float sideLength, Vector3 rotation_speed_fraction, float dashLength = 0)
     {
         Square squarePattern;
-        if (patterns.ContainsKey(patternID))
-        {
+        if (patterns.ContainsKey(patternID)) {
             squarePattern = (Square)patterns[patternID];
         }
-        else
-        { //NO PATTERN FOR ID, CREATE IT
-            squarePattern = new Square(Vector2.zero, 1);
+        else { //NO PATTERN FOR ID, CREATE IT
+            squarePattern = new Square(Vector2.zero, sideLength);
             patterns.Add(patternID, squarePattern);
         }
-        squarePattern.rotation = rotation_speed_fraction * Const.square_max_rotation_speed;
+        squarePattern.dashLength = dashLength;
         squarePattern.brightness = brightness;
+        squarePattern.rotation_speed = rotation_speed_fraction * CONST.square_max_rotation_speed;
     }
 
     void Start () {
@@ -54,7 +55,7 @@ public class Laser : SingletonComponent<Laser> {
         //    AddCircleData(cIdx, (ushort)(0.1f * cIdx * 65500), Vector3.one * 10 * cIdx);
         //}
 
-        AddSquareData(1, 65500, Vector3.one / 2f);
+        AddCircleData(patternID: 1, rotSpeed: new Vector3(50,0, 0), dashLength: 0.05f);
     }
 	
     void Update() {
@@ -65,14 +66,38 @@ public class Laser : SingletonComponent<Laser> {
             List<RCPoint> shapePoints = new List<RCPoint>();
             Vector2[] pointsPositions = patterns[patternID].NextPoints(Time.deltaTime);
 
+            //DASH THINGS
+            bool isDashingColor = true;
+            float currDashLength = 0f;
+
             for (int pIdx = 0; pIdx < pointsPositions.Length; pIdx++)
             {
                 RCPoint newPoint;
                 newPoint.x = (short)( Mathf.Clamp(pointsPositions[pIdx].x * 32767 * sizeMultiplier, -cut_x, cut_x) );
                 newPoint.y = (short)(Mathf.Clamp(pointsPositions[pIdx].y * 32767 * sizeMultiplier, -cut_y, cut_y));
-                newPoint.red = patterns[patternID].brightness;
-                newPoint.green = 0;
-                newPoint.blue = 0;
+
+                if(isDashingColor){
+                    newPoint.red = patterns[patternID].brightness;
+                    newPoint.green = 0;
+                    newPoint.blue = 0;
+                }
+                else{
+                    newPoint.red = 0;
+                    newPoint.green = 0;
+                    newPoint.blue = 0;
+                }
+
+                if(patterns[patternID].dashLength != 0)
+                {
+                    currDashLength += 1.0f / pointsPositions.Length;
+
+                    if (patterns[patternID].dashLength <= currDashLength) //END OF DASH 
+                    {
+                        isDashingColor = !isDashingColor;
+                        currDashLength = 0f;
+                    }
+                }
+
 
                 newPoint.intensity = RayComposerDraw.intensity;
                 newPoint.user1 = RayComposerDraw.user1;
