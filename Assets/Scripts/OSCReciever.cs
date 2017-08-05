@@ -7,21 +7,25 @@ public class OSCReciever : MonoBehaviour {
 
     UDPListener oscListener;
 
-    static void HandleLaserMessage(int laserIdx, List<object> args) {
-        LASERPATTERN patternType = (LASERPATTERN)args[0];
-        int newPatternID = (int)args[1];
-        float brightnessFraction = Mathf.Clamp01((float)args[2]);
+    static void HandleLaserMessage(List<object> args) {
+        int laserIdx = (int)args[0];
+        LASERPATTERN patternType = (LASERPATTERN)args[1];
+        int newPatternID = (int)args[2];
+        float brightnessFraction = Mathf.Clamp01((float)args[3]);
         ushort brightness = (ushort)(brightnessFraction * 65535);
 
 
         switch (patternType) {
             case LASERPATTERN.DOT:
-            
+                float speed = (float)args[4];
+                float trace = (float)args[5];
+                // print("BRIGHTNESS " +  brightness );
+                Laser.Instance.AddDotData(newPatternID, brightness, speed: speed);
                 break;
             case LASERPATTERN.CIRCLE:
-                float speedX = Mathf.Clamp01((float)args[3]);
-                float speedY = Mathf.Clamp01((float)args[4]);
-                float speedZ = Mathf.Clamp01((float)args[5]);
+                float speedX = Mathf.Clamp01((float)args[4]);
+                float speedY = Mathf.Clamp01((float)args[5]);
+                float speedZ = Mathf.Clamp01((float)args[6]);
                 Laser.Instance.AddCircleData(newPatternID, brightness: brightness, rotSpeed: new Vector3(speedX, speedY, speedZ));
                 break;
             default:
@@ -80,8 +84,8 @@ public class OSCReciever : MonoBehaviour {
                 HandleLEDMessage(9, args);
                 break;
             //LASER
-            case "/laser1":
-                HandleLaserMessage(0, args);
+            case "/laser":
+                HandleLaserMessage(args);
                 break;
             //DMX
             case "/dmx1":

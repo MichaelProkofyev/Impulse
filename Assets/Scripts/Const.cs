@@ -21,9 +21,9 @@ public static class CONST {
     //LASER
 	public static Dictionary<LASERPATTERN, int> pointsPerPattern = new Dictionary<LASERPATTERN, int>() {
 		{LASERPATTERN.NONE, 100},
-		{LASERPATTERN.DOT, 20},
-		{LASERPATTERN.CIRCLE, 30},
-        {LASERPATTERN.SQUARE, 30},
+		{LASERPATTERN.DOT, 10},
+		{LASERPATTERN.CIRCLE, 50},
+        {LASERPATTERN.SQUARE, 50},
     };
 
     public const ushort LASER_MAX_VALUE = 65535;

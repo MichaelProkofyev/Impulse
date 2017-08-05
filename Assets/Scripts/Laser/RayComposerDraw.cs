@@ -82,7 +82,6 @@ public class RayComposerDraw : MonoBehaviour {
         Debug.Log("Found " + count + " device(s):\n");
         for(uint i = 0; i < count; i++){
                    
-
             ret = RayComposer.RCDeviceID(i, deviceIdString, (uint)deviceIdString.Capacity);
 
             if(ret < 0){
@@ -322,7 +321,11 @@ public class RayComposerDraw : MonoBehaviour {
             Debug.Log("\nError waiting for free buffer: " + ret + " Exit.\n");
             return;
         }
-        ret = RayComposer.RCWriteFrame(handle, points.ToArray(), (uint)points.Count, speed, 0);
+        if (points.Count == 0) {
+            ret = RayComposer.RCWriteFrame(handle, new RCPoint[1], (uint)1, speed, 0);
+        }else {
+            ret = RayComposer.RCWriteFrame(handle, points.ToArray(), (uint)points.Count, speed, 0);
+        }
         if (ret < (int)RCReturnCode.RCOk)
         {
             Debug.Log("\nError writing frame to device: " + ret + " Exit.\n");
