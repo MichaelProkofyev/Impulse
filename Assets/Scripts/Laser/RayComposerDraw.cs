@@ -57,8 +57,8 @@ public class RayComposerDraw : MonoBehaviour {
 
 
 	void Start () {
-         
-        ret = RayComposer.RCInit();
+        if (Application.platform == RuntimePlatform.WindowsEditor) return;
+            ret = RayComposer.RCInit();
 
         if(ret < 0){
             Debug.Log("Error initialising Library! Exit."); return;
@@ -203,7 +203,7 @@ public class RayComposerDraw : MonoBehaviour {
                 }
 
             }
-            print("X MIN: " + x_min + " Y MIN: " + y_min + " X MAX: " + x_max + " Y MAX: " + y_max);
+          //  print("X MIN: " + x_min + " Y MIN: " + y_min + " X MAX: " + x_max + " Y MAX: " + y_max);
         }
         else {
 
@@ -261,7 +261,9 @@ public class RayComposerDraw : MonoBehaviour {
 
                         points.Add(shapePoints[p]);
                         if (p > 0) {
+
                             Debug.DrawLine(new Vector2(shapePoints[p - 1].x, shapePoints[p - 1].y) / 32767.5f, new Vector2(shapePoints[p].x, shapePoints[p].y) / 32767.5f, new Color(shapePoints[p].red / 65535f, shapePoints[p].green / 65535f, shapePoints[p].blue / 65535f));
+                        //    print("X " + shapePoints[p].x + " Y " + shapePoints[p].y);
                         }
                         //print(objectPoints[p].x);
 
@@ -309,12 +311,13 @@ public class RayComposerDraw : MonoBehaviour {
 //        print("---");
 
         checkPointsCount();
-            
+        if (Application.platform == RuntimePlatform.WindowsEditor) return;
 
-            /* wait for free buffer; second parameter is timeout
-     *   0 = poll number of free buffers only, return immediately
-     * < 0 = wait forever until buffer becomes free
-     * > 0 = wait the number of miliseconds or until a buffer becomes free */
+
+        /* wait for free buffer; second parameter is timeout
+ *   0 = poll number of free buffers only, return immediately
+ * < 0 = wait forever until buffer becomes free
+ * > 0 = wait the number of miliseconds or until a buffer becomes free */
         ret = RayComposer.RCWaitForReady(handle, -1);
         if (ret < (int)RCReturnCode.RCOk)
         {
@@ -330,18 +333,7 @@ public class RayComposerDraw : MonoBehaviour {
         {
             Debug.Log("\nError writing frame to device: " + ret + " Exit.\n");
             return;
-        }
-             
-
-//                for(int i = 0; i < points.Count; i++) {
-//                    print(points[i].x);
-//                    print(points[i].y);
-//                    print(points[i].red);
-//          
-//                }
-//        
-//                print("----");
-		
+        }		
 	}
 
 
@@ -376,6 +368,8 @@ public class RayComposerDraw : MonoBehaviour {
     }
 
     void OnApplicationQuit() {
+        if (Application.platform == RuntimePlatform.WindowsEditor) return;
+
         if (count > 0) {
             Debug.Log("Stoping laser.\n");
             ret = RayComposer.RCStopOutput(handle);

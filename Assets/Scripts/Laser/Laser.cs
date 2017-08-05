@@ -14,12 +14,17 @@ public class Laser : SingletonComponent<Laser> {
 
     public Vector3 rgb = Vector3.right;
 
+    public int patternsCount = 0;
+
+
+    public float global_shake = 0f;
+
 
     public List<List<RCPoint>> points = new List<List<RCPoint>>(); 
     Dictionary<int, LaserTaskBase> patterns = new Dictionary<int, LaserTaskBase>();
 
 
-    public void AddCircleData(int patternID, Vector3 rotSpeed, ushort brightness = CONST.LASER_MAX_VALUE, float dashLength = 0, float radius = 1) {
+    public void AddCircleData(int patternID, Vector3 rotSpeed, float shake = 0, ushort brightness = CONST.LASER_MAX_VALUE, float dashLength = 0, float radius = 1) {
         Circle circlePattern;
         if(patterns.ContainsKey(patternID)) {
             circlePattern = (Circle)patterns[patternID];
@@ -31,6 +36,7 @@ public class Laser : SingletonComponent<Laser> {
         circlePattern.brightness = brightness;
         circlePattern.dashLength = dashLength;
         circlePattern.rotation_speed = rotSpeed * CONST.CIRCLE_BASE_ROT_SPEED;
+        circlePattern.shake = global_shake;
     }
 
     public void AddSquareData(int patternID, Vector3 rotation_speed_fraction, float sideLength = 1f, ushort brightness = CONST.LASER_MAX_VALUE, float dashLength = 0)
@@ -72,11 +78,11 @@ public class Laser : SingletonComponent<Laser> {
 
 
         //DEBUG
-        for (int cIdx = 0; cIdx < 5; cIdx++)
-        {
-                AddCircleData(cIdx, brightness: (ushort)(0.1f * cIdx * 65500), rotSpeed: Random.insideUnitSphere * 10 * cIdx, radius: 1f);
-         //   AddSquareData(cIdx, rotation_speed_fraction: Random.insideUnitSphere * 50, dashLength: 0);
-        }
+        //for (int cIdx = 0; cIdx < 5; cIdx++)
+        //{
+        //        AddCircleData(cIdx, brightness: (ushort)(0.1f * cIdx * 65500), rotSpeed: Random.insideUnitSphere * 10 * cIdx, radius: 1f);
+        // //   AddSquareData(cIdx, rotation_speed_fraction: Random.insideUnitSphere * 50, dashLength: 0);
+        //}
     }
 	
     void Update() {
@@ -124,6 +130,7 @@ public class Laser : SingletonComponent<Laser> {
 
 
                 shapePoints.Add(newPoint);
+               // print("X " + newPoint.x + " Y " + newPoint.y);
             }
             points.Add(shapePoints);
 
@@ -131,14 +138,19 @@ public class Laser : SingletonComponent<Laser> {
             if (shouldDestroyPattern) {
                 finishedPatternIDs.Add(patternID);
             }
+
         }
 
         //REMOVE PATTERNS THAT ARE FINISHED
         for (int i = 0; i < finishedPatternIDs.Count; i++) {
             patterns.Remove(finishedPatternIDs[i]);
+            //print("DELETING " + i);
         }
 
-        if(patterns.Count == 0) {
+        patternsCount = patterns.Count;
+
+
+        if (patterns.Count == 0) {
             points.Clear();
             RCPoint newPoint;
             newPoint.intensity = RayComposerDraw.intensity;

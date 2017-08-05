@@ -77,15 +77,17 @@ LightmapSettings:
     m_PVRDirectSampleCount: 32
     m_PVRSampleCount: 500
     m_PVRBounces: 2
-    m_PVRFiltering: 0
+    m_PVRFilterTypeDirect: 0
+    m_PVRFilterTypeIndirect: 0
+    m_PVRFilterTypeAO: 0
     m_PVRFilteringMode: 1
     m_PVRCulling: 1
     m_PVRFilteringGaussRadiusDirect: 1
     m_PVRFilteringGaussRadiusIndirect: 5
     m_PVRFilteringGaussRadiusAO: 2
-    m_PVRFilteringAtrousColorSigma: 1
-    m_PVRFilteringAtrousNormalSigma: 1
-    m_PVRFilteringAtrousPositionSigma: 1
+    m_PVRFilteringAtrousPositionSigmaDirect: 0.5
+    m_PVRFilteringAtrousPositionSigmaIndirect: 2
+    m_PVRFilteringAtrousPositionSigmaAO: 1
   m_LightingDataAsset: {fileID: 0}
   m_UseShadowmask: 1
 --- !u!196 &4
@@ -107,6 +109,8 @@ NavMeshSettings:
     manualTileSize: 0
     tileSize: 256
     accuratePlacement: 0
+    debug:
+      m_Flags: 0
   m_NavMeshData: {fileID: 0}
 --- !u!1 &44315382
 GameObject:
@@ -192,6 +196,7 @@ GameObject:
   m_Component:
   - component: {fileID: 607506513}
   - component: {fileID: 607506512}
+  - component: {fileID: 607506514}
   m_Layer: 0
   m_Name: OSC
   m_TagString: Untagged
@@ -210,6 +215,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e50489ab0782ea3469ccab650d9e8013, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _oscAddress: /
+  _oscAddresses:
+  - /
+  _receiveAllAddresses: 1
+  _useExplicitConnection: 0
+  _explicitConnection: {fileID: 0}
+  _oscPort: 10000
+  _receiveAllPorts: 0
+  _redrawFlag: 0
+  _foldoutList: []
 --- !u!4 &607506513
 Transform:
   m_ObjectHideFlags: 0
@@ -223,6 +238,39 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &607506514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 607506511}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eaad75f03bc9d2942a2a4dd8e734324f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _transmissionTypeIn: 0
+  _transmissionTypeOut: 0
+  autoConnectOSCIn: 1
+  _oscPort: 10000
+  _isValidOscIPAddress: 1
+  _isValidOscMulticastIPAddress: 1
+  _oscMulticastIPAddress: 224.0.1.0
+  oscOut: 1
+  autoConnectOSCOut: 0
+  foldoutOSCOut: 0
+  foldoutOSCIn: 1
+  _isValidOscOutIPAddress: 1
+  _oscOutIPAddress: 127.0.0.1
+  _isValidOscOutMulticastIPAddress: 1
+  _oscOutMulticastIPAddress: 224.0.1.0
+  _oscOutPort: 9000
+  redrawFlag: 0
+  dispatchOSC: 0
+  dispatchOSCOut: 0
+  oscMappingFileObjList: []
+  oscSessionFileObjList: []
+  SendSessionDataOnStart: 0
 --- !u!1 &957303016
 GameObject:
   m_ObjectHideFlags: 0
@@ -296,6 +344,7 @@ MonoBehaviour:
   multx: 1
   cut_x: 32767
   cut_y: 32767
+  rgb: {x: 1, y: 0, z: 0}
 --- !u!4 &1104572945
 Transform:
   m_ObjectHideFlags: 0

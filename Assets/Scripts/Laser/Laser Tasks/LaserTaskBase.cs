@@ -30,8 +30,9 @@ abstract public class LaserTaskBase {
         rotation += rotation_speed * deltaTime;
         Vector2[] patternPoints = CalculatePatternPoints(deltaTime);
         //SHAKE THE POINTS
-        for (int pointIdx = 0; pointIdx < patternPoints.Length; pointIdx++) {
-            patternPoints[pointIdx] *= shake; 
+        for (int pointIdx = 0; pointIdx < patternPoints.Length; pointIdx++)
+        {
+            patternPoints[pointIdx] += CONST.RRange2(-shake, shake);
         }
 
         Vector2[] rotatedPoints = CONST.RotatePoints(patternPoints, rotation);

@@ -1,13 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using SharpOSC;
+using OSCsharp.Data;
+using UniOSC;
 
-public class OSCReciever : MonoBehaviour {
+public class OSCReciever : UniOSCEventTarget
+{
 
-    UDPListener oscListener;
-
-    static void HandleLaserMessage(List<object> args) {
+    static void HandleLaserMessage(IList<object> args) {
         int laserIdx = (int)args[0];
         LASERPATTERN patternType = (LASERPATTERN)args[1];
         int newPatternID = (int)args[2];
@@ -34,35 +34,35 @@ public class OSCReciever : MonoBehaviour {
         }
     }
 
-    static void HandleTestLaserMessage(int parttern_id, List<object> args)
+    static void HandleTestLaserMessage(int patternID, IList<object> args)
     {
-        print("ADDING TEST PATTERN");
+       // print("ADDING TEST PATTERN");
         float brightnessFraction = Mathf.Clamp01((float)args[0]);
         ushort brightness = (ushort)(brightnessFraction * 65535);
 
         // print("BRIGHTNESS " +  brightness );
-        Laser.Instance.AddDotData(parttern_id, brightness, speed: 2f);
-        //Laser.Instance.AddCircleData(patternID: parttern_id, rotSpeed: Vector2.zero);
-
+        //   Laser.Instance.AddDotData(patternID: patternID, brightness: brightness, speed: 2f);
+        Laser.Instance.AddCircleData(patternID: patternID, brightness: brightness, radius: .5f * patternID, rotSpeed: Vector2.zero);
     }
 
-    static void HandleLEDMessage(int ledIdx, List<object> args) {
+    static void HandleLEDMessage(int ledIdx, IList<object> args) {
         float brightnessFraction = Mathf.Clamp01((float)args[0]);
         LEDController.Instance.ledValues[ledIdx] = (byte)(brightnessFraction * 255);
     }
 
-    static void HandleDMXMessage(int dmxIdx, List<object> args) {
+    static void HandleDMXMessage(int dmxIdx, IList<object> args) {
         float brightnessFraction = Mathf.Clamp01((float)args[1]);
         byte brightness = (byte)(brightnessFraction * 255);
         DMXController.Instance.SetValue(dmxIdx, DMXController.Instance.channelToChange, brightness);
     }
 
 
-    HandleOscPacket OscCallback = delegate (OscPacket packet)
+    public override void OnOSCMessageReceived(UniOSCEventArgs main_args)
     {
-        OscMessage messageReceived = (OscMessage)packet;
-        List<object> args = messageReceived.Arguments;
-        switch (messageReceived.Address){
+
+        OscMessage msg = (OscMessage)main_args.Packet;
+        var args = msg.Data;
+        switch (msg.Address){
             //LED
             case "/led1":
                 HandleLEDMessage(0, args);
@@ -121,19 +121,10 @@ public class OSCReciever : MonoBehaviour {
                 HandleDMXMessage(3, args);
                 break;
             default:
-                Debug.LogWarning("Unknown OSC recieved with addr: " + messageReceived.Address);
+                Debug.LogWarning("Unknown OSC recieved with addr: " + msg.Address);
                 break;
         }
-    };
-
-    // Use this for initialization
-    void Start () {
-        oscListener = new UDPListener(10000, OscCallback);
     }
 
-    void OnApplicationQuit()
-    {
-        oscListener.Close();
-    }
 
 }

@@ -24,6 +24,8 @@ public class Dot : LaserTaskBase
         currentPoint += direction * deltaTime * speed;
         currentPoint += UnityEngine.Random.insideUnitCircle *0.01f;
         startPoint += UnityEngine.Random.insideUnitCircle *0.01f;
+        //Debug.Log("START: " + startPoint + " CURR: " + currentPoint);
+        //Debug.Log(brightness);
         Vector2[] points = new Vector2[pointsCount];
         for (int pIdx = 0; pIdx < pointsCount; pIdx++) {
             Vector2 newPoint = Vector2.Lerp(startPoint, currentPoint, (float)pIdx / pointsCount);
