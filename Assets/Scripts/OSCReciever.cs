@@ -34,6 +34,17 @@ public class OSCReciever : MonoBehaviour {
         }
     }
 
+    static void HandleTestLaserMessage(List<object> args)
+    {
+        print("RECIEVED MESSAGE");
+        float brightnessFraction = Mathf.Clamp01((float)args[0]);
+        ushort brightness = (ushort)(brightnessFraction * 65535);
+
+        // print("BRIGHTNESS " +  brightness );
+        Laser.Instance.AddDotData(1, brightness, speed: 2f);
+
+    }
+
     static void HandleLEDMessage(int ledIdx, List<object> args) {
         float brightnessFraction = Mathf.Clamp01((float)args[0]);
         LEDController.Instance.ledValues[ledIdx] = (byte)(brightnessFraction * 255);
@@ -50,7 +61,7 @@ public class OSCReciever : MonoBehaviour {
     {
         OscMessage messageReceived = (OscMessage)packet;
         List<object> args = messageReceived.Arguments;
-
+        print("RECIEVED " + messageReceived.Address);
         switch (messageReceived.Address){
             //LED
             case "/led1":
@@ -86,6 +97,9 @@ public class OSCReciever : MonoBehaviour {
             //LASER
             case "/laser":
                 HandleLaserMessage(args);
+                break;
+            case "/laser_test_spawn":
+                HandleTestLaserMessage(args);
                 break;
             //DMX
             case "/dmx1":
