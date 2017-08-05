@@ -9,27 +9,24 @@ public class Dot : LaserTaskBase
     new const LASERPATTERN type  = LASERPATTERN.DOT;
 	int pointsCount = CONST.pointsPerPattern[type];
 
-    Vector2 endPoint;
+    Vector2 currentPoint;
+    Vector2 direction;
     public float speed = 0;
-    float movementProgress = 0;
 
-    public Dot(Vector2 newStartPoint, Vector2 endPoint, ushort brightness = CONST.LASER_MAX_VALUE, float newSpeed = 5) : base(newStartPoint, brightness)
+    public Dot(Vector2 newStartPoint, Vector2 direction, ushort brightness = CONST.LASER_MAX_VALUE, float newSpeed = 5) : base(newStartPoint, brightness)
     {
-        System.Random rand = new System.Random();
-        this.endPoint = startPoint + endPoint;;
-      //  print("START POINT: " + startPoint);
+        this.currentPoint = startPoint;
+        this.direction = direction;
     }
 
     public override Vector2[] CalculatePatternPoints(float deltaTime)
     {   
-        movementProgress = movementProgress + deltaTime * speed * 5f;
-        endPoint += UnityEngine.Random.insideUnitCircle *0.01f;
+        currentPoint += direction * deltaTime * speed;
+        currentPoint += UnityEngine.Random.insideUnitCircle *0.01f;
         startPoint += UnityEngine.Random.insideUnitCircle *0.01f;
-        // Debug.Log(movementProgress);
         Vector2[] points = new Vector2[pointsCount];
         for (int pIdx = 0; pIdx < pointsCount; pIdx++) {
-            Vector2 newLineEndPoint = Vector2.LerpUnclamped(startPoint, endPoint, movementProgress);
-            Vector2 newPoint = Vector2.Lerp(startPoint, newLineEndPoint, (float)pIdx / pointsCount);
+            Vector2 newPoint = Vector2.Lerp(startPoint, currentPoint, (float)pIdx / pointsCount);
             newPoint.x *= Laser.Instance.multx;
             newPoint.y *= Laser.Instance.multy;
             points[pIdx] = newPoint;

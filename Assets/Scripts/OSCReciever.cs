@@ -34,14 +34,15 @@ public class OSCReciever : MonoBehaviour {
         }
     }
 
-    static void HandleTestLaserMessage(List<object> args)
+    static void HandleTestLaserMessage(int parttern_id, List<object> args)
     {
-        print("RECIEVED MESSAGE");
+        print("ADDING TEST PATTERN");
         float brightnessFraction = Mathf.Clamp01((float)args[0]);
         ushort brightness = (ushort)(brightnessFraction * 65535);
 
         // print("BRIGHTNESS " +  brightness );
-        Laser.Instance.AddDotData(1, brightness, speed: 2f);
+        Laser.Instance.AddDotData(parttern_id, brightness, speed: 2f);
+        //Laser.Instance.AddCircleData(patternID: parttern_id, rotSpeed: Vector2.zero);
 
     }
 
@@ -61,7 +62,6 @@ public class OSCReciever : MonoBehaviour {
     {
         OscMessage messageReceived = (OscMessage)packet;
         List<object> args = messageReceived.Arguments;
-        print("RECIEVED " + messageReceived.Address);
         switch (messageReceived.Address){
             //LED
             case "/led1":
@@ -98,8 +98,14 @@ public class OSCReciever : MonoBehaviour {
             case "/laser":
                 HandleLaserMessage(args);
                 break;
-            case "/laser_test_spawn":
-                HandleTestLaserMessage(args);
+            case "/laser_test_spawn1":
+                HandleTestLaserMessage(1, args);
+                break;
+            case "/laser_test_spawn2":
+                HandleTestLaserMessage(2, args);
+                break;
+            case "/laser_SetRGB":
+                Laser.Instance.rgb = new Vector3((float)args[0], (float)args[1], (float)args[2]);
                 break;
             //DMX
             case "/dmx1":

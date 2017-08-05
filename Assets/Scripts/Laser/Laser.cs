@@ -12,6 +12,8 @@ public class Laser : SingletonComponent<Laser> {
     public ushort cut_x = 32767;
     public ushort cut_y = 32767;
 
+    public Vector3 rgb = Vector3.right;
+
 
     public List<List<RCPoint>> points = new List<List<RCPoint>>(); 
     Dictionary<int, LaserTaskBase> patterns = new Dictionary<int, LaserTaskBase>();
@@ -24,10 +26,11 @@ public class Laser : SingletonComponent<Laser> {
         }else { //NO PATTERN FOR ID, CREATE IT
             circlePattern = new Circle(center: Vector2.zero, radius: 1f); 
             patterns.Add(patternID, circlePattern);
+            //print("CIRCLE CREATRD");
         }
         circlePattern.brightness = brightness;
         circlePattern.dashLength = dashLength;
-        circlePattern.rotation_speed = rotSpeed * CONST.circle_max_rotation_speed;
+        circlePattern.rotation_speed = rotSpeed * CONST.CIRCLE_BASE_ROT_SPEED;
     }
 
     public void AddSquareData(int patternID, Vector3 rotation_speed_fraction, float sideLength = 1f, ushort brightness = CONST.LASER_MAX_VALUE, float dashLength = 0)
@@ -52,9 +55,9 @@ public class Laser : SingletonComponent<Laser> {
             dotPattern = (Dot)patterns[patternID];
         }
         else { //NO PATTERN FOR ID, CREATE IT
-            System.Random rand = new System.Random();
-            Vector2 endPoint = new Vector2((float)rand.NextDouble() - 1f, (float)rand.NextDouble() - 1f );
-            dotPattern = new Dot(new Vector2((float)rand.NextDouble(), (float)rand.NextDouble() ), endPoint);
+            Vector2 startPoint = CONST.RRange2(-1, 1);
+            Vector2 direction = CONST.RRange2(-1, 1);
+            dotPattern = new Dot(newStartPoint: startPoint, direction: direction);
             patterns.Add(patternID, dotPattern);
         }
         dotPattern.brightness = brightness;
@@ -66,14 +69,14 @@ public class Laser : SingletonComponent<Laser> {
                 UnityEditor.SceneView.FocusWindowIfItsOpen(typeof(UnityEditor.SceneView));
 #endif
 
-        //DEBUG
-        // for (int cIdx = 0; cIdx < 5; cIdx++) {
-        // //    AddCircleData(cIdx, brightness: (ushort)(0.1f * cIdx * 65500), rotSpeed: Random.insideUnitSphere * 10 * cIdx, radius: 1f);
-        // AddSquareData(cIdx, rotation_speed_fraction: Random.insideUnitSphere*50, dashLength: 0);
-        // }
 
-        // AddCircleData(patternID: 1, rotSpeed: new Vector3(50,0, 0), dashLength: 0.05f);
-        // AddSquareData(1, rotation_speed_fraction:new Vector3(0,0, 0), dashLength: 0.05f);
+
+        //DEBUG
+        for (int cIdx = 0; cIdx < 5; cIdx++)
+        {
+                AddCircleData(cIdx, brightness: (ushort)(0.1f * cIdx * 65500), rotSpeed: Random.insideUnitSphere * 10 * cIdx, radius: 1f);
+         //   AddSquareData(cIdx, rotation_speed_fraction: Random.insideUnitSphere * 50, dashLength: 0);
+        }
     }
 	
     void Update() {
@@ -93,11 +96,10 @@ public class Laser : SingletonComponent<Laser> {
                 RCPoint newPoint;
                 newPoint.x = (short)( Mathf.Clamp(pointsPositions[pIdx].x * 32767 * sizeMultiplier, -cut_x, cut_x) );
                 newPoint.y = (short)(Mathf.Clamp(pointsPositions[pIdx].y * 32767 * sizeMultiplier, -cut_y, cut_y));
-
                 if(isDashingColor){
-                    newPoint.red = patterns[patternID].brightness;
-                    newPoint.green = patterns[patternID].brightness;
-                    newPoint.blue = patterns[patternID].brightness;
+                    newPoint.red = (ushort)(patterns[patternID].brightness * rgb.x);
+                    newPoint.green = (ushort)(patterns[patternID].brightness * rgb.y);
+                    newPoint.blue = (ushort)(patterns[patternID].brightness * rgb.z);
                 }
                 else{
                     newPoint.red = 0;
@@ -115,7 +117,6 @@ public class Laser : SingletonComponent<Laser> {
                         currDashLength = 0f;
                     }
                 }
-
 
                 newPoint.intensity = RayComposerDraw.intensity;
                 newPoint.user1 = RayComposerDraw.user1;

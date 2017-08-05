@@ -13,6 +13,9 @@ public enum LASERPATTERN
 
 public static class CONST {
 
+    static System.Random rand = new System.Random();
+
+
     //LED
     public static string LED_SERIAL_PORT = "/dev/tty.usbmodem1421";
     public static int LED_COUNT = 10;
@@ -28,7 +31,7 @@ public static class CONST {
 
     public const ushort LASER_MAX_VALUE = 65535;
 
-    public const float circle_max_rotation_speed = 1f;
+    public const float CIRCLE_BASE_ROT_SPEED = 1f;
     public const float square_max_rotation_speed = 1f;
 
     public static Vector2[] RotatePoints(Vector2[] points, Vector3 rotation)
@@ -43,6 +46,18 @@ public static class CONST {
             points[pIdx] = transformedPoint;
         }
         return points;
+    }
+
+
+    public static float RRange(float min, float max) {
+        return (float)rand.NextDouble() * (max - min) + min;
+    }
+
+    public static Vector2 RRange2(float min, float max)
+    {
+        float x = (float)rand.NextDouble() * (max - min) + min;
+        float y = (float)rand.NextDouble() * (max - min) + min;
+        return new Vector2(x, y);
     }
 }
 
