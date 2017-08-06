@@ -209,7 +209,8 @@ public class RayComposerDraw : MonoBehaviour {
 
             //pointsObject = GameObject.FindGameObjectsWithTag("LaserPoints");
 
-            List<List<RCPoint>> availableShapes = Laser.Instance.points;
+            List<List<RCPoint>> availableShapes = Laser.Instance.UpdatePatterns();
+
             for (int shapeIdx = 0; shapeIdx < availableShapes.Count; shapeIdx++) {
                 List<RCPoint> shapePoints = availableShapes[shapeIdx];
 
@@ -223,7 +224,7 @@ public class RayComposerDraw : MonoBehaviour {
                         point.red = shapePoints[p].red;
                         point.green = shapePoints[p].green;
                         point.blue = shapePoints[p].blue;
-                        point.intensity = 0;
+                        point.intensity = shapePoints[p].intensity;
                         point.user1 = 0;
                         point.user2 = 0;
                         shapePoints[p] = point;
@@ -261,9 +262,19 @@ public class RayComposerDraw : MonoBehaviour {
 
                         points.Add(shapePoints[p]);
                         if (p > 0) {
-
-                            Debug.DrawLine(new Vector2(shapePoints[p - 1].x, shapePoints[p - 1].y) / 32767.5f, new Vector2(shapePoints[p].x, shapePoints[p].y) / 32767.5f, new Color(shapePoints[p].red / 65535f, shapePoints[p].green / 65535f, shapePoints[p].blue / 65535f));
-                        //    print("X " + shapePoints[p].x + " Y " + shapePoints[p].y);
+                            if (shapePoints[p].intensity > 0)
+                            {
+                                Debug.DrawLine(
+                                    new Vector2(shapePoints[p - 1].x, shapePoints[p - 1].y) / 32767.5f,
+                                    new Vector2(shapePoints[p].x, shapePoints[p].y) / 32767.5f,
+                                    new Color(shapePoints[p].red / 65535f, shapePoints[p].green / 65535f, shapePoints[p].blue / 65535f));
+                                //print("DRAWING: " + " X " + shapePoints[p].x + " Y " + shapePoints[p].y);
+                            }
+                            else
+                            {
+                               // print(shapePoints[p].intensity);
+                            }
+                            //    print("X " + shapePoints[p].x + " Y " + shapePoints[p].y);
                         }
                         //print(objectPoints[p].x);
 

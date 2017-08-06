@@ -31,16 +31,15 @@ public static class CONST {
 
     public const ushort LASER_MAX_VALUE = 65535;
 
-    public const float CIRCLE_BASE_ROT_SPEED = 1f;
-    public const float square_max_rotation_speed = 1f;
 
     public static Vector2[] RotatePoints(Vector2[] points, Vector3 rotation)
     {
         Quaternion new_rotation = Quaternion.Euler(rotation);
-        Matrix4x4 m = Matrix4x4.TRS(Vector3.zero, new_rotation, Vector3.one * 1.0f.Remap(0f, 1f, 0, 2f));
+        Matrix4x4 m = Matrix4x4.TRS(Vector3.zero, new_rotation, Vector3.one);
+        //Matrix4x4 m = Matrix4x4.TRS(Vector3.zero, new_rotation, Vector3.one * 1.0f.Remap(0f, 1f, 0, 2f));
 
-        for (int pIdx = 0; pIdx < points.Length; pIdx++)
-        {
+
+        for (int pIdx = 0; pIdx < points.Length; pIdx++) {
             Vector3 d_point = new Vector3(points[pIdx].x, points[pIdx].y, 0);
             Vector3 transformedPoint = m.MultiplyPoint3x4(d_point);
             points[pIdx] = transformedPoint;
@@ -51,6 +50,11 @@ public static class CONST {
 
     public static float RRange(float min, float max) {
         return (float)rand.NextDouble() * (max - min) + min;
+    }
+
+    public static int RRangeInt(int min, int max)
+    {
+        return rand.Next(min + max);
     }
 
     public static Vector2 RRange2(float min, float max)

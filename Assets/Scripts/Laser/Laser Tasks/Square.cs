@@ -6,16 +6,20 @@ using UnityEngine;
 public class Square : LaserTaskBase {
 
     float sideLength;
-    int pointsCount = CONST.pointsPerPattern[type];
-    new const LASERPATTERN type = LASERPATTERN.SQUARE;
+    public float pointsMultiplier = 1f;
+
+    Vector2[] anchrors = new Vector2[] { new Vector2(-1, -1), new Vector2(1, -1), new Vector2(1, 1), new Vector2(-1, 1) };
 
     public Square(Vector2 newStartPoint, float sideLength = 1, ushort brightness = CONST.LASER_MAX_VALUE) : base(newStartPoint, brightness)
     {
+        this.type = LASERPATTERN.SQUARE;
+        this.pointsCount = CONST.pointsPerPattern[type];
         this.sideLength = sideLength;
     }
 
     public override Vector2[] CalculatePatternPoints(float deltaTime)
     {
+        pointsCount = Mathf.CeilToInt(CONST.pointsPerPattern[type] * pointsMultiplier);
         //throw new NotImplementedException();
         Vector2[] points = new Vector2[pointsCount + 1];
 

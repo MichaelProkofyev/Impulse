@@ -11,38 +11,57 @@ public class OSCReciever : UniOSCEventTarget
         int laserIdx = (int)args[0];
         LASERPATTERN patternType = (LASERPATTERN)args[1];
         int newPatternID = (int)args[2];
-        float brightnessFraction = Mathf.Clamp01((float)args[3]);
-        ushort brightness = (ushort)(brightnessFraction * 65535);
+        ushort brightness = (ushort)(Mathf.Clamp01((float)args[3]) * CONST.LASER_MAX_VALUE);
+        float wobbleMultiplier = (float)args[4];
 
+        Vector3 rotationSpeed = Vector3.zero;
+        float pointsMultiplier = 1f;
 
         switch (patternType) {
             case LASERPATTERN.DOT:
-                float speed = (float)args[4];
-                float trace = (float)args[5];
+                float speed = (float)args[5];
+                float showTrace = (float)args[6];
+                float stickToPattern = (float)args[7];
+
                 // print("BRIGHTNESS " +  brightness );
-                Laser.Instance.AddDotData(newPatternID, brightness, speed: speed);
+                Laser.Instance.AddDotData (
+                        patternID: newPatternID,
+                        brightness: brightness,
+                        wobble: wobbleMultiplier,
+                        speed: speed,
+                        showTrace: showTrace == 1f,
+                        stickToPattern: (LASERPATTERN)stickToPattern
+                      );
                 break;
             case LASERPATTERN.CIRCLE:
-                float speedX = Mathf.Clamp01((float)args[4]);
-                float speedY = Mathf.Clamp01((float)args[5]);
-                float speedZ = Mathf.Clamp01((float)args[6]);
-                Laser.Instance.AddCircleData(newPatternID, brightness: brightness, rotSpeed: new Vector3(speedX, speedY, speedZ));
+                rotationSpeed = new Vector3((float)args[5], (float)args[6], (float)args[7]);
+                pointsMultiplier = (float)args[8];
+                Vector2 center = new Vector2((float)args[9], (float)args[10]);
+
+                Laser.Instance.AddCircleData(
+                    patternID: newPatternID,
+                    brightness: brightness,
+                    wobble: wobbleMultiplier,
+                    rotation_speed: rotationSpeed,
+                    pointsMultiplier: pointsMultiplier,
+                    center: center
+                    );
+                break;
+            case LASERPATTERN.SQUARE:
+                rotationSpeed = new Vector3((float)args[5], (float)args[6], (float)args[7]);
+                pointsMultiplier = (float)args[8];
+                Laser.Instance.AddSquareData(
+                        patternID: newPatternID,
+                        brightness: brightness,
+                        rotation_speed: rotationSpeed,
+                        wobble: wobbleMultiplier,
+                        pointsMultiplier: pointsMultiplier
+                    );
                 break;
             default:
                 Debug.LogWarning("Recieved unknown laser pattern: " + patternType);
                 break;
         }
-    }
-
-    static void HandleTestLaserMessage(int patternID, IList<object> args)
-    {
-       // print("ADDING TEST PATTERN");
-        float brightnessFraction = Mathf.Clamp01((float)args[0]);
-        ushort brightness = (ushort)(brightnessFraction * 65535);
-
-        // print("BRIGHTNESS " +  brightness );
-        //   Laser.Instance.AddDotData(patternID: patternID, brightness: brightness, speed: 2f);
-        Laser.Instance.AddCircleData(patternID: patternID, brightness: brightness, radius: .5f * patternID, rotSpeed: Vector2.zero);
     }
 
     static void AddTestSquare(int patternID, IList<object> args)
@@ -52,13 +71,7 @@ public class OSCReciever : UniOSCEventTarget
 
         // print("BRIGHTNESS " +  brightness );
         //   Laser.Instance.AddDotData(patternID: patternID, brightness: brightness, speed: 2f);
-        Laser.Instance.AddSquareData(patternID: patternID, rotation_speed_fraction: Vector3.zero, brightness: brightness);
-    }
-    static void AddTestCircle(int patternID, IList<object> args)
-    {
-        float brightnessFraction = Mathf.Clamp01((float)args[0]);
-        ushort brightness = (ushort)(brightnessFraction * 65535);
-        Laser.Instance.AddCircleData(patternID: patternID, brightness: brightness, rotSpeed: new Vector3(0,0,0));
+        Laser.Instance.AddSquareData(patternID: patternID, rotation_speed: Vector3.zero, brightness: brightness);
     }
 
     
@@ -115,18 +128,6 @@ public class OSCReciever : UniOSCEventTarget
             //LASER
             case "/laser":
                 HandleLaserMessage(args);
-                break;
-            case "/laser_test_spawn1":
-                HandleTestLaserMessage(1, args);
-                break;
-            case "/laser_test_spawn2":
-                HandleTestLaserMessage(2, args);
-                break;
-            case "/laser_square_test":
-                AddTestSquare(1, args);
-                break;
-            case "/laser_circle_test":
-                AddTestCircle(1, args);
                 break;
             case "/laser_SetRGB":
                 Laser.Instance.rgb = new Vector3((float)args[0], (float)args[1], (float)args[2]);

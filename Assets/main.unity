@@ -265,8 +265,8 @@ MonoBehaviour:
   _isValidOscOutMulticastIPAddress: 1
   _oscOutMulticastIPAddress: 224.0.1.0
   _oscOutPort: 9000
-  redrawFlag: 1
-  dispatchOSC: 1
+  redrawFlag: 0
+  dispatchOSC: 0
   dispatchOSCOut: 0
   oscMappingFileObjList: []
   oscSessionFileObjList: []
@@ -346,7 +346,7 @@ MonoBehaviour:
   cut_y: 32767
   rgb: {x: 1, y: 0, z: 0}
   patternsCount: 0
-  global_wobble: 0.015
+  global_wobble: 0
 --- !u!4 &1104572945
 Transform:
   m_ObjectHideFlags: 0
