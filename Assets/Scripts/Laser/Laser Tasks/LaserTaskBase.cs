@@ -32,7 +32,7 @@ abstract public class LaserTaskBase {
         //SHAKE THE POINTS
         for (int pointIdx = 0; pointIdx < patternPoints.Length; pointIdx++)
         {
-            patternPoints[pointIdx] += CONST.RRange2(-shake, shake);
+            patternPoints[pointIdx] += CONST.RRange2(-(Laser.Instance.global_wobble + shake), Laser.Instance.global_wobble + shake);
         }
 
         Vector2[] rotatedPoints = CONST.RotatePoints(patternPoints, rotation);

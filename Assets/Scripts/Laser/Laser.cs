@@ -17,7 +17,7 @@ public class Laser : SingletonComponent<Laser> {
     public int patternsCount = 0;
 
 
-    public float global_shake = 0f;
+    public float global_wobble = 0f;
 
 
     public List<List<RCPoint>> points = new List<List<RCPoint>>(); 
@@ -36,7 +36,6 @@ public class Laser : SingletonComponent<Laser> {
         circlePattern.brightness = brightness;
         circlePattern.dashLength = dashLength;
         circlePattern.rotation_speed = rotSpeed * CONST.CIRCLE_BASE_ROT_SPEED;
-        circlePattern.shake = global_shake;
     }
 
     public void AddSquareData(int patternID, Vector3 rotation_speed_fraction, float sideLength = 1f, ushort brightness = CONST.LASER_MAX_VALUE, float dashLength = 0)

@@ -173,8 +173,8 @@ MonoBehaviour:
   tIntensity: 65535
   tUser1: 65535
   tUser2: 65535
-  correctionX: 5992
-  correctionY: 6681
+  correctionX: 0
+  correctionY: 0
   heigthCorrection: 1
 --- !u!114 &44315385
 MonoBehaviour:
@@ -265,8 +265,8 @@ MonoBehaviour:
   _isValidOscOutMulticastIPAddress: 1
   _oscOutMulticastIPAddress: 224.0.1.0
   _oscOutPort: 9000
-  redrawFlag: 0
-  dispatchOSC: 0
+  redrawFlag: 1
+  dispatchOSC: 1
   dispatchOSCOut: 0
   oscMappingFileObjList: []
   oscSessionFileObjList: []
@@ -345,6 +345,8 @@ MonoBehaviour:
   cut_x: 32767
   cut_y: 32767
   rgb: {x: 1, y: 0, z: 0}
+  patternsCount: 0
+  global_wobble: 0.015
 --- !u!4 &1104572945
 Transform:
   m_ObjectHideFlags: 0

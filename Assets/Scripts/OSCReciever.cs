@@ -45,6 +45,24 @@ public class OSCReciever : UniOSCEventTarget
         Laser.Instance.AddCircleData(patternID: patternID, brightness: brightness, radius: .5f * patternID, rotSpeed: Vector2.zero);
     }
 
+    static void AddTestSquare(int patternID, IList<object> args)
+    {
+        float brightnessFraction = Mathf.Clamp01((float)args[0]);
+        ushort brightness = (ushort)(brightnessFraction * 65535);
+
+        // print("BRIGHTNESS " +  brightness );
+        //   Laser.Instance.AddDotData(patternID: patternID, brightness: brightness, speed: 2f);
+        Laser.Instance.AddSquareData(patternID: patternID, rotation_speed_fraction: Vector3.zero, brightness: brightness);
+    }
+    static void AddTestCircle(int patternID, IList<object> args)
+    {
+        float brightnessFraction = Mathf.Clamp01((float)args[0]);
+        ushort brightness = (ushort)(brightnessFraction * 65535);
+        Laser.Instance.AddCircleData(patternID: patternID, brightness: brightness, rotSpeed: new Vector3(0,0,0));
+    }
+
+    
+
     static void HandleLEDMessage(int ledIdx, IList<object> args) {
         float brightnessFraction = Mathf.Clamp01((float)args[0]);
         LEDController.Instance.ledValues[ledIdx] = (byte)(brightnessFraction * 255);
@@ -104,8 +122,17 @@ public class OSCReciever : UniOSCEventTarget
             case "/laser_test_spawn2":
                 HandleTestLaserMessage(2, args);
                 break;
+            case "/laser_square_test":
+                AddTestSquare(1, args);
+                break;
+            case "/laser_circle_test":
+                AddTestCircle(1, args);
+                break;
             case "/laser_SetRGB":
                 Laser.Instance.rgb = new Vector3((float)args[0], (float)args[1], (float)args[2]);
+                break;
+            case "/laser_wobble":
+                Laser.Instance.global_wobble = .02f * (float)args[0];
                 break;
             //DMX
             case "/dmx1":
