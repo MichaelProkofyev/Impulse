@@ -19,6 +19,8 @@ abstract public class LaserTaskBase {
     public Vector2[] currentPoints;
 
     public Vector2 startPoint;
+
+
     
 
     public LaserTaskBase(Vector2 newStartPoint, ushort brightness = CONST.LASER_MAX_VALUE, float dashLength = 0, float shake = 0) {
@@ -33,13 +35,44 @@ abstract public class LaserTaskBase {
         rotation += rotation_speed * deltaTime;
         //Debug.Log(rotation_speed);
         Vector2[] patternPoints = CalculatePatternPoints(deltaTime);
-        //SHAKE THE POINTS
         for (int pointIdx = 0; pointIdx < patternPoints.Length; pointIdx++)
         {
+            //SHAKE THE POINTS
             patternPoints[pointIdx] += CONST.RRange2(-(Laser.Instance.global_wobble + wobble), Laser.Instance.global_wobble + wobble);
         }
 
-        currentPoints = CONST.RotatePoints(patternPoints, rotation);
+        Vector2[] rotatedPoints = CONST.RotatePoints(patternPoints, rotation);
+
+
+        Vector2[] fatPoints = new Vector2[rotatedPoints.Length * Laser.Instance.fatness];
+        //ADDITIONAL POINTS FOR CLARITY
+        for (int pointIdx = 0; pointIdx < rotatedPoints.Length; pointIdx++) {
+            for (int fIdx = 0; fIdx < Laser.Instance.fatness; fIdx++)
+            {
+                Vector2 point = rotatedPoints[pointIdx];
+                Vector2 offset = Vector2.zero;
+                switch (fIdx)
+                {
+                    case 1:
+                        offset -= Vector2.right ;
+                        break;
+                    case 2:
+                        offset -= Vector2.up;
+                        break;
+                    case 3:
+                        point += Vector2.up;
+                        break;
+                    case 4:
+                        point += Vector2.right;
+                        break;
+
+                }
+                offset *= 0.001f * Laser.Instance.fatness_offset_multiplier;
+                fatPoints[(pointIdx * Laser.Instance.fatness) + fIdx] = point + offset;
+            }
+        }
+
+        currentPoints = fatPoints;
         return currentPoints;
     }
 

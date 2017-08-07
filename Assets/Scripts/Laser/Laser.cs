@@ -6,6 +6,8 @@ public class Laser : SingletonComponent<Laser> {
 
     public float sizeMultiplier = 1;
 
+    public int fatness = 1;
+    public float fatness_offset_multiplier = 1f;
 
     public ushort cut_x = 32767;
     public ushort cut_y = 32767;
@@ -36,7 +38,7 @@ public class Laser : SingletonComponent<Laser> {
         circlePattern.startPoint = center;
     }
 
-    public void AddSquareData(int patternID, Vector3 rotation_speed, float sideLength = 1f, float pointsMultiplier = 1f, ushort brightness = CONST.LASER_MAX_VALUE, float dashLength = 0, float wobble = 0)
+    public void AddSquareData(int patternID, Vector3 rotation_speed, Vector2 center, float sideLength = 1f, float pointsMultiplier = 1f, ushort brightness = CONST.LASER_MAX_VALUE, float dashLength = 0, float wobble = 0)
     {
         Square squarePattern;
         if (patterns.ContainsKey(patternID)) {
@@ -51,6 +53,7 @@ public class Laser : SingletonComponent<Laser> {
         squarePattern.pointsMultiplier = pointsMultiplier;
         squarePattern.wobble = wobble;
         squarePattern.rotation_speed = rotation_speed;
+        squarePattern.startPoint = center;
         //print(rotation_speed);
     }
 

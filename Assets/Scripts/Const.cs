@@ -24,7 +24,7 @@ public static class CONST {
     //LASER
 	public static Dictionary<LASERPATTERN, int> pointsPerPattern = new Dictionary<LASERPATTERN, int>() {
 		{LASERPATTERN.NONE, 100},
-		{LASERPATTERN.DOT, 5},
+		{LASERPATTERN.DOT, 2},
 		{LASERPATTERN.CIRCLE, 50},
         {LASERPATTERN.SQUARE, 50},
     };

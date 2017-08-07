@@ -44,6 +44,9 @@ public class Square : LaserTaskBase {
 
             //SCALE
             points[pIdx] *= sideLength;
+
+            //CENTER OFFSET
+            points[pIdx] += startPoint;
         }
         points[pointsCount] = points[0];
 
