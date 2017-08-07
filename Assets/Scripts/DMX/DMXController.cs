@@ -23,7 +23,12 @@ public class DMXController : SingletonComponent<DMXController> {
 	void Start () {
         //value = new int[512];
         oldValue = new int[dmx_values.Length];
-        initDmx();
+        
+
+        DMXData = new byte[512];
+        ArtEngine = new ArtNet.Engine("Open DMX Ethernet", "192.168.1.100");
+        print("INITING DMX");
+        ArtEngine.Start ();
 
         
         for (int dmxID = 0; dmxID < 4; dmxID++) {
@@ -42,7 +47,7 @@ public class DMXController : SingletonComponent<DMXController> {
 
         for (int i = 0; i < 4; i++) {
             SetValue(i, "brightness", 255);
-            // SetValue(i, "red", 255);
+            SetValue(i, "red", 255);
         }
 	}
 
@@ -76,12 +81,6 @@ public class DMXController : SingletonComponent<DMXController> {
 	}
 
 
-    void initDmx ( )
-    {
-        DMXData = new byte[512];
-        ArtEngine = new ArtNet.Engine("Open DMX Ethernet", "192.168.1.100");
-        ArtEngine.Start ();
-    }
 
     void OnApplicationQuit ( )
     {   

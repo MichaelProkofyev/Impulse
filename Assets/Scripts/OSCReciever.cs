@@ -73,7 +73,8 @@ public class OSCReciever : UniOSCEventTarget
         LEDController.Instance.ledValues[ledIdx] = (byte)(brightnessFraction * 255);
     }
 
-    static void HandleDMXMessage(int dmxIdx, IList<object> args) {
+    static void HandleDMXMessage(IList<object> args) {
+        int dmxIdx = (int)(float)args[0];
         float brightnessFraction = Mathf.Clamp01((float)args[1]);
         byte brightness = (byte)(brightnessFraction * 255);
         DMXController.Instance.SetValue(dmxIdx, DMXController.Instance.channelToChange, brightness);
@@ -134,17 +135,8 @@ public class OSCReciever : UniOSCEventTarget
                 Laser.Instance.fatness_offset_multiplier = (float)args[0];
                 break;
             //DMX
-            case "/dmx1":
-                HandleDMXMessage(0, args);
-                break;
-            case "/dmx2":
-                HandleDMXMessage(1, args);
-                break;
-            case "/dmx3":
-                HandleDMXMessage(2, args);
-                break;
-            case "/dmx4":
-                HandleDMXMessage(3, args);
+            case "/dmx":
+                HandleDMXMessage(args);
                 break;
             default:
                 Debug.LogWarning("Unknown OSC recieved with addr: " + msg.Address);
