@@ -4,17 +4,16 @@ using UnityEngine;
 
 public class Circle : LaserTaskBase {
 
-	float radius;
+	public float radius = 1;
 	List<Vector2> anchrors = new List<Vector2>();
 
 
     public float pointsMultiplier = 1f;
 
 
-    public Circle(Vector2 center, float radius = 1, ushort brightness = CONST.LASER_MAX_VALUE) : base(center, brightness) {
-        this.type = LASERPATTERN.CIRCLE;
+    public Circle() : base() {
+        this.type = PATTERN.CIRCLE;
         this.pointsCount = CONST.pointsPerPattern[type];
-        this.radius = radius;
     }
 
 	public override Vector2[] CalculatePatternPoints(float deltaTime) {
@@ -23,23 +22,19 @@ public class Circle : LaserTaskBase {
         Vector2[] points = new Vector2[pointsCount];
 		for (int pIdx = 0; pIdx < pointsCount; pIdx++) {
 			Vector2 newPoint;
-
 			float phi = (float)pIdx * Mathf.PI * 2.0f / (float)pointsCount;
 			newPoint.x = Mathf.Sin(phi) * radius + startPoint.x;
 			newPoint.y = Mathf.Cos(phi) * radius + startPoint.y;
 			
 			float progress = (float)pIdx/(float)pointsCount;
-			float anchorProgressStep =  1.0f / Laser.Instance.additionalAnchors;
-			for (int i = 0; i < Laser.Instance.additionalAnchors; i++) {
+			float anchorProgressStep =  1.0f / Laser.Instance.additionalAnchors[type];
+			for (int i = 0; i < Laser.Instance.additionalAnchors[type]; i++) {
 				if (anchrors.Count < i + 1) {
 					if (anchorProgressStep * i < progress && progress < anchorProgressStep * (i + 1)) {
 						anchrors.Add(newPoint);
 					}
 				}
 			}
-
-
-			
 
 			points[pIdx] = newPoint;
 		}
@@ -53,8 +48,7 @@ public class Circle : LaserTaskBase {
             pointsWithAnchors.Add(point);
             for (int aIDx = 0; aIDx < anchrors.Count; aIDx++) {
                 if(point.x == anchrors[aIDx].x && point.y == anchrors[aIDx].y) {
-                    for (int j = 0; j < Laser.Instance.additionalPointsAtAnchor; j++)
-                    {
+                    for (int j = 0; j < Laser.Instance.additionalPointsAtAnchor[type]; j++) {
                         pointsWithAnchors.Add(point);    
                     }
                     

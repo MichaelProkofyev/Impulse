@@ -342,8 +342,6 @@ MonoBehaviour:
   sizeMultiplier: 0.3
   fatness: 1
   fatness_offset_multiplier: 1
-  additionalPointsAtAnchor: 20
-  additionalAnchors: 20
   cut_x: 32767
   cut_y: 32767
   rgb: {x: 1, y: 1, z: 1}

@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using ArtNet;
 
+public enum DMXCOLOR{
+    RED,
+    WHITE,
+    UV
+}
 
 public class DMXController : SingletonComponent<DMXController> {
 
@@ -51,8 +56,24 @@ public class DMXController : SingletonComponent<DMXController> {
             SetValue(i, "white", 0);
         }
 	}
-
     public void SetValue(int dmx_id, string valueName, short new_value) {
+        int general_index = DMX_Mapping[dmx_id][valueName];
+        dmx_values[general_index] = new_value;
+    }
+
+    public void SetValue(int dmx_id, DMXCOLOR color, short new_value) {
+        string valueName = string.Empty;
+        switch (color) {
+            case DMXCOLOR.RED:
+                valueName = "red";
+            break;
+            case DMXCOLOR.WHITE:
+                valueName = "white";
+            break;
+            case DMXCOLOR.UV:
+                valueName = "ultraviolet";
+            break;
+        }
         int general_index = DMX_Mapping[dmx_id][valueName];
         dmx_values[general_index] = new_value;
     }

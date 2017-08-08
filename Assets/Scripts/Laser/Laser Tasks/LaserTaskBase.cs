@@ -5,29 +5,25 @@ using UnityEngine;
 abstract public class LaserTaskBase {
 
 
-    public LASERPATTERN type = LASERPATTERN.NONE;
-    public ushort brightness;
+    public PATTERN type = PATTERN.NONE;
+    public ushort brightness = 0;
 
     public Vector3 rotation = Vector3.zero;
     public Vector3 rotation_speed = Vector3.zero;
 
     public float wobble = 0f;
 
-    public float dashLength;
+    public float dashLength = 0;
     public int pointsCount;
 
     public Vector2[] currentPoints;
 
-    public Vector2 startPoint;
+    public Vector2 startPoint = Vector2.zero;
 
 
     
 
-    public LaserTaskBase(Vector2 newStartPoint, ushort brightness = CONST.LASER_MAX_VALUE, float dashLength = 0, float wobble = 0) {
-        this.startPoint = newStartPoint;
-        this.brightness = brightness;
-        this.dashLength = 0;
-        this.wobble = wobble;
+    public LaserTaskBase() {
     }
 
     public Vector2[] NextPoints(float deltaTime)

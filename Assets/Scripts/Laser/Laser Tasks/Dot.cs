@@ -5,20 +5,19 @@ using UnityEngine;
 
 public class Dot : LaserTaskBase
 {
-    Vector2 currentPoint;
-    Vector2 direction;
+    public Vector2 currentPoint;
+    public Vector2 direction;
     public float speed = 0;
     public bool showTrace = true;
-    public LASERPATTERN stickToPattern = 0;
+    public PATTERN stickToPattern = 0;
 
     public int size = 4;
 
-    public Dot(Vector2 newStartPoint, Vector2 direction, ushort brightness = CONST.LASER_MAX_VALUE, float newSpeed = 5) : base(newStartPoint, brightness)
+    public Dot(Vector2 startPoint) : base()
     {
-        this.type = LASERPATTERN.DOT;
+        this.type = PATTERN.DOT;
         this.pointsCount = CONST.pointsPerPattern[type];
         this.currentPoint = startPoint;
-        this.direction = direction;
     }
 
     public override Vector2[] CalculatePatternPoints(float deltaTime)

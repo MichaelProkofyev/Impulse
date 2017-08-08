@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum LASERPATTERN
+public enum PATTERN
 {
 	NONE,
     DOT,
@@ -22,11 +22,11 @@ public static class CONST {
     public static float LED_MIN_UPDATE_TIME = 0.017f;
 
     //LASER
-	public static Dictionary<LASERPATTERN, int> pointsPerPattern = new Dictionary<LASERPATTERN, int>() {
-		{LASERPATTERN.NONE, 100},
-		{LASERPATTERN.DOT, 2},
-		{LASERPATTERN.CIRCLE, 50},
-        {LASERPATTERN.SQUARE, 50},
+	public static Dictionary<PATTERN, int> pointsPerPattern = new Dictionary<PATTERN, int>() {
+		{PATTERN.NONE, 100},
+		{PATTERN.DOT, 2},
+		{PATTERN.CIRCLE, 50},
+        {PATTERN.SQUARE, 50},
     };
 
     public const ushort LASER_MAX_VALUE = 65535;

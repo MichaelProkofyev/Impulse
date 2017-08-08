@@ -5,14 +5,14 @@ using UnityEngine;
 
 public class Square : LaserTaskBase {
 
-    float sideLength;
+    public float sideLength;
     public float pointsMultiplier = 1f;
 
-    Vector2[] anchrors = new Vector2[] { new Vector2(-1, -1), new Vector2(1, -1), new Vector2(1, 1), new Vector2(-1, 1) };
+    Vector2[] anchors = new Vector2[] { new Vector2(-1, -1), new Vector2(1, -1), new Vector2(1, 1), new Vector2(-1, 1) };
 
-    public Square(Vector2 newStartPoint, float sideLength = 1, ushort brightness = CONST.LASER_MAX_VALUE) : base(newStartPoint, brightness)
+    public Square() : base()
     {
-        this.type = LASERPATTERN.SQUARE;
+        this.type = PATTERN.SQUARE;
         this.pointsCount = CONST.pointsPerPattern[type];
         this.sideLength = sideLength;
     }
@@ -21,26 +21,57 @@ public class Square : LaserTaskBase {
     {
         pointsCount = Mathf.CeilToInt(CONST.pointsPerPattern[type] * pointsMultiplier);
         //throw new NotImplementedException();
-        Vector2[] points = new Vector2[pointsCount + 1];
-
+        //Vector2[] points = new Vector2[pointsCount];
+        List<Vector2> points = new List<Vector2>();
+        int usedAnchorsCount = 0;
         float interval = Mathf.Floor(pointsCount / 4.0f);
         for (int pIdx = 0; pIdx < pointsCount; pIdx++) {
+
             if (pIdx < pointsCount / 4.0f) { //SIDE 1
-                points[pIdx] = Vector2.Lerp(new Vector2(-1, -1), new Vector2(1, -1), (float)pIdx / interval);
+                if (usedAnchorsCount == 0) {
+                    for (int j = 0; j < Laser.Instance.additionalPointsAtAnchor[type]; j++) {
+                        points.Add(new Vector2(-1, -1));    
+                    }
+                    usedAnchorsCount ++;
+                }
+
+                Vector2 newPoint = Vector2.Lerp(new Vector2(-1, -1), new Vector2(1, -1), (float)pIdx / interval);
+                points.Add(newPoint);
+                
             }
             else if(pIdx < (pointsCount / 4.0f) * 2f){ //SIDE 2
+                if (usedAnchorsCount == 1) {
+                    for (int j = 0; j < Laser.Instance.additionalPointsAtAnchor[type]; j++) {
+                        points.Add(new Vector2(1, -1));    
+                    }
+                    usedAnchorsCount ++;
+                }
                 float intervalPoints = pIdx - pointsCount / 4.0f;
-                points[pIdx] = Vector2.Lerp(new Vector2(1, -1), new Vector2(1,1), (float)intervalPoints / interval);
+                Vector2 newPoint = Vector2.Lerp(new Vector2(1, -1), new Vector2(1,1), (float)intervalPoints / interval);
+                points.Add(newPoint);
             }
             else if (pIdx < (pointsCount / 4.0f) * 3f) { //SIDE 3
+                if (usedAnchorsCount == 2) {
+                    for (int j = 0; j < Laser.Instance.additionalPointsAtAnchor[type]; j++) {
+                        points.Add(new Vector2(1, 1));    
+                    }
+                    usedAnchorsCount ++;
+                }
                 float intervalPoints = pIdx - (pointsCount / 4.0f) * 2f;
-                points[pIdx] = Vector2.Lerp(new Vector2(1, 1), new Vector2(-1, 1), (float)intervalPoints / interval);
+                Vector2 newPoint = Vector2.Lerp(new Vector2(1, 1), new Vector2(-1, 1), (float)intervalPoints / interval);
+                points.Add(newPoint);
             }
             else { //SIDE 4
+                if (usedAnchorsCount == 3) {
+                    for (int j = 0; j < Laser.Instance.additionalPointsAtAnchor[type]; j++) {
+                        points.Add(new Vector2(-1, 1));    
+                    }
+                    usedAnchorsCount ++;
+                }
                 float intervalPoints = pIdx - (pointsCount / 4.0f) * 3f;
-                points[pIdx] = Vector2.Lerp(new Vector2(-1, 1), new Vector2(-1, -1), (float)intervalPoints / interval);
+                Vector2 newPoint = Vector2.Lerp(new Vector2(-1, 1), new Vector2(-1, -1), (float)intervalPoints / interval);
+                points.Add(newPoint);
             }
-            //Debug.Log("IDX: " + pIdx + " X" + points[pIdx].x + " Y " + points[pIdx].y);
 
             //SCALE
             points[pIdx] *= sideLength;
@@ -48,27 +79,7 @@ public class Square : LaserTaskBase {
             //CENTER OFFSET
             points[pIdx] += startPoint;
         }
-
-        List<Vector2> pointsWithAnchors = new List<Vector2>();
-
-        for (int i = 0; i < points.Length; i++) {
-            Vector2 point = points[i];
-            pointsWithAnchors.Add(point);
-            for (int aIDx = 0; aIDx < anchrors.Length; aIDx++) {
-                if(point.x == anchrors[aIDx].x && point.y == anchrors[aIDx].y) {
-                    for (int j = 0; j < Laser.Instance.additionalPointsAtAnchor; j++)
-                    {
-                        pointsWithAnchors.Add(point);    
-                    }
-                    
-                }
-            }
-
-        }
-
-        // points[pointsCount] = points[0];
-        pointsWithAnchors.Add(points[0]);
-        points = pointsWithAnchors.ToArray();
-        return points;
+        points.Add(points[0]);
+        return points.ToArray();
     }
 }

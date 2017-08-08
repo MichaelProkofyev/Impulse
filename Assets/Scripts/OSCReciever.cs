@@ -6,10 +6,9 @@ using UniOSC;
 
 public class OSCReciever : UniOSCEventTarget
 {
-
     static void HandleLaserMessage(IList<object> args) {
         int laserIdx = (int)args[0];
-        LASERPATTERN patternType = (LASERPATTERN)args[1];
+        PATTERN patternType = (PATTERN)args[1];
         int newPatternID = (int)args[2];
         ushort brightness = (ushort)(Mathf.Clamp01((float)args[3]) * CONST.LASER_MAX_VALUE);
         float wobbleMultiplier = (float)args[4];
@@ -19,7 +18,7 @@ public class OSCReciever : UniOSCEventTarget
         Vector2 center = Vector2.zero;
 
         switch (patternType) {
-            case LASERPATTERN.DOT:
+            case PATTERN.DOT:
                 float speed = (float)args[5];
                 float showTrace = (float)args[6];
                 float stickToPattern = (float)args[7];
@@ -31,10 +30,10 @@ public class OSCReciever : UniOSCEventTarget
                         wobble: wobbleMultiplier,
                         speed: speed,
                         showTrace: showTrace == 1f,
-                        stickToPattern: (LASERPATTERN)stickToPattern
+                        stickToPattern: (PATTERN)stickToPattern
                       );
                 break;
-            case LASERPATTERN.CIRCLE:
+            case PATTERN.CIRCLE:
                 rotationSpeed = new Vector3((float)args[5], (float)args[6], (float)args[7]);
                 pointsMultiplier = (float)args[8];
                 center = new Vector2((float)args[9], (float)args[10]);
@@ -45,10 +44,11 @@ public class OSCReciever : UniOSCEventTarget
                     wobble: wobbleMultiplier,
                     rotation_speed: rotationSpeed,
                     pointsMultiplier: pointsMultiplier,
-                    center: center
+                    center: center,
+                    radius: 1
                     );
                 break;
-            case LASERPATTERN.SQUARE:
+            case PATTERN.SQUARE:
                 rotationSpeed = new Vector3((float)args[5], (float)args[6], (float)args[7]);
                 pointsMultiplier = (float)args[8];
                 center = new Vector2((float)args[9], (float)args[10]);
@@ -75,11 +75,11 @@ public class OSCReciever : UniOSCEventTarget
 
     static void HandleDMXMessage(IList<object> args) {
         int dmxIdx = (int)args[0];
-        float brightnessFraction = Mathf.Clamp01((float)args[1]);
+        DMXCOLOR valueType = (DMXCOLOR)args[1];
+        float brightnessFraction = Mathf.Clamp01((float)args[2]);
         byte brightness = (byte)(brightnessFraction * 255);
-        DMXController.Instance.SetValue(dmxIdx, DMXController.Instance.channelToChange, brightness);
+        DMXController.Instance.SetValue(dmxIdx, valueType, brightness);
     }
-
 
     public override void OnOSCMessageReceived(UniOSCEventArgs main_args)
     {
@@ -134,6 +134,9 @@ public class OSCReciever : UniOSCEventTarget
             case "/laser_fatness_offset_multiplier":
                 Laser.Instance.fatness_offset_multiplier = (float)args[0];
                 break;
+            case "/laser_clear_patterns":
+                Laser.Instance.ClearPatterns();
+                break;
             //DMX
             case "/dmx":
                 HandleDMXMessage(args);
@@ -143,6 +146,5 @@ public class OSCReciever : UniOSCEventTarget
                 break;
         }
     }
-
 
 }

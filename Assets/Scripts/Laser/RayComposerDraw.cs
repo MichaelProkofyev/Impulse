@@ -43,8 +43,11 @@ public class RayComposerDraw : MonoBehaviour {
 
 
     int ret; /* return value */
+
+    List<int> retArray = new List<int>();
     int count; /* device count */
     int handle; /* device handle */
+    List<int> handleArray = new List<int>();
     StringBuilder deviceIdString = new StringBuilder(256);  /* device id string */
 
     public static List<RCPoint> points; /* points to draw */
@@ -83,6 +86,11 @@ public class RayComposerDraw : MonoBehaviour {
         for(uint i = 0; i < count; i++){
                    
             ret = RayComposer.RCDeviceID(i, deviceIdString, (uint)deviceIdString.Capacity);
+            retArray.Add(ret);
+            handle = RayComposer.RCOpenDevice(deviceIdString);
+            handleArray.Add(handle);
+
+            RayComposer.RCStartOutput(handle);
 
             if(ret < 0){
                 Debug.Log("Error reading device id! Exit.\n"); return;
@@ -93,7 +101,7 @@ public class RayComposerDraw : MonoBehaviour {
 
         /* Demo laser output */
         /* Select first device in list. */
-        ret = RayComposer.RCDeviceID(0, deviceIdString, (uint)deviceIdString.Capacity);
+        // ret = RayComposer.RCDeviceID(0, deviceIdString, (uint)deviceIdString.Capacity);
 
         if(ret < 0){
             Debug.Log("Error reading device id! Exit.\n");
@@ -101,7 +109,7 @@ public class RayComposerDraw : MonoBehaviour {
 
         Debug.Log("Opening device: " + deviceIdString + "\n");
 
-        handle = RayComposer.RCOpenDevice(deviceIdString);
+        //handle = RayComposer.RCOpenDevice(deviceIdString);
 
 
         if(handle < 0){
@@ -110,7 +118,7 @@ public class RayComposerDraw : MonoBehaviour {
 
         Debug.Log("Starting laser.\n");
  
-        ret = RayComposer.RCStartOutput(handle);
+        //ret = RayComposer.RCStartOutput(handle);
         if(ret < (int)RCReturnCode.RCOk){
             Debug.Log("Error starting laser output: " + ret + " Exit.\n"); return;
         }
@@ -329,22 +337,26 @@ public class RayComposerDraw : MonoBehaviour {
  *   0 = poll number of free buffers only, return immediately
  * < 0 = wait forever until buffer becomes free
  * > 0 = wait the number of miliseconds or until a buffer becomes free */
-        ret = RayComposer.RCWaitForReady(handle, -1);
-        if (ret < (int)RCReturnCode.RCOk)
+        for (int i = 0; i < handleArray.Count; i++)
         {
-            Debug.Log("\nError waiting for free buffer: " + ret + " Exit.\n");
-            return;
+            ret = RayComposer.RCWaitForReady(handleArray[i], -1);   
+            if (ret < (int)RCReturnCode.RCOk)
+            {
+                Debug.Log("\nError waiting for free buffer: " + ret + " Exit.\n");
+                return;
+            }
+            if (points.Count == 0) {
+                ret = RayComposer.RCWriteFrame(handleArray[i], new RCPoint[1], (uint)1, speed, 0);
+            }else {
+                ret = RayComposer.RCWriteFrame(handleArray[i], points.ToArray(), (uint)points.Count, speed, 0);
+            }
+            if (ret < (int)RCReturnCode.RCOk)
+            {
+                Debug.Log("\nError writing frame to device: " + ret + " Exit.\n");
+                return;
+            }
         }
-        if (points.Count == 0) {
-            ret = RayComposer.RCWriteFrame(handle, new RCPoint[1], (uint)1, speed, 0);
-        }else {
-            ret = RayComposer.RCWriteFrame(handle, points.ToArray(), (uint)points.Count, speed, 0);
-        }
-        if (ret < (int)RCReturnCode.RCOk)
-        {
-            Debug.Log("\nError writing frame to device: " + ret + " Exit.\n");
-            return;
-        }		
+        		
 	}
 
 

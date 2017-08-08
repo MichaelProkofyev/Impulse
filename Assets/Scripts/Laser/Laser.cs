@@ -9,13 +9,20 @@ public class Laser : SingletonComponent<Laser> {
     public int fatness = 1;
     public float fatness_offset_multiplier = 1f;
 
-    public int additionalPointsAtAnchor = 20;
-    public int additionalAnchors = 3;
+    public Dictionary<PATTERN, int> additionalPointsAtAnchor = new Dictionary<PATTERN, int> () {
+        {PATTERN.DOT, 0},
+        {PATTERN.CIRCLE, 5},
+        {PATTERN.SQUARE, 50}
+    };
+    public Dictionary<PATTERN, int> additionalAnchors = new Dictionary<PATTERN, int> () {
+        {PATTERN.DOT, 0},
+        {PATTERN.CIRCLE, 5},
+        {PATTERN.SQUARE, 4}
+    };
+
     public ushort cut_x = 32767;
     public ushort cut_y = 32767;
-
     public Vector3 rgb = Vector3.right;
-
     public int patternsCount = 0;
 
     public float global_wobble = 0f;
@@ -29,9 +36,10 @@ public class Laser : SingletonComponent<Laser> {
         if(patterns.ContainsKey(patternID)) {
             circlePattern = (Circle)patterns[patternID];
         }else { //NO PATTERN FOR ID, CREATE IT
-            circlePattern = new Circle(center: Vector2.zero, radius: 1f); 
+            circlePattern = new Circle(); 
             patterns.Add(patternID, circlePattern);
         }
+        circlePattern.radius = 1;
         circlePattern.brightness = brightness;
         circlePattern.dashLength = dashLength;
         circlePattern.rotation_speed = rotation_speed;
@@ -47,9 +55,10 @@ public class Laser : SingletonComponent<Laser> {
             squarePattern = (Square)patterns[patternID];
         }
         else { //NO PATTERN FOR ID, CREATE IT
-            squarePattern = new Square(Vector2.zero, sideLength);
+            squarePattern = new Square();
             patterns.Add(patternID, squarePattern);
         }
+        squarePattern.sideLength = sideLength;
         squarePattern.dashLength = dashLength;
         squarePattern.brightness = brightness;
         squarePattern.pointsMultiplier = pointsMultiplier;
@@ -59,18 +68,19 @@ public class Laser : SingletonComponent<Laser> {
         //print(rotation_speed);
     }
 
-    public void AddDotData(int patternID, ushort brightness = CONST.LASER_MAX_VALUE, float wobble = 0, float speed  = 0, bool showTrace = true, LASERPATTERN stickToPattern = LASERPATTERN.NONE)
+    public void AddDotData(int patternID, ushort brightness = CONST.LASER_MAX_VALUE, float wobble = 0, float speed  = 0, bool showTrace = true, PATTERN stickToPattern = PATTERN.NONE)
     {
         Dot dotPattern;
+        Vector2 startPoint = Vector2.zero;
         if (patterns.ContainsKey(patternID)) {
             dotPattern = (Dot)patterns[patternID];
         }
         else { //NO PATTERN FOR ID, CREATE IT
-            Vector2 startPoint = CONST.RRange2(-1, 1);
-            if (stickToPattern != LASERPATTERN.NONE){
+            startPoint = CONST.RRange2(-1, 1);
+            if (stickToPattern != PATTERN.NONE){
                 foreach (int patternKey in patterns.Keys)
                 {
-                    LASERPATTERN type = patterns[patternKey].type;
+                    PATTERN type = patterns[patternKey].type;
                     if (stickToPattern == type) {
 
                         //NEED MULTITHREAD LOCK
@@ -80,14 +90,10 @@ public class Laser : SingletonComponent<Laser> {
                     }
                 }
             }
-
-
-
-
-            Vector2 direction = CONST.RRange2(-1, 1);
-            dotPattern = new Dot(newStartPoint: startPoint, direction: direction);
+            dotPattern = new Dot(startPoint);
             patterns.Add(patternID, dotPattern);
         }
+        dotPattern.direction = CONST.RRange2(-1, 1);
         dotPattern.brightness = brightness;
         dotPattern.speed = speed;
         dotPattern.wobble = wobble;
@@ -95,28 +101,14 @@ public class Laser : SingletonComponent<Laser> {
         dotPattern.stickToPattern = stickToPattern;
     }
 
-    void Start () {
-        #if UNITY_EDITOR
-                UnityEditor.SceneView.FocusWindowIfItsOpen(typeof(UnityEditor.SceneView));
-#endif
-
-
-
-        //DEBUG
-        //for (int cIdx = 0; cIdx < 5; cIdx++)
-        //{
-        //        AddCircleData(cIdx, brightness: (ushort)(0.1f * cIdx * 65500), rotSpeed: Random.insideUnitSphere * 10 * cIdx, radius: 1f);
-        // //   AddSquareData(cIdx, rotation_speed_fraction: Random.insideUnitSphere * 50, dashLength: 0);
-        //}
-    }
-	
     public List<List<RCPoint>> UpdatePatterns()
     {
         points.Clear();
 
-        List<int> finishedPatternIDs = new List<int>();
+        List<int> finishedPatternIDs = new List<int>();;
         foreach (int patternID in patterns.Keys)
         {
+            // print(patternID);
             List<RCPoint> shapePoints = new List<RCPoint>();
             Vector2[] pointsPositions = patterns[patternID].NextPoints(Time.deltaTime);
 
@@ -200,5 +192,15 @@ public class Laser : SingletonComponent<Laser> {
         }
 
         return points;
+    }
+
+    public void ClearPatterns() {
+        patterns.Clear();
+    }
+
+    void Start () {
+        #if UNITY_EDITOR
+                UnityEditor.SceneView.FocusWindowIfItsOpen(typeof(UnityEditor.SceneView));
+        #endif
     }
 }
