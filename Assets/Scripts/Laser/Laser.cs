@@ -9,6 +9,8 @@ public class Laser : SingletonComponent<Laser> {
     public int fatness = 1;
     public float fatness_offset_multiplier = 1f;
 
+    public int additionalPointsAtAnchor = 20;
+    public int additionalAnchors = 3;
     public ushort cut_x = 32767;
     public ushort cut_y = 32767;
 

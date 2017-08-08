@@ -4,7 +4,7 @@ using UnityEngine;
 using ArtNet;
 
 
-public class DMXController : SingletonComponent<DMXController> {
+public class DMXSmoke : SingletonComponent<DMXController> {
 
     public string channelToChange = "white";
 

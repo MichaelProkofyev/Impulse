@@ -265,7 +265,7 @@ MonoBehaviour:
   _isValidOscOutMulticastIPAddress: 1
   _oscOutMulticastIPAddress: 224.0.1.0
   _oscOutPort: 9000
-  redrawFlag: 0
+  redrawFlag: 1
   dispatchOSC: 0
   dispatchOSCOut: 0
   oscMappingFileObjList: []
@@ -286,7 +286,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &957303017
 Transform:
   m_ObjectHideFlags: 0
@@ -311,7 +311,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 891cb7446c40040dd84d17cceac46a91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ledValues: 
+  ledValues: 00000000000000000000
 --- !u!1 &1104572942
 GameObject:
   m_ObjectHideFlags: 0
@@ -339,12 +339,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fb3ca0714944dd4ab4c8467c7117cf5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sizeMultiplier: 0.15
-  multy: 1
-  multx: 1
+  sizeMultiplier: 0.3
+  fatness: 1
+  fatness_offset_multiplier: 1
+  additionalPointsAtAnchor: 20
+  additionalAnchors: 20
   cut_x: 32767
   cut_y: 32767
-  rgb: {x: 1, y: 0, z: 0}
+  rgb: {x: 1, y: 1, z: 1}
   patternsCount: 0
   global_wobble: 0
 --- !u!4 &1104572945
@@ -375,7 +377,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1838368711
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -387,8 +389,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 323a120e393e240319f07bf4a16fd79b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  channelToChange: white
-  dmx_values: 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+  channelToChange: ultraviolet
+  dmx_values: 000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 --- !u!4 &1838368712
 Transform:
   m_ObjectHideFlags: 0

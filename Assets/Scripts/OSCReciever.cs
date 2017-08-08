@@ -74,7 +74,7 @@ public class OSCReciever : UniOSCEventTarget
     }
 
     static void HandleDMXMessage(IList<object> args) {
-        int dmxIdx = (int)(float)args[0];
+        int dmxIdx = (int)args[0];
         float brightnessFraction = Mathf.Clamp01((float)args[1]);
         byte brightness = (byte)(brightnessFraction * 255);
         DMXController.Instance.SetValue(dmxIdx, DMXController.Instance.channelToChange, brightness);

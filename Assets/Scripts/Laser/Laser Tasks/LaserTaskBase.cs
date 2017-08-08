@@ -23,11 +23,11 @@ abstract public class LaserTaskBase {
 
     
 
-    public LaserTaskBase(Vector2 newStartPoint, ushort brightness = CONST.LASER_MAX_VALUE, float dashLength = 0, float shake = 0) {
+    public LaserTaskBase(Vector2 newStartPoint, ushort brightness = CONST.LASER_MAX_VALUE, float dashLength = 0, float wobble = 0) {
         this.startPoint = newStartPoint;
         this.brightness = brightness;
         this.dashLength = 0;
-        this.wobble = shake;
+        this.wobble = wobble;
     }
 
     public Vector2[] NextPoints(float deltaTime)

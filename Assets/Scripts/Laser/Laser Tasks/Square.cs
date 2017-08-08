@@ -48,8 +48,27 @@ public class Square : LaserTaskBase {
             //CENTER OFFSET
             points[pIdx] += startPoint;
         }
-        points[pointsCount] = points[0];
 
+        List<Vector2> pointsWithAnchors = new List<Vector2>();
+
+        for (int i = 0; i < points.Length; i++) {
+            Vector2 point = points[i];
+            pointsWithAnchors.Add(point);
+            for (int aIDx = 0; aIDx < anchrors.Length; aIDx++) {
+                if(point.x == anchrors[aIDx].x && point.y == anchrors[aIDx].y) {
+                    for (int j = 0; j < Laser.Instance.additionalPointsAtAnchor; j++)
+                    {
+                        pointsWithAnchors.Add(point);    
+                    }
+                    
+                }
+            }
+
+        }
+
+        // points[pointsCount] = points[0];
+        pointsWithAnchors.Add(points[0]);
+        points = pointsWithAnchors.ToArray();
         return points;
     }
 }
