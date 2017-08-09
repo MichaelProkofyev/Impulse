@@ -17,6 +17,7 @@ public class Dot : LaserTaskBase
     {
         this.type = PATTERN.DOT;
         this.pointsCount = CONST.pointsPerPattern[type];
+        this.startPoint = startPoint;
         this.currentPoint = startPoint;
     }
 
@@ -25,7 +26,7 @@ public class Dot : LaserTaskBase
         currentPoint += direction * deltaTime * speed;
         Vector2[] points;
         if (showTrace) {
-            points = new Vector2[ pointsCount];
+            points = new Vector2[pointsCount];
             for (int pIdx = 0; pIdx < pointsCount; pIdx++) {
 
                 Vector2 newPoint = Vector2.Lerp(startPoint, currentPoint, (float)pIdx / pointsCount);
@@ -36,6 +37,7 @@ public class Dot : LaserTaskBase
             points = new Vector2[2] { currentPoint, currentPoint };
             //Debug.Log(currentPoint);
         }
+       // Debug.Log("STARTT: " + startPoint + " CURRENT " + currentPoint);
         return points;
     }
 }

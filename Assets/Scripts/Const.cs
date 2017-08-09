@@ -10,6 +10,15 @@ public enum PATTERN
     SQUARE
 }
 
+public enum SCENE
+{
+    NONE,
+    CIRCLES_1,
+    TAKEOFF_2,
+    SQUARES_3,
+    GRID_4,
+    COCOON_5
+}
 
 public static class CONST {
 
@@ -24,7 +33,7 @@ public static class CONST {
     //LASER
 	public static Dictionary<PATTERN, int> pointsPerPattern = new Dictionary<PATTERN, int>() {
 		{PATTERN.NONE, 100},
-		{PATTERN.DOT, 2},
+		{PATTERN.DOT, 10},
 		{PATTERN.CIRCLE, 50},
         {PATTERN.SQUARE, 50},
     };

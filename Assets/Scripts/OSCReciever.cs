@@ -6,6 +6,33 @@ using UniOSC;
 
 public class OSCReciever : UniOSCEventTarget
 {
+    static void Handle_SOUND_LaserMessage(IList<object> args) {
+        int laserIdx = (int)args[0];
+        PATTERN patternType = (PATTERN)args[1];
+        int newPatternID = (int)args[2];
+        ushort brightness = (ushort)(Mathf.Clamp01((float)args[3]) * CONST.LASER_MAX_VALUE);
+
+
+        switch (patternType)
+        {
+            case PATTERN.DOT:
+                Laser.Instance.AddDotData(
+                        patternID: newPatternID,
+                        brightness: brightness,
+                        wobble: 0,
+                        speed: .05f,
+                        showTrace: true,
+                        stickToPattern: PATTERN.NONE
+                      );
+                break;
+            case PATTERN.CIRCLE:
+                break;
+            case PATTERN.SQUARE:
+                break;
+        }
+
+    }
+
     static void HandleLaserMessage(IList<object> args) {
         int laserIdx = (int)args[0];
         PATTERN patternType = (PATTERN)args[1];
@@ -87,6 +114,10 @@ public class OSCReciever : UniOSCEventTarget
         OscMessage msg = (OscMessage)main_args.Packet;
         var args = msg.Data;
         switch (msg.Address){
+
+            case "/scene":
+                SceneController.Instance.CurrentScene = (SCENE)args[0];
+                break;
             //LED
             case "/led1":
                 HandleLEDMessage(0, args);
@@ -121,6 +152,9 @@ public class OSCReciever : UniOSCEventTarget
             //LASER
             case "/laser":
                 HandleLaserMessage(args);
+                break;
+            case "/laser_s":
+                Handle_SOUND_LaserMessage(args);
                 break;
             case "/laser_SetRGB":
                 Laser.Instance.rgb = new Vector3((float)args[0], (float)args[1], (float)args[2]);

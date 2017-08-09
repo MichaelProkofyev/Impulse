@@ -76,7 +76,6 @@ public class Laser : SingletonComponent<Laser> {
             dotPattern = (Dot)patterns[patternID];
         }
         else { //NO PATTERN FOR ID, CREATE IT
-            startPoint = CONST.RRange2(-1, 1);
             if (stickToPattern != PATTERN.NONE){
                 foreach (int patternKey in patterns.Keys)
                 {
@@ -89,16 +88,36 @@ public class Laser : SingletonComponent<Laser> {
                         break;
                     }
                 }
+            }else {
+
+                switch (patternID)
+                {
+                    case 0:
+                        startPoint = new Vector2(-1, 0);
+                        break;
+                    case 1:
+                        startPoint = new Vector2(1, 0);
+                        break;
+                    case 2:
+                        startPoint = new Vector2(0, -1);
+                        break;
+                    case 3:
+                        startPoint = new Vector2(0, 1);
+                        break;
+                    default:
+                        startPoint = CONST.RRange2(-1, 1);
+                        break;
+                }
             }
             dotPattern = new Dot(startPoint);
+            dotPattern.direction = CONST.RRange2(-1, 1);
+            dotPattern.showTrace = showTrace;
+            dotPattern.stickToPattern = stickToPattern;
             patterns.Add(patternID, dotPattern);
         }
-        dotPattern.direction = CONST.RRange2(-1, 1);
         dotPattern.brightness = brightness;
         dotPattern.speed = speed;
         dotPattern.wobble = wobble;
-        dotPattern.showTrace = showTrace;
-        dotPattern.stickToPattern = stickToPattern;
     }
 
     public List<List<RCPoint>> UpdatePatterns()
