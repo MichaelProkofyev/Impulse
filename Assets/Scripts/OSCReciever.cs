@@ -12,25 +12,32 @@ public class OSCReciever : UniOSCEventTarget
         int newPatternID = (int)args[2];
         ushort brightness = (ushort)(Mathf.Clamp01((float)args[3]) * CONST.LASER_MAX_VALUE);
 
-
         switch (patternType)
         {
             case PATTERN.DOT:
                 Laser.Instance.AddDotData(
+                        laserIdx: laserIdx,
                         patternID: newPatternID,
                         brightness: brightness,
                         wobble: 0,
-                        speed: .05f,
-                        showTrace: true,
-                        stickToPattern: PATTERN.NONE
+                        speed: 0f,
+                        showTrace: false,
+                        stickToPattern: PATTERN.CIRCLE
                       );
                 break;
             case PATTERN.CIRCLE:
+                Laser.Instance.AddCircleData(
+                            rotation_speed: Vector3.zero,
+                            center: Vector2.zero,
+                            laserIdx: laserIdx,
+                            patternID: newPatternID,
+                            brightness: brightness,
+                            wobble: 0
+                        );
                 break;
             case PATTERN.SQUARE:
                 break;
         }
-
     }
 
     static void HandleLaserMessage(IList<object> args) {
@@ -52,6 +59,7 @@ public class OSCReciever : UniOSCEventTarget
 
                 // print("BRIGHTNESS " +  brightness );
                 Laser.Instance.AddDotData (
+                        laserIdx: laserIdx,
                         patternID: newPatternID,
                         brightness: brightness,
                         wobble: wobbleMultiplier,
@@ -64,16 +72,29 @@ public class OSCReciever : UniOSCEventTarget
                 rotationSpeed = new Vector3((float)args[5], (float)args[6], (float)args[7]);
                 pointsMultiplier = (float)args[8];
                 center = new Vector2((float)args[9], (float)args[10]);
+                float radius = (float)args[11];
 
-                Laser.Instance.AddCircleData(
-                    patternID: newPatternID,
-                    brightness: brightness,
-                    wobble: wobbleMultiplier,
-                    rotation_speed: rotationSpeed,
-                    pointsMultiplier: pointsMultiplier,
-                    center: center,
-                    radius: 1
+                // Laser.Instance.AddCircleData(
+                //     laserIdx: laserIdx,
+                //     patternID: newPatternID,
+                //     brightness: brightness,
+                //     wobble: wobbleMultiplier,
+                //     rotation_speed: rotationSpeed / 30f,
+                //     pointsMultiplier: pointsMultiplier,
+                //     center: center,
+                //     radius: radius
+                //     );
+
+                Laser.Instance.AddSquareData(
+                        laserIdx: laserIdx,
+                        patternID: newPatternID,
+                        brightness: brightness,
+                        rotation_speed: rotationSpeed,
+                        wobble: wobbleMultiplier,
+                        pointsMultiplier: pointsMultiplier,
+                        center: center
                     );
+
                 break;
             case PATTERN.SQUARE:
                 rotationSpeed = new Vector3((float)args[5], (float)args[6], (float)args[7]);
@@ -81,6 +102,7 @@ public class OSCReciever : UniOSCEventTarget
                 center = new Vector2((float)args[9], (float)args[10]);
 
                 Laser.Instance.AddSquareData(
+                        laserIdx: laserIdx,
                         patternID: newPatternID,
                         brightness: brightness,
                         rotation_speed: rotationSpeed,

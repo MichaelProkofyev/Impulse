@@ -150,7 +150,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   upperRandLimit: 0
-  mSize: 0.79
+  mSize: 0
   randomDots: 0
   dotsCount: 0
   speed: 20000
@@ -158,19 +158,19 @@ MonoBehaviour:
   pointsInterval: 500
   startAnchors: 4
   endAnchors: 4
-  startBlackPoints: 35
+  startBlackPoints: 20
   endBlackPoints: 4
   pointsObject: []
   drawTestCircle: 0
   testCircleradius: 1
   tRed: 65535
-  tGreen: 0
-  tBlue: 0
+  tGreen: 65535
+  tBlue: 65535
   tIntensity: 65535
   tUser1: 65535
   tUser2: 65535
   correctionX: 0
-  correctionY: 0
+  correctionY: 13000
   heigthCorrection: 1
 --- !u!114 &44315385
 MonoBehaviour:
@@ -253,15 +253,15 @@ MonoBehaviour:
   _isValidOscMulticastIPAddress: 1
   _oscMulticastIPAddress: 224.0.1.0
   oscOut: 1
-  autoConnectOSCOut: 0
-  foldoutOSCOut: 0
+  autoConnectOSCOut: 1
+  foldoutOSCOut: 1
   foldoutOSCIn: 1
   _isValidOscOutIPAddress: 1
   _oscOutIPAddress: 127.0.0.1
   _isValidOscOutMulticastIPAddress: 1
   _oscOutMulticastIPAddress: 224.0.1.0
   _oscOutPort: 9000
-  redrawFlag: 1
+  redrawFlag: 0
   dispatchOSC: 0
   dispatchOSCOut: 0
   oscMappingFileObjList: []
@@ -335,7 +335,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fb3ca0714944dd4ab4c8467c7117cf5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sizeMultiplier: 0.3
+  sizeMultiplier: 0.5
   fatness: 1
   fatness_offset_multiplier: 1
   cut_x: 32767
@@ -383,8 +383,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 323a120e393e240319f07bf4a16fd79b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  channelToChange: ultraviolet
-  dmx_values: 000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+  channelToChange: white
+  dmx_values: 
 --- !u!4 &1838368712
 Transform:
   m_ObjectHideFlags: 0

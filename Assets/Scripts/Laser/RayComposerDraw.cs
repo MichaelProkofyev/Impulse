@@ -217,7 +217,7 @@ public class RayComposerDraw : MonoBehaviour {
 
             //pointsObject = GameObject.FindGameObjectsWithTag("LaserPoints");
 
-            List<List<RCPoint>> availableShapes = Laser.Instance.UpdatePatterns();
+            List<List<RCPoint>> availableShapes = Laser.Instance.UpdatePatterns1();
 
             for (int shapeIdx = 0; shapeIdx < availableShapes.Count; shapeIdx++) {
                 List<RCPoint> shapePoints = availableShapes[shapeIdx];

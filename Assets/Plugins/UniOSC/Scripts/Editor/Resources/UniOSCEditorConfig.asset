@@ -17,7 +17,7 @@ MonoBehaviour:
   isOSCTracing: 1
   isOSCLearning: 0
   isEditorEnabled: 0
-  isLastMessageTracing: 1
+  isLastMessageTracing: 0
   mySkin: {fileID: 0}
   learnStyle:
     m_Name: 

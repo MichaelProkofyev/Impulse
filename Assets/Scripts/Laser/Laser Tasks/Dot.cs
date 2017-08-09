@@ -24,6 +24,7 @@ public class Dot : LaserTaskBase
     public override Vector2[] CalculatePatternPoints(float deltaTime)
     {   
         currentPoint += direction * deltaTime * speed;
+//        Debug.Log(startPoint);
         Vector2[] points;
         if (showTrace) {
             points = new Vector2[pointsCount];
