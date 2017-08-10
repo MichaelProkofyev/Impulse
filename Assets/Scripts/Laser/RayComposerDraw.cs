@@ -7,6 +7,9 @@ using System.Text;
 
 
 public class RayComposerDraw : MonoBehaviour {
+
+    public uint laserDeviceIdx;
+
     public float upperRandLimit;
     public float mSize;
     public bool randomDots;
@@ -59,6 +62,7 @@ public class RayComposerDraw : MonoBehaviour {
     public float heigthCorrection = 1;
 
 
+
 	void Start () {
         if (Application.platform == RuntimePlatform.WindowsEditor) return;
             ret = RayComposer.RCInit();
@@ -83,20 +87,20 @@ public class RayComposerDraw : MonoBehaviour {
 
         /* List the devices found. */
         Debug.Log("Found " + count + " device(s):\n");
-        for(uint i = 0; i < count; i++){
-                   
-            ret = RayComposer.RCDeviceID(i, deviceIdString, (uint)deviceIdString.Capacity);
-            retArray.Add(ret);
-            handle = RayComposer.RCOpenDevice(deviceIdString);
-            handleArray.Add(handle);
+        
+        ret = RayComposer.RCDeviceID(laserDeviceIdx, deviceIdString, (uint)deviceIdString.Capacity);
+        retArray.Add(ret);
+        handle = RayComposer.RCOpenDevice(deviceIdString);
+        handleArray.Add(handle);
 
-            RayComposer.RCStartOutput(handle);
+        RayComposer.RCStartOutput(handle);
 
-            if(ret < 0){
-                Debug.Log("Error reading device id! Exit.\n"); return;
-            }
-            Debug.Log(i + " " + deviceIdString + "\n");
+        if(ret < 0){
+            Debug.Log("Error reading device id! Exit.\n"); return;
+            gameObject.SetActive(false);
         }
+        Debug.Log(laserDeviceIdx + " " + deviceIdString + "\n");
+    
 
 
         /* Demo laser output */
@@ -150,27 +154,29 @@ public class RayComposerDraw : MonoBehaviour {
 
             //     }    
             // }
-            for (int dotIdx = 0; dotIdx < dotsCount; dotIdx++) {
-                pointCount = 10;
-                for (uint i = 0; i < pointCount; i++)
-                {
-                    RCPoint point = new RCPoint();
-                    Vector2 randCenter = new Vector2(Random.Range(0, upperRandLimit), Random.Range(0, upperRandLimit));
-                    float phi = (float)i * Mathf.PI * 2.0f / (float)pointCount;
-                    point.x = (short)(((Mathf.Sin(phi) * 32767.5 - 0.5 ) * testCircleradius * mSize ) + correctionX + randCenter.x);
-                    point.y = (short)(((Mathf.Cos(phi) * 32767.5 - 0.5) * testCircleradius * mSize ) + correctionY + randCenter.y);
 
-                    point.red = tRed;
-                    point.green = tGreen;
-                    point.blue = tBlue;
-                    point.intensity = tIntensity;
-                    point.user1 = tUser1;
-                    point.user2 = tUser2;
 
-                    points.Add(point);
+            // for (int dotIdx = 0; dotIdx < dotsCount; dotIdx++) {
+            //     pointCount = 10;
+            //     for (uint i = 0; i < pointCount; i++)
+            //     {
+            //         RCPoint point = new RCPoint();
+            //         Vector2 randCenter = new Vector2(Random.Range(0, upperRandLimit), Random.Range(0, upperRandLimit));
+            //         float phi = (float)i * Mathf.PI * 2.0f / (float)pointCount;
+            //         point.x = (short)(((Mathf.Sin(phi) * 32767.5 - 0.5 ) * testCircleradius * mSize ) + correctionX + randCenter.x);
+            //         point.y = (short)(((Mathf.Cos(phi) * 32767.5 - 0.5) * testCircleradius * mSize ) + correctionY + randCenter.y);
 
-                }    
-            }
+            //         point.red = tRed;
+            //         point.green = tGreen;
+            //         point.blue = tBlue;
+            //         point.intensity = tIntensity;
+            //         point.user1 = tUser1;
+            //         point.user2 = tUser2;
+
+            //         points.Add(point);
+
+            //     }    
+            // }
             
         }else if(drawTestCircle)
         {
@@ -204,9 +210,7 @@ public class RayComposerDraw : MonoBehaviour {
 
                 points.Add(point);
 
-                if (i > 0)
-                {
-
+                if (i > 0) {
                     Debug.DrawLine(new Vector2(points[i - 1].x, points[i - 1].y) / 32767.5f, new Vector2(points[i].x, points[i].y) / 32767.5f, new Color(points[i].red / 65535f, points[i].green / 65535f, points[i].blue / 65535f));
                 }
 
@@ -222,6 +226,9 @@ public class RayComposerDraw : MonoBehaviour {
             for (int shapeIdx = 0; shapeIdx < availableShapes.Count; shapeIdx++) {
                 List<RCPoint> shapePoints = availableShapes[shapeIdx];
 
+                for (int i = 0; i < shapePoints.Count; i++) {
+                    // print("X " + shapePoints[i].x + " Y " + shapePoints[i].y);
+                }
 
                 if (shapePoints.Count > 0) {
                     //Position Correction
@@ -236,10 +243,6 @@ public class RayComposerDraw : MonoBehaviour {
                         point.user1 = 0;
                         point.user2 = 0;
                         shapePoints[p] = point;
-                        //                        objectPoints[p].x = (short)(objectPoints[p].x + correctionX);
-                        //                        objectPoints[p].y = (short)(objectPoints[p].y + correctionY);
-
-
                     }
 
 
@@ -333,6 +336,23 @@ public class RayComposerDraw : MonoBehaviour {
         if (Application.platform == RuntimePlatform.WindowsEditor) return;
 
 
+        RCPoint[] points1 = points.ToArray();
+        RCPoint[] points2 = points.ToArray();
+        //CUSTOM CORRECTION
+        // for (int i = 0; i < points1.Length; i++) {
+        //     points1[i].x += correctionX1;
+        //     points1[i].y += correctionY1;
+
+        //     points2[i].x += correctionX2;
+        //     points2[i].y += correctionY2;
+
+        //     points1[i].y = (short)(points1[i].y * heigthCorrection1);
+        //     points2[i].y = (short)(points2[i].y * heigthCorrection2);
+        // }
+
+
+
+
         /* wait for free buffer; second parameter is timeout
  *   0 = poll number of free buffers only, return immediately
  * < 0 = wait forever until buffer becomes free
@@ -348,7 +368,11 @@ public class RayComposerDraw : MonoBehaviour {
             if (points.Count == 0) {
                 ret = RayComposer.RCWriteFrame(handleArray[i], new RCPoint[1], (uint)1, speed, 0);
             }else {
-                ret = RayComposer.RCWriteFrame(handleArray[i], points.ToArray(), (uint)points.Count, speed, 0);
+                if (i == 0) {
+                    ret = RayComposer.RCWriteFrame(handleArray[i], points1, (uint)points.Count, speed, 0);
+                }else {
+                    ret = RayComposer.RCWriteFrame(handleArray[i], points2, (uint)points.Count, speed, 0);
+                }
             }
             if (ret < (int)RCReturnCode.RCOk)
             {

@@ -9,16 +9,8 @@ public class Laser : SingletonComponent<Laser> {
     public int fatness = 1;
     public float fatness_offset_multiplier = 1f;
 
-    public Dictionary<PATTERN, int> additionalPointsAtAnchor = new Dictionary<PATTERN, int> () {
-        {PATTERN.DOT, 0},
-        {PATTERN.CIRCLE, 5},
-        {PATTERN.SQUARE, 30}
-    };
-    public Dictionary<PATTERN, int> additionalAnchors = new Dictionary<PATTERN, int> () {
-        {PATTERN.DOT, 0},
-        {PATTERN.CIRCLE, 5},
-        {PATTERN.SQUARE, 4}
-    };
+    public int additionalPointsAtAnchorCIRCLE, additionalPointsAtAnchorSQUARE;
+    public int circleAnchors = 5;
 
     public ushort cut_x = 32767;
     public ushort cut_y = 32767;
@@ -27,6 +19,11 @@ public class Laser : SingletonComponent<Laser> {
     public int circlesCount = 0;
     public int squaresCount = 0;
     public float global_wobble = 0f;
+
+
+    public int dotPoints = 2;
+    public int circlePoints = 70;
+    public int squarePoints = 50;
 
     public List<List<RCPoint>> points1 = new List<List<RCPoint>>(); 
 
@@ -48,37 +45,37 @@ public class Laser : SingletonComponent<Laser> {
         }
         else
         { //NO PATTERN FOR ID, CREATE IT
-            if (stickToPattern != PATTERN.NONE)
+            switch (patternID)
             {
-                foreach (int patternKey in patterns[stickToPattern].Keys)
-                {
-                    //NEED MULTITHREAD LOCK
-                    startPoint = patterns[stickToPattern][patternKey].currentPoints[CONST.RRangeInt(0, patterns[stickToPattern][patternKey].currentPoints.Length)];
+                case 0:
+                    startPoint = new Vector2(-.5f, 0);
                     break;
-                }
-            }
-            else
-            {
-
-                switch (patternID)
-                {
-                    case 10:
-                        startPoint = new Vector2(-.5f, 0);
-                        break;
-                    case 11:
-                        startPoint = new Vector2(.5f, 0);
-                        break;
-                    case 12:
-                        startPoint = new Vector2(0, -.5f);
-                        break;
-                    case 13:
-                        startPoint = new Vector2(0, .5f);
-                        break;
-                    default:
+                case 1:
+                    startPoint = new Vector2(.5f, 0);
+                    break;
+                case 2:
+                    startPoint = new Vector2(0, -.5f);
+                    break;
+                case 3:
+                    startPoint = new Vector2(0, .5f);
+                    break;
+                default:
+                    if (stickToPattern != PATTERN.NONE) {
+                        foreach (int patternKey in patterns[stickToPattern].Keys)
+                        {
+                            //NEED MULTITHREAD LOCK
+                            LaserTaskBase taskStickTo = patterns[stickToPattern][patternKey];
+                            startPoint = taskStickTo.currentPoints[CONST.RRangeInt(0, taskStickTo.currentPoints.Length)];
+                            break;
+                        }
+                        if (startPoint == Vector2.zero) startPoint = CONST.RRange2(-.5f, .5f);
+                    }else {
                         startPoint = CONST.RRange2(-.5f, .5f);
-                        break;
-                }
+                    }
+                    break;
             }
+            
+            
             dotPattern = new Dot(startPoint);
             dotPattern.direction = CONST.RRange2(-1, 1);
             dotPattern.showTrace = showTrace;
@@ -98,7 +95,7 @@ public class Laser : SingletonComponent<Laser> {
             circlePattern = new Circle();
             patterns[PATTERN.CIRCLE].Add(patternID, circlePattern);
         }
-        circlePattern.radius = 1;
+        
         circlePattern.brightness = brightness;
         circlePattern.dashLength = dashLength;
         circlePattern.rotation_speed = rotation_speed;
@@ -156,6 +153,9 @@ public class Laser : SingletonComponent<Laser> {
                     RCPoint newPoint;
                     newPoint.x = (short)(Mathf.Clamp(pointsPositions[pIdx].x * 32767 * sizeMultiplier, -cut_x, cut_x));
                     newPoint.y = (short)(Mathf.Clamp(pointsPositions[pIdx].y * 32767 * sizeMultiplier, -cut_y, cut_y));
+
+                    //print("X " + newPoint.x + " Y " + newPoint.y);
+
                     if (isDashingColor)
                     {
 
@@ -250,6 +250,12 @@ public class Laser : SingletonComponent<Laser> {
         {
             patterns[patternType].Clear();
         }
+    }
+
+    public void ClearDots() {
+        
+        patterns[PATTERN.DOT].Clear();
+        
     }
 
     void Start () {

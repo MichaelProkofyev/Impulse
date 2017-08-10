@@ -119,7 +119,7 @@ GameObject:
   - component: {fileID: 44315384}
   - component: {fileID: 44315385}
   m_Layer: 0
-  m_Name: RayComposer
+  m_Name: RayComposer 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -149,6 +149,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 547b919773e584cd48e7df5519af3948, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  laserDeviceIdx: 0
   upperRandLimit: 0
   mSize: 0
   randomDots: 0
@@ -170,7 +171,7 @@ MonoBehaviour:
   tUser1: 65535
   tUser2: 65535
   correctionX: 0
-  correctionY: 13000
+  correctionY: 0
   heigthCorrection: 1
 --- !u!114 &44315385
 MonoBehaviour:
@@ -183,6 +184,123 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63ed1b53a2e3649d791074eb830276b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &412250803
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 412250805}
+  - component: {fileID: 412250804}
+  m_Layer: 0
+  m_Name: Scene2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &412250804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 412250803}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1aa8381d177b49c5854fc7afe4d2b5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  circlesBr:
+  - 1
+  - 1
+  - 1
+  circlesCurrentPos:
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  circlesTargetPos:
+  - {x: 0, y: 0.25}
+  - {x: 0, y: 0}
+  - {x: 0, y: -0.25}
+  circlesRotationSpeed:
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  circlesRadius:
+  - 0.2
+  - 0.2
+  - 0.2
+  circlesWobble:
+  - 0
+  - 0
+  - 0
+  circlesPointsMultiplier:
+  - 1
+  - 1
+  - 1
+  hoverTargetPositions:
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  hoverAmplitude: 0.05
+  sendData: 0
+--- !u!4 &412250805
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 412250803}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &508921185
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 508921187}
+  - component: {fileID: 508921186}
+  m_Layer: 0
+  m_Name: TEST_CIRCLES
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &508921186
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 508921185}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45d653e94f1fc433bb7748c4d5c5625e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  numberOfCircles: 3
+  radius: 0.01
+  rotationSpeed: {x: 0, y: 0, z: 0}
+--- !u!4 &508921187
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 508921185}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &607506511
 GameObject:
   m_ObjectHideFlags: 0
@@ -341,11 +459,17 @@ MonoBehaviour:
   - 0
   - 0
   circlesBr:
-  - 1
+  - 0.001
+  - 0
+  - 0
+  - 0
   - 0
   - 0
   - 0
   circlesRotationSpeed:
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 0}
@@ -355,12 +479,21 @@ MonoBehaviour:
   - 1
   - 1
   - 1
+  - 0.2
+  - 0.2
+  - 0.2
   circlesWobble:
   - 0
   - 0
   - 0
   - 0
+  - 0
+  - 0
+  - 0
   circlesPointsMultiplier:
+  - 1
+  - 1
+  - 1
   - 1
   - 1
   - 1
@@ -377,7 +510,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1104572942
 GameObject:
@@ -409,6 +542,9 @@ MonoBehaviour:
   sizeMultiplier: 0.5
   fatness: 1
   fatness_offset_multiplier: 1
+  additionalPointsAtAnchorCIRCLE: 0
+  additionalPointsAtAnchorSQUARE: 0
+  circleAnchors: 5
   cut_x: 32767
   cut_y: 32767
   rgb: {x: 1, y: 1, z: 1}
@@ -416,6 +552,9 @@ MonoBehaviour:
   circlesCount: 0
   squaresCount: 0
   global_wobble: 0
+  dotPoints: 2
+  circlePoints: 60
+  squarePoints: 50
 --- !u!4 &1104572945
 Transform:
   m_ObjectHideFlags: 0
@@ -427,7 +566,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1838368710
 GameObject:
@@ -470,4 +609,80 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2029929182
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 2029929185}
+  - component: {fileID: 2029929184}
+  - component: {fileID: 2029929183}
+  m_Layer: 0
+  m_Name: RayComposer 2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2029929183
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2029929182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63ed1b53a2e3649d791074eb830276b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2029929184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2029929182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 547b919773e584cd48e7df5519af3948, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  laserDeviceIdx: 1
+  upperRandLimit: 0
+  mSize: 0
+  randomDots: 0
+  dotsCount: 0
+  speed: 20000
+  minPoints: 200
+  pointsInterval: 500
+  startAnchors: 4
+  endAnchors: 4
+  startBlackPoints: 20
+  endBlackPoints: 4
+  pointsObject: []
+  drawTestCircle: 0
+  testCircleradius: 1
+  tRed: 65535
+  tGreen: 65535
+  tBlue: 65535
+  tIntensity: 65535
+  tUser1: 65535
+  tUser2: 65535
+  correctionX: 0
+  correctionY: 0
+  heigthCorrection: 1
+--- !u!4 &2029929185
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2029929182}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

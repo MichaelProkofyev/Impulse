@@ -13,12 +13,12 @@ public class Square : LaserTaskBase {
     public Square() : base()
     {
         this.type = PATTERN.SQUARE;
-        this.pointsCount = CONST.pointsPerPattern[type];
+        this.pointsCount = Laser.Instance.squarePoints;
     }
 
     public override Vector2[] CalculatePatternPoints(float deltaTime)
     {
-        pointsCount = Mathf.CeilToInt(CONST.pointsPerPattern[type] * pointsMultiplier);
+        pointsCount = Mathf.CeilToInt(Laser.Instance.squarePoints * pointsMultiplier);
         //throw new NotImplementedException();
         //Vector2[] points = new Vector2[pointsCount];
         List<Vector2> points = new List<Vector2>();
@@ -28,7 +28,7 @@ public class Square : LaserTaskBase {
 
             if (pIdx < pointsCount / 4.0f) { //SIDE 1
                 if (usedAnchorsCount == 0) {
-                    for (int j = 0; j < Laser.Instance.additionalPointsAtAnchor[type]; j++) {
+                    for (int j = 0; j < Laser.Instance.additionalPointsAtAnchorSQUARE; j++) {
                         points.Add(new Vector2(-1, -1));    
                     }
                     usedAnchorsCount ++;
@@ -40,7 +40,7 @@ public class Square : LaserTaskBase {
             }
             else if(pIdx < (pointsCount / 4.0f) * 2f){ //SIDE 2
                 if (usedAnchorsCount == 1) {
-                    for (int j = 0; j < Laser.Instance.additionalPointsAtAnchor[type]; j++) {
+                    for (int j = 0; j < Laser.Instance.additionalPointsAtAnchorSQUARE; j++) {
                         points.Add(new Vector2(1, -1));    
                     }
                     usedAnchorsCount ++;
@@ -51,7 +51,7 @@ public class Square : LaserTaskBase {
             }
             else if (pIdx < (pointsCount / 4.0f) * 3f) { //SIDE 3
                 if (usedAnchorsCount == 2) {
-                    for (int j = 0; j < Laser.Instance.additionalPointsAtAnchor[type]; j++) {
+                    for (int j = 0; j < Laser.Instance.additionalPointsAtAnchorSQUARE; j++) {
                         points.Add(new Vector2(1, 1));    
                     }
                     usedAnchorsCount ++;
@@ -62,7 +62,7 @@ public class Square : LaserTaskBase {
             }
             else { //SIDE 4
                 if (usedAnchorsCount == 3) {
-                    for (int j = 0; j < Laser.Instance.additionalPointsAtAnchor[type]; j++) {
+                    for (int j = 0; j < Laser.Instance.additionalPointsAtAnchorSQUARE; j++) {
                         points.Add(new Vector2(-1, 1));    
                     }
                     usedAnchorsCount ++;

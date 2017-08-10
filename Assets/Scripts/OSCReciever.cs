@@ -15,25 +15,35 @@ public class OSCReciever : UniOSCEventTarget
         switch (patternType)
         {
             case PATTERN.DOT:
-                Laser.Instance.AddDotData(
-                        laserIdx: laserIdx,
-                        patternID: newPatternID,
-                        brightness: brightness,
-                        wobble: 0,
-                        speed: 0f,
-                        showTrace: false,
-                        stickToPattern: PATTERN.CIRCLE
-                      );
+                // Laser.Instance.AddDotData(
+                //         laserIdx: laserIdx,
+                //         patternID: newPatternID,
+                //         brightness: brightness,
+                //         wobble: 0,
+                //         speed: 0f,
+                //         showTrace: false,
+                //         stickToPattern: PATTERN.CIRCLE
+                //       );
+                Scene1.Instance.OSCDotData(
+                    laserIdx: laserIdx,
+                    patternID: newPatternID,
+                    brightness: Mathf.Clamp01((float)args[3])
+                );  
                 break;
             case PATTERN.CIRCLE:
-                Laser.Instance.AddCircleData(
-                            rotation_speed: Vector3.zero,
-                            center: Vector2.zero,
-                            laserIdx: laserIdx,
-                            patternID: newPatternID,
-                            brightness: brightness,
-                            wobble: 0
-                        );
+                // Laser.Instance.AddCircleData(
+                //             rotation_speed: Vector3.zero,
+                //             center: Vector2.zero,
+                //             laserIdx: laserIdx,
+                //             patternID: newPatternID,
+                //             brightness: brightness,
+                //             wobble: 0
+                //         );
+                Scene1.Instance.OSCCircleData(
+                    laserIdx: laserIdx,
+                    patternID: newPatternID,
+                    brightness: Mathf.Clamp01((float)args[3])
+                );    
                 break;
             case PATTERN.SQUARE:
                 break;
@@ -183,6 +193,9 @@ public class OSCReciever : UniOSCEventTarget
                 break;
             case "/laser_clear_patterns":
                 Laser.Instance.ClearPatterns();
+                break;
+            case "/laser_clear_dots":
+                Laser.Instance.ClearDots();
                 break;
             //DMX
             case "/dmx":

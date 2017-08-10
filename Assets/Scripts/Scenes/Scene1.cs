@@ -2,26 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Scene1 : MonoBehaviour {
+public class Scene1 : SingletonComponent<Scene1> {
 
     public float[] dotsBr = new float[4];
 
 
-    public float[] circlesBr = new float[4];
-    public Vector3[] circlesRotationSpeed = new Vector3[4];
-    public float[] circlesRadius = new float[4] { 1, 1, 1, 1 };
-    public float[] circlesWobble = new float[4];
-    public float[] circlesPointsMultiplier = new float[4] { 1, 1, 1, 1 };
+    public float[] circlesBr = new float[7];
+    public Vector3[] circlesRotationSpeed = new Vector3[7];
+    public float[] circlesRadius = new float[7] { 1, 1, 1, 1, 0.2f , 0.2f, 0.2f};
+    public float[] circlesWobble = new float[7];
+    public float[] circlesPointsMultiplier = new float[7] { 1, 1, 1, 1 ,1,1,1};
 
 
 
 
     public bool sendData = false;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
+	public void InitScene() {
+        circlesBr[0] = 0.001f;
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -68,5 +67,32 @@ public class Scene1 : MonoBehaviour {
             );
         }
 
+    }
+
+
+    public void OSCDotData(int laserIdx, int patternID, float brightness) {
+        if (patternID < 4) {
+            dotsBr[patternID] = brightness;
+            OnValidate();
+        } {
+            Laser.Instance.AddDotData(
+               laserIdx: 1,
+               patternID: patternID,
+               brightness: (ushort)(Mathf.Clamp01(brightness) * CONST.LASER_MAX_VALUE),
+               wobble: 0,
+               speed: 0f,
+               showTrace: false,
+               stickToPattern: PATTERN.CIRCLE
+           );
+        }
+    }
+
+    public void OSCCircleData(int laserIdx, int patternID, float brightness) {
+        if (patternID < 7) {
+            circlesBr[patternID] = brightness;
+            OnValidate();
+        }else {
+            Debug.LogWarning("Scene 1, Unknown circleID: " + patternID);
+        }
     }
 }

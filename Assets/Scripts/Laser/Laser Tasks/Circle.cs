@@ -13,12 +13,11 @@ public class Circle : LaserTaskBase {
 
     public Circle() : base() {
         this.type = PATTERN.CIRCLE;
-        this.pointsCount = CONST.pointsPerPattern[type];
+        this.pointsCount = Laser.Instance.circlePoints;
     }
 
 	public override Vector2[] CalculatePatternPoints(float deltaTime) {
-        pointsCount = Mathf.CeilToInt(CONST.pointsPerPattern[type] * pointsMultiplier);
-
+        pointsCount = Mathf.CeilToInt(Laser.Instance.circlePoints * pointsMultiplier);
         Vector2[] points = new Vector2[pointsCount];
 		for (int pIdx = 0; pIdx < pointsCount; pIdx++) {
 			Vector2 newPoint;
@@ -27,8 +26,8 @@ public class Circle : LaserTaskBase {
 			newPoint.y = Mathf.Cos(phi) * radius + startPoint.y;
 			
 			float progress = (float)pIdx/(float)pointsCount;
-			float anchorProgressStep =  1.0f / Laser.Instance.additionalAnchors[type];
-			for (int i = 0; i < Laser.Instance.additionalAnchors[type]; i++) {
+			float anchorProgressStep =  1.0f / Laser.Instance.circleAnchors;
+			for (int i = 0; i < Laser.Instance.circleAnchors; i++) {
 				if (anchrors.Count < i + 1) {
 					if (anchorProgressStep * i < progress && progress < anchorProgressStep * (i + 1)) {
 						anchrors.Add(newPoint);
@@ -48,7 +47,7 @@ public class Circle : LaserTaskBase {
             pointsWithAnchors.Add(point);
             for (int aIDx = 0; aIDx < anchrors.Count; aIDx++) {
                 if(point.x == anchrors[aIDx].x && point.y == anchrors[aIDx].y) {
-                    for (int j = 0; j < Laser.Instance.additionalPointsAtAnchor[type]; j++) {
+                    for (int j = 0; j < Laser.Instance.additionalPointsAtAnchorCIRCLE; j++) {
                         pointsWithAnchors.Add(point);    
                     }
                     

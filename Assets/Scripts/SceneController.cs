@@ -9,13 +9,18 @@ public class SceneController : SingletonComponent<SceneController> {
         get { return currentScene; }
         set {
             currentScene = value;
+            Scene1.Instance.gameObject.SetActive(false);
+            Scene2.Instance.gameObject.SetActive(false);
             switch (currentScene)
             {
                 case SCENE.NONE:
                     break;
                 case SCENE.CIRCLES_1:
+                    Scene1.Instance.gameObject.SetActive(true);
+                    Scene1.Instance.InitScene();
                     break;
                 case SCENE.TAKEOFF_2:
+                    Scene2.Instance.gameObject.SetActive(true);
                     break;
                 case SCENE.SQUARES_3:
                     break;

@@ -31,12 +31,6 @@ public static class CONST {
     public static float LED_MIN_UPDATE_TIME = 0.017f;
 
     //LASER
-	public static Dictionary<PATTERN, int> pointsPerPattern = new Dictionary<PATTERN, int>() {
-		{PATTERN.NONE, 100},
-		{PATTERN.DOT, 2},
-		{PATTERN.CIRCLE, 100},
-        {PATTERN.SQUARE, 50},
-    };
 
     public const ushort LASER_MAX_VALUE = 65535;
 

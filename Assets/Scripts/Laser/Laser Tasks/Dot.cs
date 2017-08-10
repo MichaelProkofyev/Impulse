@@ -16,7 +16,7 @@ public class Dot : LaserTaskBase
     public Dot(Vector2 startPoint) : base()
     {
         this.type = PATTERN.DOT;
-        this.pointsCount = CONST.pointsPerPattern[type];
+        this.pointsCount = Laser.Instance.dotPoints;
         this.startPoint = startPoint;
         this.currentPoint = startPoint;
     }
