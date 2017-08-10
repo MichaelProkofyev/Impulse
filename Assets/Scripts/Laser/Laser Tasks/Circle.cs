@@ -7,9 +7,7 @@ public class Circle : LaserTaskBase {
 	public float radius = 1;
 	List<Vector2> anchrors = new List<Vector2>();
 
-
     public float pointsMultiplier = 1f;
-
 
     public Circle() : base() {
         this.type = PATTERN.CIRCLE;
@@ -34,7 +32,6 @@ public class Circle : LaserTaskBase {
 					}
 				}
 			}
-
 			points[pIdx] = newPoint;
 		}
 
@@ -49,11 +46,9 @@ public class Circle : LaserTaskBase {
                 if(point.x == anchrors[aIDx].x && point.y == anchrors[aIDx].y) {
                     for (int j = 0; j < Laser.Instance.additionalPointsAtAnchorCIRCLE; j++) {
                         pointsWithAnchors.Add(point);    
-                    }
-                    
+                    }       
                 }
             }
-
         }
 
         // points[pointsCount] = points[0];

@@ -28,6 +28,8 @@ public class Scene1 : SingletonComponent<Scene1> {
         if(Input.GetKeyDown(KeyCode.Space)) {
             sendData = !sendData;
         }
+
+        
     }
 
     void OnValidate()

@@ -15,15 +15,14 @@ public class Laser : SingletonComponent<Laser> {
     public ushort cut_x = 32767;
     public ushort cut_y = 32767;
     public Vector3 rgb = Vector3.right;
-    public int dotsCount = 0;
-    public int circlesCount = 0;
-    public int squaresCount = 0;
+    public int dotsCount, circlesCount, squaresCount, linesCount;
     public float global_wobble = 0f;
 
 
     public int dotPoints = 2;
     public int circlePoints = 70;
     public int squarePoints = 50;
+    public int linePoints = 2;
 
     public List<List<RCPoint>> points1 = new List<List<RCPoint>>(); 
 
@@ -31,7 +30,8 @@ public class Laser : SingletonComponent<Laser> {
     {
         { PATTERN.DOT, new Dictionary<int, LaserTaskBase>() },
         { PATTERN.CIRCLE, new Dictionary<int, LaserTaskBase>() },
-        { PATTERN.SQUARE, new Dictionary<int, LaserTaskBase>() }
+        { PATTERN.SQUARE, new Dictionary<int, LaserTaskBase>() },
+        { PATTERN.LINE, new Dictionary<int, LaserTaskBase>() }
 
     };
 
@@ -125,6 +125,22 @@ public class Laser : SingletonComponent<Laser> {
         //print(rotation_speed);
     }
 
+    public void AddLineData(int laserIdx, int patternID, Vector2 startPoint, Vector2 endPoint, ushort brightness = CONST.LASER_MAX_VALUE, float wobble = 0) {
+        Line linePattern;
+        if (patterns[PATTERN.LINE].ContainsKey(patternID))
+        {
+            linePattern = (Line)patterns[PATTERN.LINE][patternID];
+        }
+        else
+        { //NO PATTERN FOR ID, CREATE IT
+            linePattern = new Line(startPoint, endPoint);
+            patterns[PATTERN.LINE].Add(patternID, linePattern);
+        }
+        linePattern.startPoint = startPoint;
+        linePattern.endPoint = endPoint;
+        linePattern.brightness = brightness;
+        linePattern.wobble = wobble;
+    }
 
 
     public List<List<RCPoint>> UpdatePatterns1()
@@ -134,7 +150,8 @@ public class Laser : SingletonComponent<Laser> {
         Dictionary<PATTERN, List<int>> finishedPatternIDs = new Dictionary<PATTERN, List<int>>() {
             { PATTERN.DOT, new List<int>() },
             { PATTERN.CIRCLE, new List<int>() },
-            { PATTERN.SQUARE, new List<int>() }
+            { PATTERN.SQUARE, new List<int>() },
+            { PATTERN.LINE, new List<int>() },
         };
 
         foreach (PATTERN patternType in patterns.Keys) {
@@ -210,6 +227,8 @@ public class Laser : SingletonComponent<Laser> {
         dotsCount = patterns[PATTERN.DOT].Count;
         circlesCount = patterns[PATTERN.CIRCLE].Count;
         squaresCount = patterns[PATTERN.SQUARE].Count;
+        linesCount = patterns[PATTERN.LINE].Count;
+
 
 
 

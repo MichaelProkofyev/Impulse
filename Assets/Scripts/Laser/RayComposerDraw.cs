@@ -64,7 +64,7 @@ public class RayComposerDraw : MonoBehaviour {
 
 
 	void Start () {
-        if (Application.platform == RuntimePlatform.WindowsEditor) return;
+       // if (Application.platform == RuntimePlatform.WindowsEditor) return;
             ret = RayComposer.RCInit();
 
         if(ret < 0){
@@ -333,7 +333,7 @@ public class RayComposerDraw : MonoBehaviour {
 //        print("---");
 
         checkPointsCount();
-        if (Application.platform == RuntimePlatform.WindowsEditor) return;
+       // if (Application.platform == RuntimePlatform.WindowsEditor) return;
 
 
         RCPoint[] points1 = points.ToArray();
@@ -415,7 +415,7 @@ public class RayComposerDraw : MonoBehaviour {
     }
 
     void OnApplicationQuit() {
-        if (Application.platform == RuntimePlatform.WindowsEditor) return;
+       // if (Application.platform == RuntimePlatform.WindowsEditor) return;
 
         if (count > 0) {
             Debug.Log("Stoping laser.\n");

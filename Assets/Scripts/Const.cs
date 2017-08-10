@@ -7,7 +7,8 @@ public enum PATTERN
 	NONE,
     DOT,
 	CIRCLE,
-    SQUARE
+    SQUARE,
+    LINE
 }
 
 public enum SCENE
