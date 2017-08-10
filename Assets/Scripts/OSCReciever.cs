@@ -74,26 +74,17 @@ public class OSCReciever : UniOSCEventTarget
                 center = new Vector2((float)args[9], (float)args[10]);
                 float radius = (float)args[11];
 
-                // Laser.Instance.AddCircleData(
-                //     laserIdx: laserIdx,
-                //     patternID: newPatternID,
-                //     brightness: brightness,
-                //     wobble: wobbleMultiplier,
-                //     rotation_speed: rotationSpeed / 30f,
-                //     pointsMultiplier: pointsMultiplier,
-                //     center: center,
-                //     radius: radius
-                //     );
-
-                Laser.Instance.AddSquareData(
-                        laserIdx: laserIdx,
-                        patternID: newPatternID,
-                        brightness: brightness,
-                        rotation_speed: rotationSpeed,
-                        wobble: wobbleMultiplier,
-                        pointsMultiplier: pointsMultiplier,
-                        center: center
+                Laser.Instance.AddCircleData(
+                    laserIdx: laserIdx,
+                    patternID: newPatternID,
+                    brightness: brightness,
+                    wobble: wobbleMultiplier,
+                    rotation_speed: rotationSpeed / 30f,
+                    pointsMultiplier: pointsMultiplier,
+                    center: center,
+                    radius: radius
                     );
+
 
                 break;
             case PATTERN.SQUARE:

@@ -18,10 +18,7 @@ abstract public class LaserTaskBase {
 
     public Vector2[] currentPoints;
 
-    public Vector2 startPoint = Vector2.zero;
-
-
-    
+    public Vector2 startPoint = Vector2.zero;    
 
     public LaserTaskBase() {
     }

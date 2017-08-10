@@ -5,16 +5,15 @@ using UnityEngine;
 
 public class Square : LaserTaskBase {
 
-    public float sideLength;
+    public float sideLength = 1;
     public float pointsMultiplier = 1f;
 
-    Vector2[] anchors = new Vector2[] { new Vector2(-1, -1), new Vector2(1, -1), new Vector2(1, 1), new Vector2(-1, 1) };
+    //Vector2[] anchors = new Vector2[] { new Vector2(-1, -1), new Vector2(1, -1), new Vector2(1, 1), new Vector2(-1, 1) };
 
     public Square() : base()
     {
         this.type = PATTERN.SQUARE;
         this.pointsCount = CONST.pointsPerPattern[type];
-        this.sideLength = sideLength;
     }
 
     public override Vector2[] CalculatePatternPoints(float deltaTime)

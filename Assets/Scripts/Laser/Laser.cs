@@ -23,73 +23,42 @@ public class Laser : SingletonComponent<Laser> {
     public ushort cut_x = 32767;
     public ushort cut_y = 32767;
     public Vector3 rgb = Vector3.right;
-    public int patternsCount = 0;
+    public int dotsCount = 0;
+    public int circlesCount = 0;
+    public int squaresCount = 0;
     public float global_wobble = 0f;
 
     public List<List<RCPoint>> points1 = new List<List<RCPoint>>(); 
-    public List<List<RCPoint>> points2 = new List<List<RCPoint>>(); 
-    Dictionary<int, LaserTaskBase> patterns = new Dictionary<int, LaserTaskBase>();
 
-
-    public void AddCircleData(int laserIdx, int patternID, Vector3 rotation_speed, Vector2 center, float wobble = 0, ushort brightness = CONST.LASER_MAX_VALUE, float pointsMultiplier = 1f, float dashLength = 0, float radius = 1) {
-        Circle circlePattern;
-        if(patterns.ContainsKey(patternID)) {
-            circlePattern = (Circle)patterns[patternID];
-        }else { //NO PATTERN FOR ID, CREATE IT
-            circlePattern = new Circle(); 
-            patterns.Add(patternID, circlePattern);
-        }
-        circlePattern.radius = 1;
-        circlePattern.brightness = brightness;
-        circlePattern.dashLength = dashLength;
-        circlePattern.rotation_speed = rotation_speed;
-        circlePattern.wobble = wobble;
-        circlePattern.pointsMultiplier = pointsMultiplier;
-        circlePattern.startPoint = center;
-        circlePattern.radius = radius;
-    }
-
-    public void AddSquareData(int laserIdx, int patternID, Vector3 rotation_speed, Vector2 center, float sideLength = 1f, float pointsMultiplier = 1f, ushort brightness = CONST.LASER_MAX_VALUE, float dashLength = 0, float wobble = 0)
+    Dictionary<PATTERN, Dictionary<int, LaserTaskBase>> patterns = new Dictionary<PATTERN, Dictionary<int, LaserTaskBase>>()
     {
-        Square squarePattern;
-        if (patterns.ContainsKey(patternID)) {
-            squarePattern = (Square)patterns[patternID];
-        }
-        else { //NO PATTERN FOR ID, CREATE IT
-            squarePattern = new Square();
-            patterns.Add(patternID, squarePattern);
-        }
-        squarePattern.sideLength = sideLength;
-        squarePattern.dashLength = dashLength;
-        squarePattern.brightness = brightness;
-        squarePattern.pointsMultiplier = pointsMultiplier;
-        squarePattern.wobble = wobble;
-        squarePattern.rotation_speed = rotation_speed;
-        squarePattern.startPoint = center;
-        //print(rotation_speed);
-    }
+        { PATTERN.DOT, new Dictionary<int, LaserTaskBase>() },
+        { PATTERN.CIRCLE, new Dictionary<int, LaserTaskBase>() },
+        { PATTERN.SQUARE, new Dictionary<int, LaserTaskBase>() }
 
-    public void AddDotData(int laserIdx, int patternID, ushort brightness = CONST.LASER_MAX_VALUE, float wobble = 0, float speed  = 0, bool showTrace = true, PATTERN stickToPattern = PATTERN.NONE)
+    };
+
+    public void AddDotData(int laserIdx, int patternID, ushort brightness = CONST.LASER_MAX_VALUE, float wobble = 0, float speed = 0, bool showTrace = true, PATTERN stickToPattern = PATTERN.NONE)
     {
         Dot dotPattern;
         Vector2 startPoint = Vector2.zero;
-        if (patterns.ContainsKey(patternID)) {
-            dotPattern = (Dot)patterns[patternID];
+        if (patterns[PATTERN.DOT].ContainsKey(patternID))
+        {
+            dotPattern = (Dot)patterns[PATTERN.DOT][patternID];
         }
-        else { //NO PATTERN FOR ID, CREATE IT
-            if (stickToPattern != PATTERN.NONE){
-                foreach (int patternKey in patterns.Keys)
+        else
+        { //NO PATTERN FOR ID, CREATE IT
+            if (stickToPattern != PATTERN.NONE)
+            {
+                foreach (int patternKey in patterns[stickToPattern].Keys)
                 {
-                    PATTERN type = patterns[patternKey].type;
-                    if (stickToPattern == type) {
-
-                        //NEED MULTITHREAD LOCK
-                        startPoint = patterns[patternKey].currentPoints[CONST.RRangeInt(0, patterns[patternKey].currentPoints.Length)];
-                        //print("CLINGED TO");
-                        break;
-                    }
+                    //NEED MULTITHREAD LOCK
+                    startPoint = patterns[stickToPattern][patternKey].currentPoints[CONST.RRangeInt(0, patterns[stickToPattern][patternKey].currentPoints.Length)];
+                    break;
                 }
-            }else {
+            }
+            else
+            {
 
                 switch (patternID)
                 {
@@ -114,109 +83,162 @@ public class Laser : SingletonComponent<Laser> {
             dotPattern.direction = CONST.RRange2(-1, 1);
             dotPattern.showTrace = showTrace;
             dotPattern.stickToPattern = stickToPattern;
-            patterns.Add(patternID, dotPattern);
+            patterns[PATTERN.DOT].Add(patternID, dotPattern);
         }
         dotPattern.brightness = brightness;
         dotPattern.speed = speed;
         dotPattern.wobble = wobble;
     }
 
+    public void AddCircleData(int laserIdx, int patternID, Vector3 rotation_speed, Vector2 center, float wobble = 0, ushort brightness = CONST.LASER_MAX_VALUE, float pointsMultiplier = 1f, float dashLength = 0, float radius = 1) {
+        Circle circlePattern;
+        if(patterns[PATTERN.CIRCLE].ContainsKey(patternID)) {
+            circlePattern = (Circle)patterns[PATTERN.CIRCLE][patternID];
+        }else { //NO PATTERN FOR ID, CREATE IT
+            circlePattern = new Circle();
+            patterns[PATTERN.CIRCLE].Add(patternID, circlePattern);
+        }
+        circlePattern.radius = 1;
+        circlePattern.brightness = brightness;
+        circlePattern.dashLength = dashLength;
+        circlePattern.rotation_speed = rotation_speed;
+        circlePattern.wobble = wobble;
+        circlePattern.pointsMultiplier = pointsMultiplier;
+        circlePattern.startPoint = center;
+        circlePattern.radius = radius;
+    }
+
+    public void AddSquareData(int laserIdx, int patternID, Vector3 rotation_speed, Vector2 center, float sideLength = 1f, float pointsMultiplier = 1f, ushort brightness = CONST.LASER_MAX_VALUE, float dashLength = 0, float wobble = 0)
+    {
+        Square squarePattern;
+        if (patterns[PATTERN.SQUARE].ContainsKey(patternID)) {
+            squarePattern = (Square)patterns[PATTERN.SQUARE][patternID];
+        }
+        else { //NO PATTERN FOR ID, CREATE IT
+            squarePattern = new Square();
+            patterns[PATTERN.SQUARE].Add(patternID, squarePattern);
+        }
+        squarePattern.sideLength = sideLength;
+        squarePattern.dashLength = dashLength;
+        squarePattern.brightness = brightness;
+        squarePattern.pointsMultiplier = pointsMultiplier;
+        squarePattern.wobble = wobble;
+        squarePattern.rotation_speed = rotation_speed;
+        squarePattern.startPoint = center;
+        //print(rotation_speed);
+    }
+
+
+
     public List<List<RCPoint>> UpdatePatterns1()
     {
         points1.Clear();
 
-        List<int> finishedPatternIDs = new List<int>();;
-        foreach (int patternID in patterns.Keys)
-        {
-            // print(patternID);
-            List<RCPoint> shapePoints = new List<RCPoint>();
-            Vector2[] pointsPositions = patterns[patternID].NextPoints(Time.deltaTime);
+        Dictionary<PATTERN, List<int>> finishedPatternIDs = new Dictionary<PATTERN, List<int>>() {
+            { PATTERN.DOT, new List<int>() },
+            { PATTERN.CIRCLE, new List<int>() },
+            { PATTERN.SQUARE, new List<int>() }
+        };
 
-            //DASH THINGS
-            bool isDashingColor = true;
-            float currDashLength = 0f;
-
-            for (int pIdx = 0; pIdx < pointsPositions.Length; pIdx++)
+        foreach (PATTERN patternType in patterns.Keys) {
+            foreach (int patternID in patterns[patternType].Keys)
             {
-                RCPoint newPoint;
-                newPoint.x = (short)(Mathf.Clamp(pointsPositions[pIdx].x * 32767 * sizeMultiplier, -cut_x, cut_x));
-                newPoint.y = (short)(Mathf.Clamp(pointsPositions[pIdx].y * 32767 * sizeMultiplier, -cut_y, cut_y));
-                if (isDashingColor)
-                {
+                // print(patternID);
+                List<RCPoint> shapePoints = new List<RCPoint>();
+                Vector2[] pointsPositions = patterns[patternType][patternID].NextPoints(Time.deltaTime);
 
-                    newPoint.red = (ushort)(patterns[patternID].brightness * rgb.x);
-                    newPoint.green = (ushort)(patterns[patternID].brightness * rgb.y);
-                    newPoint.blue = (ushort)(patterns[patternID].brightness * rgb.z);
-                }
-                else
-                {
-                    newPoint.red = 0;
-                    newPoint.green = 0;
-                    newPoint.blue = 0;
-                }
+                //DASH THINGS
+                bool isDashingColor = true;
+                float currDashLength = 0f;
 
-                if (patterns[patternID].dashLength != 0)
+                for (int pIdx = 0; pIdx < pointsPositions.Length; pIdx++)
                 {
-                    currDashLength += 1.0f / pointsPositions.Length;
-
-                    if (patterns[patternID].dashLength <= currDashLength) //END OF DASH 
+                    RCPoint newPoint;
+                    newPoint.x = (short)(Mathf.Clamp(pointsPositions[pIdx].x * 32767 * sizeMultiplier, -cut_x, cut_x));
+                    newPoint.y = (short)(Mathf.Clamp(pointsPositions[pIdx].y * 32767 * sizeMultiplier, -cut_y, cut_y));
+                    if (isDashingColor)
                     {
-                        isDashingColor = !isDashingColor;
-                        currDashLength = 0f;
+
+                        newPoint.red = (ushort)(patterns[patternType][patternID].brightness * rgb.x);
+                        newPoint.green = (ushort)(patterns[patternType][patternID].brightness * rgb.y);
+                        newPoint.blue = (ushort)(patterns[patternType][patternID].brightness * rgb.z);
                     }
+                    else
+                    {
+                        newPoint.red = 0;
+                        newPoint.green = 0;
+                        newPoint.blue = 0;
+                    }
+
+                    if (patterns[patternType][patternID].dashLength != 0)
+                    {
+                        currDashLength += 1.0f / pointsPositions.Length;
+
+                        if (patterns[patternType][patternID].dashLength <= currDashLength) //END OF DASH 
+                        {
+                            isDashingColor = !isDashingColor;
+                            currDashLength = 0f;
+                        }
+                    }
+
+                    newPoint.intensity = (ushort)(patterns[patternType][patternID].brightness);
+                    newPoint.user1 = RayComposerDraw.user1;
+                    newPoint.user2 = RayComposerDraw.user2;
+
+                    //print(newPoint.intensity);
+
+                    shapePoints.Add(newPoint);
+                    // print("X " + newPoint.x + " Y " + newPoint.y);
+                }
+                points1.Add(shapePoints);
+
+                bool shouldDestroyPattern = patterns[patternType][patternID].brightness == 0;
+                if (shouldDestroyPattern)
+                {
+                    finishedPatternIDs[patternType].Add(patternID);
                 }
 
-                newPoint.intensity = (ushort)(patterns[patternID].brightness);
-                newPoint.user1 = RayComposerDraw.user1;
-                newPoint.user2 = RayComposerDraw.user2;
-
-
-                shapePoints.Add(newPoint);
-                // print("X " + newPoint.x + " Y " + newPoint.y);
             }
-            points1.Add(shapePoints);
+        }
 
-            bool shouldDestroyPattern = patterns[patternID].brightness == 0;
-            if (shouldDestroyPattern)
-            {
-                finishedPatternIDs.Add(patternID);
+        foreach (PATTERN patternType in patterns.Keys) {
+            for (int i = 0; i < finishedPatternIDs[patternType].Count; i++) {
+                patterns[patternType].Remove(finishedPatternIDs[patternType][i]);
             }
-
         }
 
-        //REMOVE PATTERNS THAT ARE FINISHED
-        for (int i = 0; i < finishedPatternIDs.Count; i++)
-        {
-            patterns.Remove(finishedPatternIDs[i]);
-            //print("DELETING " + i);
-        }
-
-        patternsCount = patterns.Count;
+        dotsCount = patterns[PATTERN.DOT].Count;
+        circlesCount = patterns[PATTERN.CIRCLE].Count;
+        squaresCount = patterns[PATTERN.SQUARE].Count;
 
 
-        if (patterns.Count == 0)
-        {
-            points1.Clear();
-            RCPoint newPoint;
-            newPoint.intensity = RayComposerDraw.intensity;
-            newPoint.user1 = RayComposerDraw.user1;
-            newPoint.user2 = RayComposerDraw.user2;
-            newPoint.x = 0;
-            newPoint.y = 0;
-            newPoint.red = 0;
-            newPoint.green = 0;
-            newPoint.blue = 0;
-            List<RCPoint> emptyList = new List<RCPoint>();
-            emptyList.Add(newPoint);
-            points1.Add(emptyList);
-        }
+
+
+        //if (patterns.Count == 0)
+        //{
+        //    points1.Clear();
+        //    RCPoint newPoint;
+        //    newPoint.intensity = RayComposerDraw.intensity;
+        //    newPoint.user1 = RayComposerDraw.user1;
+        //    newPoint.user2 = RayComposerDraw.user2;
+        //    newPoint.x = 0;
+        //    newPoint.y = 0;
+        //    newPoint.red = 0;
+        //    newPoint.green = 0;
+        //    newPoint.blue = 0;
+        //    List<RCPoint> emptyList = new List<RCPoint>();
+        //    emptyList.Add(newPoint);
+        //    points1.Add(emptyList);
+        //}
+
+
         // foreach (var item in points1)
         // {
         //     for (int i = 0; i < item.Count; i++)
         //     {
         //         print(" X "  + item[i].x + " Y " + item[i].y);
         //     }
-            
+
         // }
 
 
@@ -224,7 +246,10 @@ public class Laser : SingletonComponent<Laser> {
     }
 
     public void ClearPatterns() {
-        patterns.Clear();
+        foreach (PATTERN patternType in patterns.Keys)
+        {
+            patterns[patternType].Clear();
+        }
     }
 
     void Start () {
