@@ -162,11 +162,17 @@ public class OSCReciever : UniOSCEventTarget
         OscMessage msg = (OscMessage)main_args.Packet;
         var args = msg.Data;
         switch (msg.Address){
+            case "/cocoon":
+                Scene_Cocoon.Instance.OSC_offsetSpeed = new Vector2((float)args[0], (float)args[1]);
+                break;
+            case "/cocoon_scale":
+                Scene_Cocoon.Instance.OSC_cocoonScale = new Vector2((float)args[0], (float)args[1]);
+                break;
             case "/kinect":
                 HandleKinectMessage(args);
                 break;
             case "/scene":
-                SceneController.Instance.CurrentScene = (SCENE)args[0];
+                SceneController.Instance.SetScene((SCENE)args[0], (int)args[1]) ;
                 break;
             //LED
             case "/led1":
@@ -207,7 +213,7 @@ public class OSCReciever : UniOSCEventTarget
                 Handle_SOUND_LaserMessage(args);
                 break;
             case "/laser_randomize_lines":
-                CirclesTest.Instance.RandomizeLines();
+                Scene_Cocoon.Instance.RandomizeLines();
                 break;
             
             case "/laser_SetRGB":

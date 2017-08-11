@@ -3,12 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using Neuron;
 using System.Linq;
-public class CirclesTest : SingletonComponent<CirclesTest> {
+public class Scene_Cocoon : SingletonComponent<Scene_Cocoon> {
 
 
 	public float radius = 1f;
-	public Vector3 rotationSpeed = Vector3.zero;
+    public Vector2 offsetClamp = Vector2.zero;
+    public Vector3 rotationSpeed = Vector3.zero;
     public Vector2[] circlesPositions = new Vector2[17];
+
+    public Vector2 OSC_cocoonScale = Vector2.zero;
+
+    public Vector2 OSC_cocoonOffset = Vector2.zero;
+    public Vector2 OSC_offsetSpeed = Vector2.zero;
 
     public Neuron.NeuronTransformsInstance skeleton;
 
@@ -47,9 +53,13 @@ public class CirclesTest : SingletonComponent<CirclesTest> {
 
     }
 
+    public Transform meshRoot;
     // Update is called once per frame
     void Update () {
+       // meshRoot.position = new Vector3(0, meshRoot.position.y, 0);
 
+
+        OSC_cocoonOffset +=  new Vector2(Mathf.Clamp(OSC_offsetSpeed.x, -offsetClamp.x, offsetClamp.x), Mathf.Clamp(OSC_offsetSpeed.y, -offsetClamp.y, offsetClamp.y)) * Time.deltaTime;
 
         skeletonPoints[0] = skeleton.lHandT.position;
         skeletonPoints[1] = skeleton.rHandT.position;
@@ -179,11 +189,12 @@ public class CirclesTest : SingletonComponent<CirclesTest> {
     }
 
     Vector2 transformPostion(Vector3 position) {
-        position.x *= transformMultiplierX;
-        position.y *= transformMultiplierY;
+        position.x *= (transformMultiplierX + OSC_cocoonScale.x);
+        position.y *= (transformMultiplierY +  OSC_cocoonScale.y);
 
         Vector2 result = new Vector2(Mathf.Clamp(position.x, transformClampMin.x, transformClampMax.x), Mathf.Clamp(position.y, transformClampMin.y, transformClampMax.y ));
-        result += pointsOffset;
+        result +=  pointsOffset + OSC_cocoonOffset;
+        result = new Vector2(Mathf.Clamp(OSC_offsetSpeed.x, -offsetClamp.x, result.x), Mathf.Clamp(OSC_offsetSpeed.y, -offsetClamp.y, result.y));
         return CONST.RotatePoints(new Vector2[] { result }, pointsRotation)[0];
     }
 }

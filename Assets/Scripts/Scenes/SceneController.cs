@@ -35,6 +35,11 @@ public class SceneController : SingletonComponent<SceneController> {
     public SCENE currentScene = SCENE.NONE;
 
 
+    public void SetScene(SCENE sceneIdx, int subSceneIdx)
+    {
+
+    }
+
 	// Use this for initialization
 	void Start () {
 		

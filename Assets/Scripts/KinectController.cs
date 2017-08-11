@@ -21,8 +21,7 @@ public class KinectController : SingletonComponent<KinectController> {
 		
 	}
 
-    void OnValidate()
-    {
+    void OnValidate() {
         for (int i = 0; i < brightness.Length; i++) {
             Laser.Instance.AddCircleData(
                 laserIdx: 1,

@@ -26,7 +26,7 @@ namespace Neuron
 	public class NeuronTransformsInstance : NeuronInstance 
 	{
 
-        public Transform lHandT, rHandT;
+        public Transform lHandT, rHandT; //0, 1
         public Transform lForeArmT, rForeArmT;
         public Transform lArmT, rArmT;
         public Transform lShoulderT, rShoulderT;
