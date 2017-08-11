@@ -6,6 +6,20 @@ using UniOSC;
 
 public class OSCReciever : UniOSCEventTarget
 {
+
+    static void HandleKinectMessage(IList<object> args) {
+        int id = (int)args[0];
+        float x = (float)args[1];
+        float y = (float)args[2];
+        float w = (float)args[3];
+        float h = (float)args[4];
+        float n = (float)args[5];
+        float b = (float)args[6];
+
+
+        KinectController.Instance.AddKinectData(id, x, y, w, h, n, b);
+    }
+
     static void Handle_SOUND_LaserMessage(IList<object> args) {
         int laserIdx = (int)args[0];
         PATTERN patternType = (PATTERN)args[1];
@@ -28,7 +42,7 @@ public class OSCReciever : UniOSCEventTarget
                     laserIdx: laserIdx,
                     patternID: newPatternID,
                     brightness: Mathf.Clamp01((float)args[3])
-                );  
+                ); 
                 break;
             case PATTERN.CIRCLE:
                 // Laser.Instance.AddCircleData(
@@ -46,6 +60,17 @@ public class OSCReciever : UniOSCEventTarget
                 );    
                 break;
             case PATTERN.SQUARE:
+                break;
+            case PATTERN.LINE:
+                Laser.Instance.AddLineData(
+                    laserIdx: laserIdx,
+                    patternID: newPatternID,
+                    startPoint: Vector2.zero,
+                    endPoint: Vector2.zero,
+                    brightness: brightness,
+                    wobble: 0,
+                    fromOSC: true
+                    );
                 break;
         }
     }
@@ -137,7 +162,9 @@ public class OSCReciever : UniOSCEventTarget
         OscMessage msg = (OscMessage)main_args.Packet;
         var args = msg.Data;
         switch (msg.Address){
-
+            case "/kinect":
+                HandleKinectMessage(args);
+                break;
             case "/scene":
                 SceneController.Instance.CurrentScene = (SCENE)args[0];
                 break;
@@ -179,6 +206,10 @@ public class OSCReciever : UniOSCEventTarget
             case "/laser_s":
                 Handle_SOUND_LaserMessage(args);
                 break;
+            case "/laser_randomize_lines":
+                CirclesTest.Instance.RandomizeLines();
+                break;
+            
             case "/laser_SetRGB":
                 Laser.Instance.rgb = new Vector3((float)args[0], (float)args[1], (float)args[2]);
                 break;

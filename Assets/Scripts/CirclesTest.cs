@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Neuron;
+using System.Linq;
 public class CirclesTest : SingletonComponent<CirclesTest> {
 
 
@@ -19,6 +20,8 @@ public class CirclesTest : SingletonComponent<CirclesTest> {
     public Vector2[] skeletonPoints = new Vector2[17];
 
     public Vector2 pointsOffset, pointsRotation;
+
+    
 
     Vector2[] linesConnections = new Vector2[10] {
         new Vector2(0, 1),
@@ -133,13 +136,29 @@ public class CirclesTest : SingletonComponent<CirclesTest> {
         }
     }
 
+    private int[] lastShuffle = new int[17] { 0, 1, 13, 15, 16, 0,0,0,0,0,0,0,0,0,0,0,0 };
     public void RandomizeLines()
     {
-        for (int i = 0; i < linesConnections.Length; i++)
-        {
-            linesConnections[i].x = CONST.RRangeInt(0, circlesPositions.Length - 1);
-            linesConnections[i].y = CONST.RRangeInt(0, circlesPositions.Length - 1);
-        }
+        int[] shuffle = new int[] {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16 }.OrderBy(n => System.Guid.NewGuid()).ToArray();
+
+        int firstChange = Random.Range(0, 5);
+     //   int secondChange = Random.Range(0, 5);
+
+        lastShuffle[firstChange] = shuffle[0];
+     //   lastShuffle[secondChange] = shuffle[1];
+
+        linesConnections = new Vector2[10] {
+            new Vector2(lastShuffle[0], lastShuffle[1]),
+            new Vector2(lastShuffle[0], lastShuffle[2]),
+            new Vector2(lastShuffle[0], lastShuffle[3]),
+            new Vector2(lastShuffle[0], lastShuffle[4]),
+            new Vector2(lastShuffle[1], lastShuffle[2]),
+            new Vector2(lastShuffle[1], lastShuffle[3]),
+            new Vector2(lastShuffle[1], lastShuffle[4]),
+            new Vector2(lastShuffle[2], lastShuffle[3]),
+            new Vector2(lastShuffle[2], lastShuffle[4]),
+            new Vector2(lastShuffle[3], lastShuffle[4])
+        };
     }
 
 

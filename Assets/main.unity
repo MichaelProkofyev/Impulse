@@ -293,7 +293,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &508921186
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -326,8 +326,8 @@ MonoBehaviour:
   - {x: 0, y: 0}
   - {x: 0, y: 0}
   skeleton: {fileID: 1446536010}
-  transformMultiplierX: 0.3
-  transformMultiplierY: 0.3
+  transformMultiplierX: 1
+  transformMultiplierY: 1
   transformClampMin: {x: -10, y: -10, z: 0}
   transformClampMax: {x: 10, y: 10, z: 0}
   skeletonPoints:
@@ -714,7 +714,7 @@ MonoBehaviour:
   - 0
   - 0
   circlesBr:
-  - 0.001
+  - 1
   - 0
   - 0
   - 0
@@ -753,7 +753,7 @@ MonoBehaviour:
   - 1
   - 1
   - 1
-  sendData: 0
+  sendData: 1
 --- !u!4 &1048699301
 Transform:
   m_ObjectHideFlags: 0
@@ -766,6 +766,66 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1060797181
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1060797183}
+  - component: {fileID: 1060797182}
+  m_Layer: 0
+  m_Name: KinectScene
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1060797182
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1060797181}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e3b4ceb81429714987a5eabdd02ae39, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  brightness:
+  - 0
+  - 0
+  - 0
+  positions:
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  wobble:
+  - 0
+  - 0
+  - 0
+  rotationSpeeds:
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  radiuses:
+  - 0
+  - 0
+  - 0
+--- !u!4 &1060797183
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1060797181}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1104572942
 GameObject:
@@ -794,14 +854,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fb3ca0714944dd4ab4c8467c7117cf5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sizeMultiplier: 0.5
-  fatness: 1
-  fatness_offset_multiplier: 1
+  sizeMultiplier: {x: 1, y: 1}
   additionalPointsAtAnchorCIRCLE: 0
   additionalPointsAtAnchorSQUARE: 0
   circleAnchors: 5
-  cut_x: 32767
-  cut_y: 32767
+  cut_x: 30000
+  cut_y: 30000
   rgb: {x: 1, y: 1, z: 1}
   dotsCount: 0
   circlesCount: 0
@@ -811,7 +869,7 @@ MonoBehaviour:
   dotPoints: 2
   circlePoints: 100
   squarePoints: 50
-  linePoints: 10
+  linePoints: 20
 --- !u!4 &1104572945
 Transform:
   m_ObjectHideFlags: 0

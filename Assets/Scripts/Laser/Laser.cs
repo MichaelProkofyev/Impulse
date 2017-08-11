@@ -124,7 +124,7 @@ public class Laser : SingletonComponent<Laser> {
         //print(rotation_speed);
     }
 
-    public void AddLineData(int laserIdx, int patternID, Vector2 startPoint, Vector2 endPoint, ushort brightness = CONST.LASER_MAX_VALUE, float wobble = 0) {
+    public void AddLineData(int laserIdx, int patternID, Vector2 startPoint, Vector2 endPoint, ushort brightness = CONST.LASER_MAX_VALUE, float wobble = 0, bool fromOSC = false) {
         Line linePattern;
         if (patterns[PATTERN.LINE].ContainsKey(patternID))
         {
@@ -132,12 +132,14 @@ public class Laser : SingletonComponent<Laser> {
         }
         else
         { //NO PATTERN FOR ID, CREATE IT
+            if (fromOSC) return;
             linePattern = new Line(startPoint, endPoint);
             patterns[PATTERN.LINE].Add(patternID, linePattern);
         }
+        linePattern.brightness = brightness;
+        if (fromOSC) return;
         linePattern.startPoint = startPoint;
         linePattern.endPoint = endPoint;
-        linePattern.brightness = brightness;
         linePattern.wobble = wobble;
     }
 
