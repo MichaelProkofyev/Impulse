@@ -2,43 +2,51 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Neuron;
-public class CirclesTest : MonoBehaviour {
+public class CirclesTest : SingletonComponent<CirclesTest> {
 
-	public int numberOfCircles = 0;
-	public float radius =1f;
 
+	public float radius = 1f;
 	public Vector3 rotationSpeed = Vector3.zero;
-
     public Vector2[] circlesPositions = new Vector2[17];
-
 
     public Neuron.NeuronTransformsInstance skeleton;
 
 
     public float transformMultiplierX = 1f;
     public float transformMultiplierY = 1f;
-    public Vector3 transformClampMin;
-    public Vector3 transformClampMax;
+    public Vector3 transformClampMin, transformClampMax;
 
     public Vector2[] skeletonPoints = new Vector2[17];
 
-    public Vector2 pointsOffset;
-    public Vector2 pointsRotation;
+    public Vector2 pointsOffset, pointsRotation;
 
-    public Vector2[] linesConnections = new Vector2[4]; 
+    Vector2[] linesConnections = new Vector2[10] {
+        new Vector2(0, 1),
+        new Vector2(0, 13),
+        new Vector2(0, 15),
+        new Vector2(0, 16),
+        new Vector2(1, 13),
+        new Vector2(1, 15),
+        new Vector2(1, 16),
+        new Vector2(13, 15),
+        new Vector2(13, 16),
+        new Vector2(15, 16)
+    };
+
+    public float randomChangeSpeed = 1f;
+
+    public int numberOfLines = 15;
 
 
     // Use this for initialization
     void Start () {
-        StartCoroutine(ChangeLines());
+//        StartCoroutine(ChangeLines());
 
     }
 
     // Update is called once per frame
     void Update () {
-        if (Input.GetKeyDown(KeyCode.D)) {
-            StartCoroutine(ChangeLines());
-        }
+
 
         skeletonPoints[0] = skeleton.lHandT.position;
         skeletonPoints[1] = skeleton.rHandT.position;
@@ -72,32 +80,46 @@ public class CirclesTest : MonoBehaviour {
 
         //ADD CIRCLES
 	    for (int i = 0; i < circlesPositions.Length; i++) {
-		    Laser.Instance.AddCircleData(
-            laserIdx: 1,
-            patternID: i,
-            brightness: CONST.LASER_MAX_VALUE,
-            wobble: 0,
-            rotation_speed: rotationSpeed,
-            pointsMultiplier: 1,
-            center: circlesPositions[i],//Vector2.one - new Vector2(0.1f * i, 0.1f * i),
-            radius: radius);   
+            if (i == 0 || i == 1 || i == 13 || i == 14 || i ==15 || i == 16)
+            {
+                break;
+		        Laser.Instance.AddCircleData(
+                laserIdx: 1,
+                patternID: i,
+                brightness: CONST.LASER_MAX_VALUE,
+                wobble: 0,
+                rotation_speed: rotationSpeed,
+                pointsMultiplier: 1,
+                center: circlesPositions[i],//Vector2.one - new Vector2(0.1f * i, 0.1f * i),
+                radius: radius);   
+            }
 	    }
+
+        //for (int i = 0; i < circlesPositions.Length; i++)
+        //{
+        //    Laser.Instance.AddDotData(
+        //    laserIdx: 1,
+        //    patternID: i,
+        //    brightness: CONST.LASER_MAX_VALUE,
+        //    wobble: 0,
+        //    center: circlesPositions[i],//Vector2.one - new Vector2(0.1f * i, 0.1f * i),
+        //    radius: radius);
+        //}
 
         //ADD LINES
 
 
 
-        for (int i = 0; i < 1; i++)
-        {
+        for (int i = 0; i < numberOfLines; i++) {
             Laser.Instance.AddLineData(
                 laserIdx: 1,
                 patternID: i,
-                startPoint: circlesPositions[(int)linesConnections[0].x],
-                endPoint: circlesPositions[(int)linesConnections[0].y],
+                startPoint: circlesPositions[(int)linesConnections[i].x],
+                endPoint: circlesPositions[(int)linesConnections[i].y],
                 brightness: CONST.LASER_MAX_VALUE,
                 wobble: 0
                 );
-            }
+        }
     }
 
     IEnumerator ChangeLines() {
@@ -107,8 +129,34 @@ public class CirclesTest : MonoBehaviour {
                 linesConnections[i].x = CONST.RRangeInt(0, circlesPositions.Length - 1);
                 linesConnections[i].y = CONST.RRangeInt(0, circlesPositions.Length - 1);
             }
-            yield return new WaitForSeconds(.1f);
+            yield return new WaitForSeconds(randomChangeSpeed);
         }
+    }
+
+    public void RandomizeLines()
+    {
+        for (int i = 0; i < linesConnections.Length; i++)
+        {
+            linesConnections[i].x = CONST.RRangeInt(0, circlesPositions.Length - 1);
+            linesConnections[i].y = CONST.RRangeInt(0, circlesPositions.Length - 1);
+        }
+    }
+
+
+    public void ResetLines() {
+        linesConnections = new Vector2[10] {
+            new Vector2(0, 1),
+            new Vector2(0, 13),
+            new Vector2(0, 15),
+            new Vector2(0, 16),
+            new Vector2(1, 13),
+            new Vector2(1, 15),
+            new Vector2(1, 16),
+            new Vector2(13, 15),
+            new Vector2(13, 16),
+            new Vector2(15, 16)
+
+        };
     }
 
     Vector2 transformPostion(Vector3 position) {

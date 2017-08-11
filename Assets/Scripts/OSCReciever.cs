@@ -185,12 +185,6 @@ public class OSCReciever : UniOSCEventTarget
             case "/laser_wobble":
                 Laser.Instance.global_wobble = .02f * (float)args[0];
                 break;
-            case "/laser_fatness":
-                Laser.Instance.fatness = (int)((float)args[0]*4 + 1);
-                break;
-            case "/laser_fatness_offset_multiplier":
-                Laser.Instance.fatness_offset_multiplier = (float)args[0];
-                break;
             case "/laser_clear_patterns":
                 Laser.Instance.ClearPatterns();
                 break;

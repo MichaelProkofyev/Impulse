@@ -4,16 +4,15 @@ using UnityEngine;
 
 public class Laser : SingletonComponent<Laser> {
 
-    public float sizeMultiplier = 1;
-
-    public int fatness = 1;
-    public float fatness_offset_multiplier = 1f;
+    //public float sizeMultiplier = 1;
+    public Vector2 sizeMultiplier = Vector2.one;
 
     public int additionalPointsAtAnchorCIRCLE, additionalPointsAtAnchorSQUARE;
     public int circleAnchors = 5;
 
-    public ushort cut_x = 32767;
-    public ushort cut_y = 32767;
+    public ushort cut_x;
+    public ushort cut_y;
+    private ushort original_cut_x, original_cut_y;
     public Vector3 rgb = Vector3.right;
     public int dotsCount, circlesCount, squaresCount, linesCount;
     public float global_wobble = 0f;
@@ -168,8 +167,8 @@ public class Laser : SingletonComponent<Laser> {
                 for (int pIdx = 0; pIdx < pointsPositions.Length; pIdx++)
                 {
                     RCPoint newPoint;
-                    newPoint.x = (short)(Mathf.Clamp(pointsPositions[pIdx].x * 32767 * sizeMultiplier, -cut_x, cut_x));
-                    newPoint.y = (short)(Mathf.Clamp(pointsPositions[pIdx].y * 32767 * sizeMultiplier, -cut_y, cut_y));
+                    newPoint.x = (short)(Mathf.Clamp(pointsPositions[pIdx].x * 32767 * sizeMultiplier.x, -cut_x, cut_x));
+                    newPoint.y = (short)(Mathf.Clamp(pointsPositions[pIdx].y * 32767 * sizeMultiplier.y, -cut_y, cut_y));
 
                     //print("X " + newPoint.x + " Y " + newPoint.y);
 
@@ -282,6 +281,9 @@ public class Laser : SingletonComponent<Laser> {
                 UnityEditor.SceneView.FocusWindowIfItsOpen(typeof(UnityEditor.SceneView));
         #endif
 
+        original_cut_x = cut_x;
+        original_cut_y = cut_y;
+
         // Laser.Instance.AddCircleData(
         //             laserIdx: 1,
         //             patternID: 800,
@@ -292,5 +294,27 @@ public class Laser : SingletonComponent<Laser> {
         //             center: Vector2.zero,
         //             radius: 1
         //             );
+    }
+
+    void Update() //COOL TRICKS DOWN THERE
+    {
+        if (Input.GetKey(KeyCode.Space)) {
+            sizeMultiplier = CONST.RotatePoints(new Vector2[] { Random.insideUnitCircle }, Random.insideUnitSphere)[0] * Random.Range(-5f, 5f);
+        } else if (Input.GetKey(KeyCode.C))
+        {
+            cut_x = (ushort)Random.Range(-30000, 30000);
+            cut_y = (ushort)Random.Range(-30000, 30000);
+        } else if (Input.GetKey(KeyCode.L)) {
+            CirclesTest.Instance.RandomizeLines();
+        } else if (Input.GetKeyDown(KeyCode.K))
+        {
+            CirclesTest.Instance.ResetLines();
+        }
+        else
+        {
+            cut_x = original_cut_x;
+            cut_y = original_cut_y;
+            sizeMultiplier = Vector2.one *  .5f;
+        }
     }
 }

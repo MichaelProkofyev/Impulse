@@ -300,12 +300,11 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 508921185}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 45d653e94f1fc433bb7748c4d5c5625e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numberOfCircles: 4
   radius: 0.01
   rotationSpeed: {x: 0, y: 0, z: 0}
   circlesPositions:
@@ -313,9 +312,22 @@ MonoBehaviour:
   - {x: 0, y: 0}
   - {x: 0, y: 0}
   - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
   skeleton: {fileID: 1446536010}
-  transformMultiplierX: 2.49
-  transformMultiplierY: 0.6
+  transformMultiplierX: 0.3
+  transformMultiplierY: 0.3
   transformClampMin: {x: -10, y: -10, z: 0}
   transformClampMax: {x: 10, y: 10, z: 0}
   skeletonPoints:
@@ -338,6 +350,8 @@ MonoBehaviour:
   - {x: 0, y: 0}
   pointsOffset: {x: 0, y: 0}
   pointsRotation: {x: 0, y: 0}
+  randomChangeSpeed: 1
+  numberOfLines: 10
 --- !u!4 &508921187
 Transform:
   m_ObjectHideFlags: 0
@@ -795,7 +809,7 @@ MonoBehaviour:
   linesCount: 0
   global_wobble: 0
   dotPoints: 2
-  circlePoints: 2
+  circlePoints: 100
   squarePoints: 50
   linePoints: 10
 --- !u!4 &1104572945

@@ -36,36 +36,7 @@ abstract public class LaserTaskBase {
 
         Vector2[] rotatedPoints = CONST.RotatePoints(patternPoints, rotation);
 
-
-        Vector2[] fatPoints = new Vector2[rotatedPoints.Length * Laser.Instance.fatness];
-        //ADDITIONAL POINTS FOR CLARITY
-        for (int pointIdx = 0; pointIdx < rotatedPoints.Length; pointIdx++) {
-            for (int fIdx = 0; fIdx < Laser.Instance.fatness; fIdx++)
-            {
-                Vector2 point = rotatedPoints[pointIdx];
-                Vector2 offset = Vector2.zero;
-                switch (fIdx)
-                {
-                    case 1:
-                        offset -= Vector2.right ;
-                        break;
-                    case 2:
-                        offset -= Vector2.up;
-                        break;
-                    case 3:
-                        point += Vector2.up;
-                        break;
-                    case 4:
-                        point += Vector2.right;
-                        break;
-
-                }
-                offset *= 0.001f * Laser.Instance.fatness_offset_multiplier;
-                fatPoints[(pointIdx * Laser.Instance.fatness) + fIdx] = point + offset;
-            }
-        }
-
-        currentPoints = fatPoints;
+        currentPoints = rotatedPoints;
         return currentPoints;
     }
 

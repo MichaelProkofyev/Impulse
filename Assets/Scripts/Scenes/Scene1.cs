@@ -23,13 +23,7 @@ public class Scene1 : SingletonComponent<Scene1> {
     }
 	
 	// Update is called once per frame
-	void Update () {
-        
-        if(Input.GetKeyDown(KeyCode.Space)) {
-            sendData = !sendData;
-        }
-
-        
+	void Update () {        
     }
 
     void OnValidate()
