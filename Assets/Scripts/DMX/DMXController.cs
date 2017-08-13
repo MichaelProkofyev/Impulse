@@ -14,7 +14,7 @@ public class DMXController : SingletonComponent<DMXController> {
     public string channelToChange = "white";
 
     [Range(0, 255)]
-    public int[] dmx_values;
+    public int[] dmx_values = new int[41];
 
     private int[] oldValue;
     private bool updateDMX;

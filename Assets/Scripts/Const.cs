@@ -17,8 +17,8 @@ public enum SCENE
     CIRCLES_1,
     TAKEOFF_2,
     SQUARES_3,
-    GRID_4,
-    COCOON_5
+    COCOON_5,
+    KINECT
 }
 
 public static class CONST {

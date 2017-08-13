@@ -24,20 +24,13 @@ public class OSCReciever : UniOSCEventTarget
         int laserIdx = (int)args[0];
         PATTERN patternType = (PATTERN)args[1];
         int newPatternID = (int)args[2];
+        newPatternID = Mathf.Clamp(newPatternID - 61, 0, 4);
+        print(newPatternID);
         ushort brightness = (ushort)(Mathf.Clamp01((float)args[3]) * CONST.LASER_MAX_VALUE);
 
         switch (patternType)
         {
             case PATTERN.DOT:
-                // Laser.Instance.AddDotData(
-                //         laserIdx: laserIdx,
-                //         patternID: newPatternID,
-                //         brightness: brightness,
-                //         wobble: 0,
-                //         speed: 0f,
-                //         showTrace: false,
-                //         stickToPattern: PATTERN.CIRCLE
-                //       );
                 Scene1.Instance.OSCDotData(
                     laserIdx: laserIdx,
                     patternID: newPatternID,
@@ -45,14 +38,6 @@ public class OSCReciever : UniOSCEventTarget
                 ); 
                 break;
             case PATTERN.CIRCLE:
-                // Laser.Instance.AddCircleData(
-                //             rotation_speed: Vector3.zero,
-                //             center: Vector2.zero,
-                //             laserIdx: laserIdx,
-                //             patternID: newPatternID,
-                //             brightness: brightness,
-                //             wobble: 0
-                //         );
                 Scene1.Instance.OSCCircleData(
                     laserIdx: laserIdx,
                     patternID: newPatternID,
@@ -60,17 +45,10 @@ public class OSCReciever : UniOSCEventTarget
                 );    
                 break;
             case PATTERN.SQUARE:
+                Scene3.Instance.OSCSquaresData(newPatternID, brightness);
                 break;
             case PATTERN.LINE:
-                Laser.Instance.AddLineData(
-                    laserIdx: laserIdx,
-                    patternID: newPatternID,
-                    startPoint: Vector2.zero,
-                    endPoint: Vector2.zero,
-                    brightness: brightness,
-                    wobble: 0,
-                    fromOSC: true
-                    );
+                Scene_Cocoon.Instance.OSCLinesData(newPatternID, brightness);
                 break;
         }
     }

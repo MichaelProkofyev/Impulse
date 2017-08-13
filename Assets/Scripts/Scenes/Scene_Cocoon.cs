@@ -5,10 +5,10 @@ using Neuron;
 using System.Linq;
 public class Scene_Cocoon : SingletonComponent<Scene_Cocoon> {
 
+    public bool sendUpdates = false;
 
-	public float radius = 1f;
+    public float[] brightness = new float[10];
     public Vector2 offsetClamp = Vector2.zero;
-    public Vector3 rotationSpeed = Vector3.zero;
     public Vector2[] circlesPositions = new Vector2[17];
 
     public Vector2 OSC_cocoonScale = Vector2.zero;
@@ -44,18 +44,35 @@ public class Scene_Cocoon : SingletonComponent<Scene_Cocoon> {
 
     public float randomChangeSpeed = 1f;
 
-    public int numberOfLines = 15;
-
-
     // Use this for initialization
     void Start () {
 //        StartCoroutine(ChangeLines());
 
     }
 
+    public void InitScene()
+    {
+        for (int i = 0; i < brightness.Length; i++) {
+            brightness[i] = .1f;
+        }
+        sendUpdates = true;
+    }
+
+    public void DisableScene()
+    {
+        for (int i = 0; i < brightness.Length; i++)
+        {
+            brightness[i] = 0;
+        }
+        Laser.Instance.ClearLines();
+        sendUpdates = false;
+    }
+
+
     public Transform meshRoot;
     // Update is called once per frame
     void Update () {
+        if (!sendUpdates) return;
        // meshRoot.position = new Vector3(0, meshRoot.position.y, 0);
 
 
@@ -79,64 +96,30 @@ public class Scene_Cocoon : SingletonComponent<Scene_Cocoon> {
         skeletonPoints[15] = skeleton.lFootT.position;
         skeletonPoints[16] = skeleton.rFootT.position;
 
-        Vector2 lArmPos = transformPostion(skeletonPoints[0]);
-        Vector2 rArmPos = transformPostion(skeletonPoints[1]);
-
-        Vector2 lFootTransform = transformPostion(skeletonPoints[15]);
-        Vector2 rFootTransform = transformPostion(skeletonPoints[16]);
-
+        for (int i = 0; i < skeletonPoints.Length; i++) {
+            skeletonPoints[i] -= (Vector2)meshRoot.position;
+        }
 
         for (int i = 0; i < circlesPositions.Length; i++)
         {
             circlesPositions[i] = transformPostion(skeletonPoints[i]);
         }
 
-        //ADD CIRCLES
-	    for (int i = 0; i < circlesPositions.Length; i++) {
-            if (i == 0 || i == 1 || i == 13 || i == 14 || i ==15 || i == 16)
-            {
-                break;
-		        Laser.Instance.AddCircleData(
-                laserIdx: 1,
-                patternID: i,
-                brightness: CONST.LASER_MAX_VALUE,
-                wobble: 0,
-                rotation_speed: rotationSpeed,
-                pointsMultiplier: 1,
-                center: circlesPositions[i],//Vector2.one - new Vector2(0.1f * i, 0.1f * i),
-                radius: radius);   
-            }
-	    }
-
-        //for (int i = 0; i < circlesPositions.Length; i++)
-        //{
-        //    Laser.Instance.AddDotData(
-        //    laserIdx: 1,
-        //    patternID: i,
-        //    brightness: CONST.LASER_MAX_VALUE,
-        //    wobble: 0,
-        //    center: circlesPositions[i],//Vector2.one - new Vector2(0.1f * i, 0.1f * i),
-        //    radius: radius);
-        //}
-
-        //ADD LINES
 
 
-
-        for (int i = 0; i < numberOfLines; i++) {
+        for (int i = 0; i < linesConnections.Length; i++) {
             Laser.Instance.AddLineData(
                 laserIdx: 1,
                 patternID: i,
                 startPoint: circlesPositions[(int)linesConnections[i].x],
                 endPoint: circlesPositions[(int)linesConnections[i].y],
-                brightness: CONST.LASER_MAX_VALUE,
+                brightness:(ushort)(brightness[i] * CONST.LASER_MAX_VALUE),
                 wobble: 0
                 );
         }
     }
 
     IEnumerator ChangeLines() {
-        Vector2[] points = new Vector2[4] { new Vector2(-0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0, .5f), new Vector2(0, -.5f) };
         while(true){
             for (int i = 0; i < linesConnections.Length; i++) {
                 linesConnections[i].x = CONST.RRangeInt(0, circlesPositions.Length - 1);
@@ -192,9 +175,20 @@ public class Scene_Cocoon : SingletonComponent<Scene_Cocoon> {
         position.x *= (transformMultiplierX + OSC_cocoonScale.x);
         position.y *= (transformMultiplierY +  OSC_cocoonScale.y);
 
-        Vector2 result = new Vector2(Mathf.Clamp(position.x, transformClampMin.x, transformClampMax.x), Mathf.Clamp(position.y, transformClampMin.y, transformClampMax.y ));
+        Vector2 result = position; //new Vector2(Mathf.Clamp(position.x, transformClampMin.x, transformClampMax.x), Mathf.Clamp(position.y, transformClampMin.y, transformClampMax.y ));
         result +=  pointsOffset + OSC_cocoonOffset;
         result = new Vector2(Mathf.Clamp(OSC_offsetSpeed.x, -offsetClamp.x, result.x), Mathf.Clamp(OSC_offsetSpeed.y, -offsetClamp.y, result.y));
         return CONST.RotatePoints(new Vector2[] { result }, pointsRotation)[0];
+    }
+
+    public void OSCLinesData(int patternID, float newBrightness)
+    {
+        if (patternID < 10)
+        {
+            brightness[patternID] = newBrightness;
+        }
+        else {
+            Debug.LogWarning("Scene Cocoon, Unknown line ID: " + patternID);
+        }
     }
 }

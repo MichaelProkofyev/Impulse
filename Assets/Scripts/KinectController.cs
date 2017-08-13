@@ -10,18 +10,47 @@ public class KinectController : SingletonComponent<KinectController> {
     public Vector2[] rotationSpeeds = new Vector2[3] { Vector2.zero, Vector2.zero, Vector2.zero };
     public float[] radiuses = new float[3] { 0,0,0 };
 
+    public bool sendData = false;
+
+    //TIME
+    Vector2[] numberAnchorPoints = new Vector2[] {
+       // new Vector2()
+    };
+
 
     // Use this for initialization
     void Start () {
 		
 	}
-	
-	// Update is called once per frame
-	void Update () {
+
+    public void InitScene()
+    {
+        for (int i = 0; i < brightness.Length; i++)
+        {
+            brightness[i] = 1;
+        }
+        sendData = true;
+    }
+
+    public void DisableScene()
+    {
+        for (int i = 0; i < brightness.Length; i++)
+        {
+            brightness[i] = 0;
+        }
+        Laser.Instance.ClearCircles();
+        sendData = false;
+    }
+
+
+    // Update is called once per frame
+    void Update () {
 		
 	}
 
     void OnValidate() {
+        if (!sendData) return;
+        
         for (int i = 0; i < brightness.Length; i++) {
             Laser.Instance.AddCircleData(
                 laserIdx: 1,

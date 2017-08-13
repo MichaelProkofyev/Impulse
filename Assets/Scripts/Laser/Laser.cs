@@ -7,11 +7,15 @@ public class Laser : SingletonComponent<Laser> {
     //public float sizeMultiplier = 1;
     public Vector2 sizeMultiplier = Vector2.one;
 
+
     public int additionalPointsAtAnchorCIRCLE, additionalPointsAtAnchorSQUARE;
     public int circleAnchors = 5;
 
     public ushort cut_x;
     public ushort cut_y;
+    public ushort cut_x_default;
+    public ushort cut_y_default;
+
     private ushort original_cut_x, original_cut_y;
     public Vector3 rgb = Vector3.right;
     public int dotsCount, circlesCount, squaresCount, linesCount;
@@ -22,6 +26,8 @@ public class Laser : SingletonComponent<Laser> {
     public int circlePoints = 70;
     public int squarePoints = 50;
     public int linePoints = 2;
+
+    public Vector3 globalRotation = Vector3.zero;
 
     public List<List<RCPoint>> points1 = new List<List<RCPoint>>(); 
 
@@ -161,7 +167,7 @@ public class Laser : SingletonComponent<Laser> {
                 // print(patternID);
                 List<RCPoint> shapePoints = new List<RCPoint>();
                 Vector2[] pointsPositions = patterns[patternType][patternID].NextPoints(Time.deltaTime);
-
+                pointsPositions = CONST.RotatePoints(pointsPositions, globalRotation);
                 //DASH THINGS
                 bool isDashingColor = true;
                 float currDashLength = 0f;
@@ -278,6 +284,21 @@ public class Laser : SingletonComponent<Laser> {
         
     }
 
+    public void ClearCircles()
+    {
+        patterns[PATTERN.CIRCLE].Clear();
+    }
+
+    public void ClearSquares()
+    {
+        patterns[PATTERN.SQUARE].Clear();
+    }
+
+    public void ClearLines()
+    {
+        patterns[PATTERN.LINE].Clear();
+    }
+
     void Start () {
         #if UNITY_EDITOR
                 UnityEditor.SceneView.FocusWindowIfItsOpen(typeof(UnityEditor.SceneView));
@@ -301,7 +322,7 @@ public class Laser : SingletonComponent<Laser> {
     void Update() //COOL TRICKS DOWN THERE
     {
         if (Input.GetKey(KeyCode.Space)) {
-            sizeMultiplier = CONST.RotatePoints(new Vector2[] { Random.insideUnitCircle }, Random.insideUnitSphere)[0] * Random.Range(-5f, 5f);
+           // sizeMultiplier = CONST.RotatePoints(new Vector2[] { Random.insideUnitCircle }, Random.insideUnitSphere)[0] * Random.Range(-5f, 5f);
         } else if (Input.GetKey(KeyCode.C))
         {
             cut_x = (ushort)Random.Range(-30000, 30000);
@@ -314,9 +335,9 @@ public class Laser : SingletonComponent<Laser> {
         }
         else
         {
-            cut_x = original_cut_x;
-            cut_y = original_cut_y;
-            sizeMultiplier = Vector2.one *  .5f;
+            cut_x = cut_x_default;
+            cut_y = cut_y_default;
+         //   sizeMultiplier = Vector2.one *  .5f;
         }
     }
 }
